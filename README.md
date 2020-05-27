@@ -32,13 +32,13 @@ Let's take a quick tour of JadyTrack!
 
 | [![jadyAndroidTarget1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidTarget4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-4.jpg)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|:---:|
-| todo | todo | todo | todo
+| todo | todo | todo | todo |
 
 #### Viewer
 
-| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
-|:---:|:---:|:---:|
-| Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
+| [![jadyAndroidViewer1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidViewer4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-4.jpg)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|:---:|
+| todo | todo | todo | todo |
 
 #### Appointment
 
