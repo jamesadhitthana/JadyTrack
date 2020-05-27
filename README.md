@@ -4,7 +4,7 @@
 <sup><b>JadyTrack allows you or your loved ones to track and share your current LIVE location in real-time as easy as 1,2,3! </b></sup>
 </p>
 
-
+![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-1.png)
 
 # Introduction
 
@@ -23,7 +23,7 @@ Let's take a quick tour of JadyTrack!
 
 #### Use the Web App to Monitor your Peers!
 
-![screenshot-jady](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-full.png)
+![screenshot-jady](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-1.PNG)
 
 #### Get real-time Notifications from your Peers!
 
@@ -33,8 +33,9 @@ Let's take a quick tour of JadyTrack!
 
 
 
+![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-2.png)
 
-
+![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-3.png)
 
 # Getting Started
 
