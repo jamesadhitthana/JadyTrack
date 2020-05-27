@@ -4,7 +4,7 @@
 <sup><b>JadyTrack allows you or your loved ones to track and share your current LIVE location in real-time as easy as 1,2,3! </b></sup>
 </p>
 
-![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-1.png)
+![screenshot-jady-intro](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-1.PNG)
 
 # Introduction
 
@@ -23,19 +23,19 @@ Let's take a quick tour of JadyTrack!
 
 #### Use the Web App to Monitor your Peers!
 
-![screenshot-jady](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-1.PNG)
+![screenshot-jady](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-full.PNG)
 
 #### Get real-time Notifications from your Peers!
 
-| [![WebAppArrived](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
+| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|
 | Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
 
 
 
-![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-2.PNG)
+![screenshot-jady-intro](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-2.PNG)
 
-![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-3.PNG)
+![screenshot-jady-intro](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
 
 # Getting Started
 
