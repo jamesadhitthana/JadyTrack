@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "302386485893",
+    "firebase_url": "https://myjadytrack.firebaseio.com",
+    "project_id": "myjadytrack",
+    "storage_bucket": "myjadytrack.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302386485893:android:6d8e0cd6fca0a133",
+        "android_client_info": {
+          "package_name": "com.jamesgalaxy.jadytrackui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302386485893-6gk06nsq4b0o14hhh7knmtrsu6s78lj4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jamesgalaxy.jadytrackui",
+            "certificate_hash": "e71d970c9f6daf07333937b56a1fa1cd31bee89f"
+          }
+        },
+        {
+          "client_id": "302386485893-k2tatbbdbku46tcc7ojq3mo9i0ltvkql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302386485893-k2tatbbdbku46tcc7ojq3mo9i0ltvkql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

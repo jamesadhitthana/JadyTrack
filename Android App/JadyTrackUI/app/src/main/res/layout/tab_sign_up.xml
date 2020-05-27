@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/signUpName"
+        android:layout_width="297dp"
+        android:layout_height="42dp"
+        android:layout_alignStart="@+id/signUpEmail"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="235dp"
+        android:background="@drawable/rectangle_round_textbox"
+        android:ems="10"
+        android:hint="NAME"
+        android:textColorHint="#ffffff"
+        android:textAlignment="center"
+        android:inputType="textPersonName"
+        android:textColor="#ffffff" />
+
+    <EditText
+        android:id="@+id/signUpEmail"
+        android:layout_width="300dp"
+        android:layout_height="43dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="177dp"
+        android:background="@drawable/rectangle_round_textbox"
+        android:ems="10"
+        android:hint="E-MAIL"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff" />
+
+    <EditText
+        android:id="@+id/signUpPassword"
+        android:layout_width="297dp"
+        android:layout_height="44dp"
+        android:layout_alignEnd="@+id/buttonSignUp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="-50dp"
+        android:layout_marginBottom="115dp"
+        android:background="@drawable/rectangle_round_textbox"
+        android:ems="10"
+        android:hint="PASSWORD"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="201dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/signUpName"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="49dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/rectangle_round"
+        android:text="SIGN UP" />
+
+
+</RelativeLayout>

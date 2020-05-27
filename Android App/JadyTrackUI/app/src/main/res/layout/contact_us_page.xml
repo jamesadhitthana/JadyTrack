@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4EB9BF">
+
+    <TextView
+        android:id="@+id/titleContactUs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:fontFamily="@font/roboto_thin"
+        android:text="Contact Us"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="100dp"
+        android:elevation="4dp"
+        app:tabTextColor="#ffffff" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/tab_layout"
+
+        android:layout_marginTop="1dp"
+        android:background="@drawable/toolbar_dropshadow" />
+
+    <TextView
+        android:id="@+id/jadyEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleContactUs"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="-72dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="jadytrack@gmail.com"
+        android:textAlignment="viewStart"
+        android:textColor="#ffffff" />
+
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="309dp"
+        android:layout_height="386dp"
+        android:layout_above="@+id/buttonSendMessage"
+        android:layout_below="@+id/tab_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp"
+        android:layout_marginBottom="62dp"
+        android:background="#ffffff"
+        android:ems="10"
+        android:hint="ENTER MESSAGE"
+        android:inputType="textMultiLine"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textColorHint="#bababa" />
+
+    <Button
+        android:id="@+id/buttonSendMessage"
+        android:layout_width="298dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/rectangle_round"
+        android:text="SEND MESSAGE" />
+
+
+</RelativeLayout>

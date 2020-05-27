@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.jamesgalaxy.jadytrackui"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+
+    implementation 'com.ramotion.paperonboarding:paper-onboarding:1.1.3'
+    implementation 'com.github.florent37:diagonallayout:1.1.1'
+    implementation 'com.github.florent37:arclayout:1.0.3'
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
+    implementation 'com.tapadoo.android:alerter:2.0.6'
+
+    implementation "com.orhanobut:hawk:2.0.1"
+
+
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.android.gms:play-services-auth:+'
+
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-location:+'
+
+    implementation 'com.github.kenglxn.QRGen:android:2.2.0'
+    implementation 'me.dm7.barcodescanner:zxing:1.9'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.1.0-alpha04'
+}
+apply plugin: 'com.google.gms.google-services'

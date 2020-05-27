@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.github.florent37.diagonallayout.DiagonalLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:elevation="10dp"
+        app:diagonal_angle="20"
+        app:diagonal_position="bottom"
+        app:diagonal_direction="left">
+
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_about_page"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="70dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="About JadyTrack"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="105dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:fontFamily="@font/roboto_thin"
+                android:text="Know whats going on, don't worry about…"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+    </com.github.florent37.diagonallayout.DiagonalLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="160dp"
+        android:elevation="15dp"
+        app:srcCompat="@drawable/jadylogo_254" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:fontFamily="@font/roboto"
+        android:text="JadyTrack allows you or your loved ones to track and share your current LIVE location in real time as easy as 1,2,3!\n\nSimply open the app, set your destination and geofence customization, then tap go! It will then create a new QR code (or link) that you can share with your peers so that they can track you for the current session.\n\nAlso JadyTrack isn't going to spy on you, compared to our competitors, we believe that privacy is your privilege, so we won’t track you 24/7. JadyTrack only works per session, so once the session is done, that’s it!"
+        android:textAllCaps="false"
+        android:textColor="#717171" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="196dp"
+        android:layout_marginEnd="108dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Contact:"
+        android:textAlignment="viewStart"
+        android:textColor="#3E3E3E" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="-73dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="jadytrack@gmail.com"
+        android:textAlignment="viewStart"
+        android:textColor="#3E3E3E"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/buttonContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="134dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginEnd="139dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/contact_us_button"
+        android:paddingLeft="10px"
+        android:paddingRight="10px"
+        android:text="Contact Us"
+        android:textColor="#ffffff" />
+
+
+</RelativeLayout>
