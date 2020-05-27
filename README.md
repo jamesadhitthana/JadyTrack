@@ -21,9 +21,33 @@ Let's take a quick tour of JadyTrack!
 
 ### Web app
 
+#### Target
+
+| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|
+| Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
+
+
+
+#### Viewer
+
+| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|
+| Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
+
+
+
+#### Appointment
+
+| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|
+| Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
+
+
+
 #### Use the Web App to Monitor your Peers!
 
-![screenshot-jady](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-full.PNG)
+![screenshot-jady-web-full](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-full.png)
 
 #### Get real-time Notifications from your Peers!
 
@@ -33,9 +57,9 @@ Let's take a quick tour of JadyTrack!
 
 
 
-![screenshot-jady-intro](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-2.PNG)
+![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-2.PNG)
 
-![screenshot-jady-intro](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
+![screenshot-jady-misc3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
 
 # Getting Started
 
