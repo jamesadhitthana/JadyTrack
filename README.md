@@ -30,9 +30,9 @@ Let's take a quick tour of JadyTrack!
 
 #### Target
 
-| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
-|:---:|:---:|:---:|
-| Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
+| [![jadyAndroidTarget1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)]|[![jadyAndroidTarget2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidTarget4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|:---:|
+| todo | todo | todo | todo
 
 #### Viewer
 
@@ -58,13 +58,25 @@ Let's take a quick tour of JadyTrack!
 |:---:|:---:|:---:|
 | Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
 
-
-
-![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-2.PNG)
-
-![screenshot-jady-misc3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
+![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
 
 # Getting Started
 
 #### Notes:
 - On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
+
+## Built With
+* [Google Maps](https://cloud.google.com/maps-platform/) - Google Maps
+* [Firebase](https://firebase.google.com/) - Firebase
+* [Android](https://developer.android.com/studio/) - Android Studio
+* [JavaScript](https://www.javascript.com/) - JavaScript
+* [Bootstrap](https://getbootstrap.com/) - Bootstrap
+
+## Authors
+
+* **James Adhitthana** - [jamesadhitthana](https://github.com/jamesadhitthana)
+* **Christopher Yefta** - [ChrisYef](https://github.com/ChrisYef)
+* **Deananda Irwansyah** - [hikariyoru](https://github.com/hikariyoru)
+* **Andre Kurnia** - [liemhy](https://github.com/liemhy)
+
+![screenshot-jady-end](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-2.PNG)
