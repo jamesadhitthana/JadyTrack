@@ -50,7 +50,9 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 ![screenshot-jady-web-full](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-home.png)
 
-| Use the Web App to Monitor your Peers! |
+### Use the Web App to Monitor your Peers!
+
+| Use your web-browser to monitor your peers in real-time |
 |:---:|
 | [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-full.png)](https://github.com/jamesadhitthana/)|
 
