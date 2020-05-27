@@ -32,21 +32,19 @@ Let's take a quick tour of JadyTrack!
 
 | [![jadyAndroidTarget1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidTarget4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-4.jpg)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|:---:|
-| todo | todo | todo | todo |
-
-#### Viewer
-
-| [![jadyAndroidViewer1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidViewer4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-4.jpg)](https://github.com/jamesadhitthana/) |
-|:---:|:---:|:---:|:---:|
-| todo | todo | todo | todo |
+| Target enables broadcast | With broadcast enabled, select "Get Tracking ID" | Target gets the tracking ID for the session | Target shares the tracking ID |
 
 #### Appointment
 
 | [![jadyAndroidAppointment1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidAppointment2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidAppointment3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidAppointment4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-4.jpg)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|:---:|
-| todo | todo | todo | todo |
+| User picks to set the route or set geofence | User appoints the route for the target | User sets the geofence for the target | User finishes setting the route and geofence |
 
+#### Viewer
 
+| [![jadyAndroidViewer1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidViewer4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-4.jpg)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|:---:|
+| Viewer selects a method to view the target | User enters the tracking ID manually | User scans a QR code to enter the tracking ID | Viewer views the real-time location of the target |
 
 ### Web app
 
