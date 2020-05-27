@@ -33,9 +33,9 @@ Let's take a quick tour of JadyTrack!
 
 
 
-![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-2.png)
+![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-2.PNG)
 
-![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-3.png)
+![screenshot-jady-intro](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-misc-3.PNG)
 
 # Getting Started
 
