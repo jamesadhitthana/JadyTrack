@@ -19,14 +19,15 @@ Let's take a quick tour of JadyTrack!
 
 ### Features:
 
-#### todo
+#### Web app
 
-![screenshot-jady](picturelink)
+![screenshot-jady](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-full.png)
 
-| Getting Started with JadyTrack | Selecting a temperature for your Drink |
-|:---:|:---:|
-| [![web-](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.gif)](https://github.com/jamesadhitthana/)  | [![web-](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.gif)](https://github.com/jamesadhitthana/)  |
+| [![WebAppArrived](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
+|:---:|:---:|:---:|
+| Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
 
+#### Android app
 
 
 
@@ -34,4 +35,4 @@ Let's take a quick tour of JadyTrack!
 # Getting Started
 
 #### Notes:
-- On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
+- On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API k
