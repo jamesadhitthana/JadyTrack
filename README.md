@@ -22,49 +22,51 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 
 
-## JadyTrack Tour
+## JadyTrack For Android
 
 Let's take a quick tour of JadyTrack!
 
-### Android app:
+### Target
 
-#### Target
-
-| [![jadyAndroidTarget1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidTarget4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-4.jpg)](https://github.com/jamesadhitthana/) |
-|:---:|:---:|:---:|:---:|
 | Target enables broadcast | With broadcast enabled, select "Get Tracking ID" | Target gets the tracking ID for the session | Target shares the tracking ID |
-
-#### Appointment
-
-| [![jadyAndroidAppointment1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidAppointment2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidAppointment3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidAppointment4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-4.jpg)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|:---:|
+| [![jadyAndroidTarget1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidTarget3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidTarget4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-target-4.jpg)](https://github.com/jamesadhitthana/) |
+
+
+
+### Appointment
+
 | User picks to set the route or set geofence | User appoints the route for the target | User sets the geofence for the target | User finishes setting the route and geofence |
-
-#### Viewer
-
-| [![jadyAndroidViewer1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidViewer4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-4.jpg)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|:---:|
-| Viewer selects a method to view the target | User enters the tracking ID manually | User scans a QR code to enter the tracking ID | Viewer views the real-time location of the target |
+| [![jadyAndroidAppointment1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidAppointment2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidAppointment3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidAppointment4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-appointment-4.jpg)](https://github.com/jamesadhitthana/) |
 
-### Web app
+### Viewer
+
+| Viewer selects a method to view the target | User enters the tracking ID manually | User scans a QR code to enter the tracking ID | Viewer views the real-time location of the target |
+|:---:|:---:|:---:|:---:|
+| [![jadyAndroidViewer1](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-1.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-2.jpg)](https://github.com/jamesadhitthana/)  |[![jadyAndroidViewer3](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-3.jpg)](https://github.com/jamesadhitthana/) |[![jadyAndroidViewer4](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-android-viewer-4.jpg)](https://github.com/jamesadhitthana/) |
+
+
+
+## JadyTrack Web
 
 ![screenshot-jady-web-full](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-home.png)
 
-#### Use the Web App to Monitor your Peers!
+### Use the Web App to Monitor your Peers!
 
 ![screenshot-jady-web-full](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-full.png)
 
-#### Get real-time Notifications from your Peers!
+### Get real-time Notifications from your Peers!
 
-| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
-|:---:|:---:|:---:|
 | Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
+|:---:|:---:|:---:|
+| [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
 
 ![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
 
 # Getting Started
 
-#### Notes:
+### Notes:
 - On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
 
 ## Built With
