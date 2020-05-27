@@ -48,6 +48,8 @@ Let's take a quick tour of JadyTrack!
 
 ### Web app
 
+![screenshot-jady-web-full](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-home.png)
+
 #### Use the Web App to Monitor your Peers!
 
 ![screenshot-jady-web-full](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-full.png)
