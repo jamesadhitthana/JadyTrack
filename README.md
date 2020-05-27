@@ -17,17 +17,21 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 Let's take a quick tour of JadyTrack!
 
-### Features:
+### Android app
 
-#### Web app
+### Web app
+
+#### Use the Web App to Monitor your Peers!
 
 ![screenshot-jady](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-full.png)
+
+#### Get real-time Notifications from your Peers!
 
 | [![WebAppArrived](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://github.com/jamesadhitthana/JadyTrack/blob/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
 |:---:|:---:|:---:|
 | Your peer has arrived to the destination | Your peer sets off the SOS button | Your peer crossed the geofence |
 
-#### Android app
+
 
 
 
@@ -35,4 +39,4 @@ Let's take a quick tour of JadyTrack!
 # Getting Started
 
 #### Notes:
-- On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API k
+- On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
