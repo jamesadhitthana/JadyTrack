@@ -20,6 +20,9 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 ### Features:
 
+![jady-poster1](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/JadyTrack%20Poster.jpg)
+![jady-poster2](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/JadyTrack%20Poster%202.jpg)
+
 
 
 ## JadyTrack For Android
@@ -67,6 +70,15 @@ People are getting busier and busier. With our restless schedules, managing the 
 ![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
 
 # Getting Started
+
+### User Manual:
+* [User Manual - Android](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/User%20Manual%20-%20Android.pdf)
+* [User Manual - Web](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/User%20Manual%20-%20WebApp.pdf)
+
+
+### Documentation:
+* [Development Documentation](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/JadyTrack%20Development%20Documentation.pdf)
+
 
 ### Notes:
 - On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
