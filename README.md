@@ -19,11 +19,7 @@ People are getting busier and busier. With our restless schedules, managing the 
 3. Start tracking your peer!
 
 ### Features:
-
 ![jady-poster1](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/JadyTrack%20Poster.jpg)
-![jady-poster2](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/JadyTrack%20Poster%202.jpg)
-
-
 
 ## JadyTrack For Android
 
@@ -78,7 +74,6 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 ### Documentation:
 * [Development Documentation](https://github.com/jamesadhitthana/JadyTrack/raw/master/Documentation/JadyTrack%20Development%20Documentation.pdf)
-
 
 ### Notes:
 - On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
