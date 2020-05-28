@@ -77,6 +77,7 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 ### Notes:
 - On the web app, change the contents of <b>jadytrackfirebase.js</b> to your own API keys.
+- JadyTrack was built for a university project therefore we will not be liable for any loss or damage of any nature.
 
 ## Built With
 * [Google Maps](https://cloud.google.com/maps-platform/) - Google Maps
