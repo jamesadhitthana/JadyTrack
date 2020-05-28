@@ -63,7 +63,7 @@ People are getting busier and busier. With our restless schedules, managing the 
 |:---:|:---:|:---:|
 | [![WebAppArrived](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-arrived.png)](https://github.com/jamesadhitthana/)  |[![WebAppSOS](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-sos.png)](https://github.com/jamesadhitthana/)  |[![WebAppGeofence](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-web-geofence.png)](https://github.com/jamesadhitthana/) |
 
-![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.PNG)
+![screenshot-jady-misc2](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-3.jpg)
 
 # Getting Started
 
