@@ -90,7 +90,7 @@ People are getting busier and busier. With our restless schedules, managing the 
 
 * **James Adhitthana** - [jamesadhitthana](https://github.com/jamesadhitthana)
 * **Christopher Yefta** - [ChrisYef](https://github.com/ChrisYef)
-* **Deananda Irwansyah** - [hikariyoru](https://github.com/hikariyoru)
+* **Deananda Irwansyah** - [DeIrw](https://github.com/DeIrw)
 * **Andre Kurnia** - [liemhy](https://github.com/liemhy)
 
 ![screenshot-jady-end](https://raw.githubusercontent.com/jamesadhitthana/JadyTrack/master/Screenshots/jady-misc-2.PNG)
