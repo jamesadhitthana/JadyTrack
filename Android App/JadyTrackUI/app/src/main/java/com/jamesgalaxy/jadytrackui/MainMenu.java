@@ -26,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.orhanobut.hawk.Hawk;
-import com.tapadoo.alerter.Alerter;
 
 public class MainMenu extends AppCompatActivity {
     private TextView textViewCurrentUser;
@@ -108,7 +107,7 @@ public class MainMenu extends AppCompatActivity {
         buttonViewer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"buttonViewer pressed",Toast.LENGTH_SHORT).show();
+               //Toast.makeText(getApplicationContext(),"buttonViewer pressed",Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), InputOptionActivity.class);
                 i.putExtra(EXTRA_MESSAGE_SCENARIO, "viewer");
                 startActivity(i);
@@ -165,6 +164,32 @@ public class MainMenu extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        //enable the tutorial if already loaded
+        //---HAWK set SkipOnboarding to true if the user is logged in---//
+        Boolean skipMainMenuTutorial = Hawk.get("skipMainMenuTutorial");
+        //END OF: HAWK stuff james
+        if (skipMainMenuTutorial == null) {
+            launchMainMenuTutorial();
+            Boolean skipMainMenuTemp = true;
+            Hawk.put("skipMainMenuTutorial", skipMainMenuTemp);
+        } else {
+            //If skipOnboarding==false then launch tutorial again.
+            if (skipMainMenuTutorial == false) {
+                launchMainMenuTutorial();
+                Boolean skipMainMenuTemp = true;
+                Hawk.put("skipMainMenuTutorial", skipMainMenuTemp);
+            }
+            if (skipMainMenuTutorial == true) {
+                //do nothing
+            }
+        }
+
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -176,11 +201,12 @@ public class MainMenu extends AppCompatActivity {
             currentUserUID = currentUser.getUid().toString();
 
 
+
             //----CREATE A LISTENER FOR Name of User----
             databaseKu.getReference().child("users").child(currentUser.getUid()).child("name").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot != null) {
+                    if (dataSnapshot!= null) {
                         userName = dataSnapshot.getValue().toString();
                         //Toast.makeText(getApplicationContext(), "Welcome :" + userName, Toast.LENGTH_SHORT).show();
                         textViewUserName.setText(userName);
@@ -190,8 +216,6 @@ public class MainMenu extends AppCompatActivity {
                         buttonTarget.setEnabled(true);
                         buttonAppointment.setEnabled(true);
                         loadingWindow.dismiss();
-
-
                         //---------Main Menu stuff to do after loading is complete---------//
                         //---HAWK set SkipOnboarding to true if the user is logged in---//
                         Boolean skipMainMenuTutorial = Hawk.get("skipMainMenuTutorial");
@@ -210,21 +234,17 @@ public class MainMenu extends AppCompatActivity {
                             if (skipMainMenuTutorial == true) {
                                 //do nothing
                             }
-
-                            //----COBA ALERTER----//
-                            Alerter.create(MainMenu.this).setTitle("Ini title").setText("Alert textnya blablabla").setBackgroundColorRes(R.color.jamesBlue).show();
                         }
 
                         //END OF: Main Menu stuff to do after loading is complete---------//
 
-
-
-                    } else {
+                    }else {
                         //Disable buttons if the username is not loaded and is still null:
                         buttonViewer.setEnabled(false);
                         buttonAboutPage.setEnabled(false);
                         buttonTarget.setEnabled(false);
                         buttonAppointment.setEnabled(false);
+
                     }
                 }
 
@@ -253,7 +273,6 @@ public class MainMenu extends AppCompatActivity {
                 .start();
         //END OF: Tap Target methods (INTRO TUTORIAL PART)//
     }
-
     public void updateUI(FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {

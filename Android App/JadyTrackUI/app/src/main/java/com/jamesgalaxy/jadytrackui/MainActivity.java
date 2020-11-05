@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.orhanobut.hawk.Hawk;
+import com.tapadoo.alerter.Alerter;
 
 public class MainActivity extends AppCompatActivity {
     private TextView title1;
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
-            Toast.makeText(getApplicationContext(), "Not logged in.", Toast.LENGTH_SHORT).show();
+            Alerter.create(MainActivity.this).setTitle("Login to Access JadyTrack").setText("You are currently not logged in").setBackgroundColorRes(R.color.colorAccent).show();
         } else {
             //Toast.makeText(getApplicationContext(), "Welcome " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "signIn:" + currentUser.getEmail());
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
-        Toast.makeText(getApplicationContext(), "Logging in..", Toast.LENGTH_SHORT).show();
+        Alerter.create(MainActivity.this).setText("Logging in...").setBackgroundColorRes(R.color.colorAccent).show();
 
         //showProgressDialog();
 
@@ -137,23 +138,22 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(getApplicationContext(), "Logged in as " + mAuth.getCurrentUser().getEmail(),
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT).show(); //diemin aja
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Alerter.create(MainActivity.this).setTitle("Login Failed").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                             updateUI(null);
                         }
 
                         // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Alerter.create(MainActivity.this).setTitle("Authentication Failed").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                         }
+
                         // [END_EXCLUDE]
                     }
                 });
@@ -162,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void createAccount(final String name, final String email, final String password) {
         Log.d(TAG, "createAccount:" + email);
-        Toast.makeText(getApplicationContext(), "Creating Account..", Toast.LENGTH_SHORT).show();
+        Alerter.create(MainActivity.this).setTitle("Creating Account").setText("Setting up your account...").setBackgroundColorRes(R.color.colorAccent).show();
+
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -179,10 +180,9 @@ public class MainActivity extends AppCompatActivity {
                             databaseUser.child(user.getUid()).setValue(registeredUser);
 
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If register fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Alerter.create(MainActivity.this).setTitle("Failed to Register").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                             updateUI(null);
                         }
 
@@ -210,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
             //---------HAWK set SkipOnboarding to FALSE if the user is NOT logged in---------//
             Boolean skipOnboardingIfLoggedIn = false;
             Hawk.put("skipOnboardingIfLoggedIn", skipOnboardingIfLoggedIn);
-
             //---------HAWK set Home Tutorial to FALSE if the user is NOT logged in (MainActivity)---------//
             Boolean skipMainMenuTutorial = false;
             Hawk.put("skipMainMenuTutorial", skipMainMenuTutorial);

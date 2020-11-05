@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tapadoo.alerter.Alerter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,7 +72,8 @@ public class ContactUsPage extends AppCompatActivity {
                     //send message functionality
                     sendContactUsMessage();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Make sure all your fields are filled properly", Toast.LENGTH_SHORT).show();
+                    Alerter.create(ContactUsPage.this).setTitle("Oh no!").setText("Make sure all your fields are filled properly").setBackgroundColorRes(R.color.colorAccent).show();
+
                 }
             }
         });
@@ -97,7 +99,7 @@ public class ContactUsPage extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Failed to send message. \nPlease check your internet connection.", Toast.LENGTH_SHORT).show();
+                        Alerter.create(ContactUsPage.this).setTitle("Failed to send message!").setText("Please check your internet connection").setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 });
 

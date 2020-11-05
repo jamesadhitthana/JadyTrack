@@ -3,7 +3,6 @@ package com.jamesgalaxy.jadytrackui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
 import com.ramotion.paperonboarding.PaperOnboardingEngine;
@@ -25,12 +24,6 @@ public class Onboarding extends AppCompatActivity {
         //SharedPreference untuk Onboarding & Tutorial Auto Skip kalau udah login//
         Hawk.init(Onboarding.this).build(); //library SharedPreference yang lebih Gampang
         Boolean skipOnboarding = Hawk.get("skipOnboardingIfLoggedIn");
-
-        //        String statusJames = "ini loh si james";
-        //        Hawk.put("statusJames", statusJames);
-        //        //coba ambil dari help
-        //        String dariHelp = Hawk.get("dariHelp");
-        //        Toast.makeText(getApplicationContext(), dariHelp, Toast.LENGTH_SHORT).show();
         //END OF: Shared Preference--------------
 
         if (skipOnboarding == null) {

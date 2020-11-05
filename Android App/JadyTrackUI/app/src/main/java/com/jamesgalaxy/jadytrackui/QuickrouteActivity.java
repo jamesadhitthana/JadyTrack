@@ -50,12 +50,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tapadoo.alerter.Alerter;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import androidx.annotation.NonNull;
@@ -197,7 +201,7 @@ public class QuickrouteActivity extends AppCompatActivity
                                         startActivity(intent);
                                     }
                                     else if(!isSent){
-                                        Toast.makeText(QuickrouteActivity.this, "couldn't set geofence because geofence has set before", Toast.LENGTH_LONG).show();
+                                        Alerter.create(QuickrouteActivity.this).setTitle("Unable to set geofence").setText("Unable to set geofence because geofence has been created previously").setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
 
@@ -209,29 +213,67 @@ public class QuickrouteActivity extends AppCompatActivity
 
 
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Failed to set the object on the database.", Toast.LENGTH_SHORT).show();
+                            Alerter.create(QuickrouteActivity.this).setTitle("Oops something went wrong!").setText("We failed to set the object on the database").setBackgroundColorRes(R.color.colorAccent).show();
+
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please draw at least three points for your geofence.", Toast.LENGTH_SHORT).show();
+                        Alerter.create(QuickrouteActivity.this).setTitle("You forgot to draw your geofence!").setText("Please draw at least three points for your geofence").setBackgroundColorRes(R.color.colorAccent).show();
+
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please set your quickroute.", Toast.LENGTH_SHORT).show();
+                    Alerter.create(QuickrouteActivity.this).setText("Please set your quickroute").setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
             }
         });
 
 
-        // spinner
-        final Spinner spinnerDropDown;
-        final String[] history = {
-                "Day 1 - 23:57",
-                "Day 2 - 13:47",
-                "Day 3 - 12:35",
-                "Day 4 - 11:23"
-        };
+        // ini untuk mengambil history geofence yang pernah dibuat sebelumnya
+        historyReference = FirebaseDatabase.getInstance().getReference().child("users/"+userUID+"/trackingHistory");
+
+
+        // SPINNER
         // Get reference of SpinnerView from layout/main_activity.xml
-        spinnerDropDown =(Spinner)findViewById(R.id.spinner);
+        final Spinner spinnerDropDown = (Spinner)findViewById(R.id.spinner);
+        final ArrayList<String> historyTime = new ArrayList<String>();
+        final ArrayList<String> historyId = new ArrayList<String>();
+        final boolean[] isHistoryCollected = {false};
+        historyTime.add("TAP TO SELECT QUICK ROUTE");
+
+
+        historyReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null && !isHistoryCollected[0]){
+
+                    HashMap<String, Object> data =
+                            (HashMap<String, Object>) dataSnapshot.getValue();
+
+                    for (HashMap.Entry<String, Object> entry : data.entrySet()) {
+
+                        // epoch to date
+                        String dataTime = entry.getValue().toString();
+
+                        Date date = new Date(Long.parseLong(dataTime));
+                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        format.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
+                        String formatted = format.format(date);
+
+                        historyTime.add(formatted);
+
+                        historyId.add(entry.getKey());
+                    }
+                    isHistoryCollected[0] = true;
+
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         try {
             Field popup = Spinner.class.getDeclaredField("mPopup");
@@ -247,8 +289,9 @@ public class QuickrouteActivity extends AppCompatActivity
             // silently fail...
         }
 
+        // masukkin array history ke dalam spinner
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
-                R.layout.simple_spinner_dropdown_item , history);
+                R.layout.simple_spinner_dropdown_item , historyTime);
 
         spinnerDropDown.setAdapter(adapter);
 
@@ -259,8 +302,11 @@ public class QuickrouteActivity extends AppCompatActivity
                                        int position, long id) {
                 // Get select item
                 int sid=spinnerDropDown.getSelectedItemPosition();
-                Toast.makeText(getBaseContext(), "You have selected Day : " + history[sid],
-                        Toast.LENGTH_SHORT).show();
+                if(sid > 0){
+                    //Toast.makeText(getBaseContext(), "You have selected : " + historyId.get(sid-1), Toast.LENGTH_SHORT).show();
+                    // ini digunakan untuk menggambar geofence di mapnya
+                    plotGeofence(historyId.get(sid-1));
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -268,17 +314,6 @@ public class QuickrouteActivity extends AppCompatActivity
             }
         });
 
-
-
-
-
-        // ini untuk menampilkan history geofence yang pernah dibuat sebelumnya
-        String coba = "users/"+userUID+"/"+"-LczUMf5yboMji-SCUwx";
-        historyReference = FirebaseDatabase.getInstance().getReference().child(coba);
-
-
-        // ini digunakan untuk menggambar geofence di mapnya
-        plotGeofence();
 
 
 
@@ -313,13 +348,11 @@ public class QuickrouteActivity extends AppCompatActivity
                         //Add Geofence Numbers into Firebase
                         databaseReference.child(targetId).child("geofenceNum").setValue(markers.size());
 
-                        Toast.makeText(getApplicationContext(), "Successfully synchronized Geofence online as", Toast.LENGTH_SHORT).show();
-
-
-
+                        Alerter.create(QuickrouteActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Id doesn't exist", Toast.LENGTH_SHORT).show();
+                    Alerter.create(QuickrouteActivity.this).setTitle("Oh no we failed to find tracking ID").setText("ID doesn't exist").setBackgroundColorRes(R.color.colorAccent).show();
+
                 }
             }
 
@@ -426,8 +459,21 @@ public class QuickrouteActivity extends AppCompatActivity
 
 
     // untuk menggambar geofence
-    public void plotGeofence(){
-        plotReference = FirebaseDatabase.getInstance().getReference("trackingSession/-LczUMf5yboMji-SCUwx");
+    public void plotGeofence(String trackingId){
+
+        if(isGeofenceDrawed){
+            polygon.remove();
+            destinationFence.remove();
+            destinationMarker.remove();
+            while(markers.size() != 0){
+                markers.get(markers.size() - 1).remove();
+                markers.remove(markers.size() - 1);
+            }
+            isGeofenceDrawed = false;
+        }
+
+        //map.clear();
+        plotReference = FirebaseDatabase.getInstance().getReference("trackingSession/"+trackingId);
         plotReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -464,7 +510,6 @@ public class QuickrouteActivity extends AppCompatActivity
                                 .zIndex(100f);
 
                         destinationMarker = map.addMarker(markerOptions);
-                        markers.add(destinationMarker);
 
                         CircleOptions circleOptions = new CircleOptions()
                                 .center(destinationMarker.getPosition())

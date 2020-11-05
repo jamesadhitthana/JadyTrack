@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.tapadoo.alerter.Alerter;
+
 public class TabLogin extends Fragment {
     private EditText loginEmail;
     private EditText loginPassword;

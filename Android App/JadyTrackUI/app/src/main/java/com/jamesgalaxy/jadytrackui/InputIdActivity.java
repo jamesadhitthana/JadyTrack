@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -20,11 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tapadoo.alerter.Alerter;
 
 public class InputIdActivity extends AppCompatActivity {
 
     // Attribute
-    private String id;
+    private String id = null;
     private String nama;
     private String scenario;
     private String uid;
@@ -95,39 +97,44 @@ public class InputIdActivity extends AppCompatActivity {
         EditText targetId = (EditText) findViewById(R.id.inputId);
         id = targetId.getText().toString();
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("trackingSession");
-        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.hasChild(id)) {
-                    if(scenario.equals("viewer")){
-                        Intent intent = new Intent(InputIdActivity.this, TrackingActivity.class);
-                        intent.putExtra(EXTRA_MESSAGE_ID, id);
-                        intent.putExtra(EXTRA_MESSAGE_NAME, nama);
-                        startActivity(intent);
-                    }
-                    else if(scenario.equals("appointment")){
-                        // cek apakah sudah pernah buat geofence
+        if(id.isEmpty()){
+            Alerter.create(InputIdActivity.this).setTitle("Tracking ID").setText("Please input the tracking ID").setBackgroundColorRes(R.color.colorAccent).show();
+            //Toast.makeText(InputIdActivity.this, "Input the target's ID please!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("trackingSession");
+            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.hasChild(id)) {
+                        if(scenario.equals("viewer")){
+                            Intent intent = new Intent(InputIdActivity.this, TrackingActivity.class);
+                            intent.putExtra(EXTRA_MESSAGE_ID, id);
+                            intent.putExtra(EXTRA_MESSAGE_NAME, nama);
+                            startActivity(intent);
+                        }
+                        else if(scenario.equals("appointment")){
 
+                            Intent intent = new Intent(InputIdActivity.this, AppointmentActivity.class);
+                            intent.putExtra(EXTRA_MESSAGE_ID, id);
+                            intent.putExtra(EXTRA_MESSAGE_NAME, nama);
+                            intent.putExtra(EXTRA_MESSAGE_UID, uid);
+                            startActivity(intent);
+                        }
 
-                        Intent intent = new Intent(InputIdActivity.this, AppointmentActivity.class);
-                        intent.putExtra(EXTRA_MESSAGE_ID, id);
-                        intent.putExtra(EXTRA_MESSAGE_NAME, nama);
-                        intent.putExtra(EXTRA_MESSAGE_UID, uid);
-                        startActivity(intent);
                     }
+                    else{
+                        Alerter.create(InputIdActivity.this).setTitle("Failed to find ID").setText("ID does not exist").setBackgroundColorRes(R.color.colorAccent).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-                else{
-                    Toast.makeText(InputIdActivity.this, "ID does not exist", Toast.LENGTH_SHORT).show();
-                }
-            }
+            });
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
 

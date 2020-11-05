@@ -55,6 +55,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tapadoo.alerter.Alerter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +84,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private Marker currentMarker;
     private MarkerOptions markerOption;
     private boolean isFirstMarker = true;
+    private boolean isMarkerDrawed = false;
 
     private Double destLongitude;
     private Double destLatitude;
@@ -133,7 +135,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private DatabaseReference databaseReference;
     private DatabaseReference geofenceReference;
 
-    ProgressDialog dialog;
+    // Process dialog
+    private KProgressHUD loadingWindow;
 
     //loading bar WINDOW
     boolean progressDialogIsShown =false;
@@ -143,6 +146,16 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_broadcast);
+
+        loadingWindow = KProgressHUD.create(BroadcastActivity.this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setBackgroundColor(Color.parseColor("#508AF1F7"))
+                .setLabel("Please wait")
+                .setDetailsLabel("Getting location data")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+                .show();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -180,12 +193,38 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onLocationChanged(Location location) {
 
+                // mengubah status
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.child(id).child("notifications").child("statusSOS").getValue() == "true"){
+                                    databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
+                                }
+                                if(dataSnapshot.child(id).child("notifications").child("statusInGeofence").getValue() == "true"){
+                                    databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
+                                }
+                                if(dataSnapshot.child(id).child("notifications").child("statusHasArrived").getValue() == "true"){
+                                    databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(false);
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                });
+
+
+
                 Long endTime = location.getTime();
                 Long diffTime = endTime - startTime ;
 
                 // Mengubah current marker
                 markerPosition = new LatLng(location.getLatitude(), location.getLongitude());
                 currentMarker.setPosition(markerPosition);
+                if(!isMarkerDrawed){
+                    loadingWindow.dismiss();
+                    isMarkerDrawed = true;
+                }
                 mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
 
                 // setiap 12 detik (12000) update database
@@ -343,7 +382,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Broadcast is disabled", Toast.LENGTH_SHORT).show();
+                    Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
+
                 }
             }
         });
@@ -358,6 +398,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
 
+                if(isBroadcast){
                     //Check In Alert Dialog
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
                     alertDialogBuilder.setMessage("Are you sure you want to enable SOS (Emergency) mode? If you are connected to the internet, your peers will get notified of an emergency immediately.");
@@ -368,9 +409,11 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                     //------------------------Emergency Status: ENABLE EMERGENCY----------------------//
                                     try {
                                         databaseReference.child(id).child("notifications").child("statusSOS").setValue(true);
-                                        Toast.makeText(getApplicationContext(), "Emergency status sent!", Toast.LENGTH_SHORT).show();
+                                        Alerter.create(BroadcastActivity.this).setText("Emergency status sent").setBackgroundColorRes(R.color.colorAccent).show();
+
                                     } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), "Failed to send emergency status, please check your internet connection.", Toast.LENGTH_SHORT).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle("Failed to send emergency status!").setText("Please check your internet connection").setBackgroundColorRes(R.color.colorAccent).show();
+
                                     }
                                 }
                             });
@@ -382,9 +425,10 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                     //------------------------Emergency Status: DISABLE EMERGENCY----------------------//
                                     try {
                                         databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
-                                        Toast.makeText(BroadcastActivity.this, "You selected no. \nEmergency status set to false.", Toast.LENGTH_SHORT).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle("You selected no!").setText("Emergency status set to false").setBackgroundColorRes(R.color.colorAccent).show();
+
                                     } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), "Failed to set Emergency status to false, if you did not previously enabled your emergency status then you are fine. \nIf you have, then please check your internet connection and try again.", Toast.LENGTH_LONG).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle("Failed to set Emergency status to false!").setText(", if you did not previously enabled your emergency status then you are fine. If you have, then please check your internet connection and try again.").setBackgroundColorRes(R.color.colorAccent).show();
                                     }
 
                                 }
@@ -393,6 +437,10 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                     //--
+                }
+                else{
+                    Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
+                }
 
             }
         });
@@ -415,9 +463,10 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                         manualCheckIn = true;
                                         hasArrived = true;
                                         notifyTargetReachDestination();
-                                        Toast.makeText(getApplicationContext(), "You have checked in manually!", Toast.LENGTH_SHORT).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle("Checked In").setText("You have checked in manually").setBackgroundColorRes(R.color.colorAccent).show();
+
                                     } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), "Failed to check in, please check your internet connection.", Toast.LENGTH_SHORT).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle("Oh no! We failed to check you in").setText("Please check your internet connection").setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
                             });
@@ -426,7 +475,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(BroadcastActivity.this, "You selected no.", Toast.LENGTH_SHORT).show();
+                                    Alerter.create(BroadcastActivity.this).setText("You selected no").setBackgroundColorRes(R.color.colorAccent).show();
                                 }
                             });
 
@@ -434,7 +483,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     alertDialog.show();
                     //--
                 } else {
-                    Toast.makeText(getApplicationContext(), "You don't have geofence", Toast.LENGTH_SHORT).show();
+                    Alerter.create(BroadcastActivity.this).setText("You don't have geofence").setBackgroundColorRes(R.color.colorAccent).show();
+
                 }
             }
         });
@@ -499,7 +549,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     int geofenceSize = geofence.size()-1;
                     int geofenceNum = (Integer) Integer.parseInt((String) dataSnapshot.child("geofenceNum").getValue().toString());
 
-                    Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
 
                     if(geofenceNum == geofenceSize) {
                         isGeofenceDrawed = true;
@@ -863,7 +913,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private void notifyTargetCrossedGeofence() {
         polygon.setFillColor(Color.RED);
 
-        Toast.makeText(getApplicationContext(), "Crossing Border", Toast.LENGTH_SHORT).show();
+        Alerter.create(BroadcastActivity.this).setTitle("CROSSING THE BORDER!").setText("Watch out! You are crossing the border!").setBackgroundColorRes(R.color.colorAccent).show();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";

@@ -35,10 +35,8 @@ dependencies {
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
-    implementation 'com.tapadoo.android:alerter:2.0.6'
 
     implementation "com.orhanobut:hawk:2.0.1"
-
 
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.7'
@@ -56,5 +54,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
     implementation 'com.google.android.material:material:1.1.0-alpha04'
+
+    implementation 'com.tapadoo.android:alerter:2.0.6'
 }
 apply plugin: 'com.google.gms.google-services'

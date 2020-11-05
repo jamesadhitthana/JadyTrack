@@ -36,7 +36,6 @@ public class GenerateIdActivity extends AppCompatActivity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //Share button functionality
-                Toast.makeText(getApplicationContext(), "Sharing your tracking ID", Toast.LENGTH_SHORT).show();
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND); //Intent to share
                 sharingIntent.setType("text/plain");//Set type of shared data to text
                 //shared string

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -20,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tapadoo.alerter.Alerter;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -42,7 +45,7 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
     // view untuk qr scanner
     private ZXingScannerView mScannerView;
 
-
+   private KProgressHUD loadingWindow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +114,18 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
     public void handleResult(Result rawResult) {
         // dalam satu porses hanya boleh ada 1 sesi untuk mendeteksi qr code
         if(sessionHandler == 0){
+            //Set loading window
+            loadingWindow = KProgressHUD.create(ScanQrActivity.this)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setBackgroundColor(Color.parseColor("#508AF1F7"))
+                    .setLabel("Please wait")
+                    .setDetailsLabel("Finding tracking id")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f)
+                    .show();
+
+
             checkDatabase(rawResult.getText());
             sessionHandler = 1;
         }
@@ -133,6 +148,7 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.hasChild(id)) {
                     if(scenario.equals("viewer")){
+                        loadingWindow.dismiss();//dismiss window
                         Intent intent = new Intent(ScanQrActivity.this, TrackingActivity.class);
                         intent.putExtra(EXTRA_MESSAGE_ID, id);
                         intent.putExtra(EXTRA_MESSAGE_NAME, nama);
@@ -140,7 +156,7 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
                     }
                     else if(scenario.equals("appointment")){
                         // cek apakah sudah pernah buat geofence
-
+                        loadingWindow.dismiss();//dismiss window
                         Intent intent = new Intent(ScanQrActivity.this, AppointmentActivity.class);
                         intent.putExtra(EXTRA_MESSAGE_ID, id);
                         intent.putExtra(EXTRA_MESSAGE_NAME, nama);
@@ -149,7 +165,9 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
                     }
                 }
                 else{
-                    Toast.makeText(ScanQrActivity.this, "ID does not exist", Toast.LENGTH_SHORT).show();
+                    Alerter.create(ScanQrActivity.this).setTitle("Oh no!").setText("ID does not exist").setBackgroundColorRes(R.color.colorAccent).show();
+
+                    loadingWindow.dismiss();
                     sessionHandler = 0;
                 }
             }

@@ -60,6 +60,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.ValueEventListener;
+import com.tapadoo.alerter.Alerter;
 
 import java.security.Timestamp;
 import java.util.ArrayList;
@@ -173,9 +174,6 @@ public class AppointmentActivity extends AppCompatActivity
                         time = (Long) entry.getValue();
                     }
                 }
-
-                //Toast.makeText(AppointmentActivity.this, location.toString(), Toast.LENGTH_LONG).show();
-
                 getLastKnownLocation();
             }
 
@@ -244,7 +242,7 @@ public class AppointmentActivity extends AppCompatActivity
                                         startActivity(intent);
                                     }
                                     else if(!isSent){
-                                        Toast.makeText(AppointmentActivity.this, "couldn't set geofence because geofence has set before", Toast.LENGTH_LONG).show();
+                                        Alerter.create(AppointmentActivity.this).setTitle("Unable to set geofence").setText("Unable to set geofence because geofence has been created previously").setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
 
@@ -256,13 +254,13 @@ public class AppointmentActivity extends AppCompatActivity
 
 
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Failed to set the object on the database.", Toast.LENGTH_SHORT).show();
+                            Alerter.create(AppointmentActivity.this).setTitle("Oops something went wrong!").setText("We failed to set the object on the database").setBackgroundColorRes(R.color.colorAccent).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please draw at least three points for your geofence.", Toast.LENGTH_SHORT).show();
+                        Alerter.create(AppointmentActivity.this).setTitle("You forgot to draw your geofence!").setText("Please draw at least three points for your geofence").setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please set your destination point by tapping on the desired destination.", Toast.LENGTH_SHORT).show();
+                    Alerter.create(AppointmentActivity.this).setTitle("You forgot to set your destination!").setText("Please set your destination by tapping on the desired destination").setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
             }
@@ -411,7 +409,7 @@ public class AppointmentActivity extends AppCompatActivity
         Date date= new Date();
         long time = date.getTime();
 
-        historyReference.child("history").child(id).setValue(time);
+        historyReference.child("trackingHistory").child(id).setValue(time);
 
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -438,13 +436,14 @@ public class AppointmentActivity extends AppCompatActivity
                         databaseReference.child(id).child("geofenceNum").setValue(markers.size());
 
                         geofenceActivated = true;//activate geofence
-                        Toast.makeText(getApplicationContext(), "Successfully synchronized Geofence online", Toast.LENGTH_SHORT).show();
+                        Alerter.create(AppointmentActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
 
 
 
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Id doesn't exist", Toast.LENGTH_SHORT).show();
+                    Alerter.create(AppointmentActivity.this).setTitle("Oh no we failed to find tracking ID").setText("ID doesn't exist").setBackgroundColorRes(R.color.colorAccent).show();
+
                 }
             }
 
@@ -807,13 +806,14 @@ public class AppointmentActivity extends AppCompatActivity
 
     private void notifyTargetInsideGeofence() {
         polygon.setFillColor(Color.argb(100, 150, 150, 150));
-        Toast.makeText(getApplicationContext(), "You are inside the geofence!", Toast.LENGTH_SHORT).show();
+        Alerter.create(AppointmentActivity.this).setText("You are inside the geofence!").setBackgroundColorRes(R.color.colorAccent).show();
+
     }
 
     private void notifyTargetCrossedGeofence() {
         polygon.setFillColor(Color.RED);
 
-        Toast.makeText(getApplicationContext(), "Crossing Border", Toast.LENGTH_SHORT).show();
+        Alerter.create(AppointmentActivity.this).setText("Crossing the border!").setBackgroundColorRes(R.color.colorAccent).show();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";

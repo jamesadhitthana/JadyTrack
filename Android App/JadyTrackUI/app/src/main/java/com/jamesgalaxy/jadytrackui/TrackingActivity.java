@@ -52,6 +52,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tapadoo.alerter.Alerter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,10 +126,24 @@ public class TrackingActivity extends AppCompatActivity implements
     // Firebase reference
     private DatabaseReference databaseReference;
 
+    // Process dialog
+    private KProgressHUD loadingWindow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking);
+
+        //Set loading window
+        loadingWindow = KProgressHUD.create(TrackingActivity.this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setBackgroundColor(Color.parseColor("#508AF1F7"))
+                .setLabel("Please wait")
+                .setDetailsLabel("Getting location data")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+                .show();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -167,7 +183,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
                     Long diffTime = tsLong - time;
                     // aktif selama 30 detik
-                    if(diffTime < 30000){
+                    if(diffTime < 20000){
                         isTargetOnline = true;
                     }
                     else{
@@ -206,6 +222,7 @@ public class TrackingActivity extends AppCompatActivity implements
         // Menggambar history marker yang tersimpan di firebase
         if(!isMarkerDrawed){
             plotMarkerHistory();
+            loadingWindow.dismiss();
         }
         if(!isGeofenceDrawed){
             plotGeofence();
@@ -456,7 +473,8 @@ public class TrackingActivity extends AppCompatActivity implements
                     mMap.addPolyline(options);
                 }
                 catch (Error e){
-                    Toast.makeText(TrackingActivity.this, "No history marker", Toast.LENGTH_LONG).show();
+                    Alerter.create(TrackingActivity.this).setTitle("Oh no!").setText("You dont have a history marker").setBackgroundColorRes(R.color.colorAccent).show();
+
                 }
 
             }
@@ -728,8 +746,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
     private void notifyTargetCrossedGeofence() {
         polygon.setFillColor(Color.RED);
-
-        Toast.makeText(getApplicationContext(), "Crossing Border", Toast.LENGTH_SHORT).show();
+        Alerter.create(TrackingActivity.this).setTitle("Target crossed the Geofence!").setText("Target has exited the geofence!").setBackgroundColorRes(R.color.colorAccent).show();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
