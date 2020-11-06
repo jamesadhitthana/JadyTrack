@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JadyTrack v2</string>
+    <string name="onboarding_1_titleText">Selamat datang di JadyTrack!</string>
+    <string name="onboarding_1_descriptionText">Asisten pribadi Anda untuk memantau lokasi rekan Anda. \n\nGeser ke kanan untuk melanjutkan</string>
+    <string name="onboarding_2_titleText">Lacak Keluarga Anda dengan Mudah</string>
+    <string name="onboarding_2_descriptionText">Tidak perlu lagi mengkhawatirkan keluarga Anda! Kami tunjukkan di mana mereka secara real-time!</string>
+    <string name="onboarding_3_titleText">Perlindungan Perjalanan</string>
+    <string name="onboarding_3_descriptionText">Siapkan zona aman dan zona bahaya di pagar virtual yang dapat disesuaikan dan pastikan keluarga Anda aman ke mana pun mereka pergi</string>
+    <string name="onboarding_4_titleText">Tombol SOS</string>
+    <string name="onboarding_4_descriptionText">Rekan Anda dapat memberi tahu Anda tentang keadaan darurat dengan lebih mudah dan lebih cepat dengan mengetuk tombol SOS untuk mengirim peringatan darurat secara otomatis!</string>
+    <string name="onboarding_5_titleText">Check-In Mudah</string>
+    <string name="onboarding_5_descriptionText">Tidak ada lagi yang pesan mengganggu seperti \"di mana kamu?\" dari rekan Anda. Cukup ketuk tombol check-in dan beri tahu rekan Anda bahwa Anda telah tiba</string>
+    <string name="onboarding_6_descriptionText">Anda mendapatkan pemberitahuan otomatis ketika rekan-rekan Anda tiba di tujuan mereka, keluar dari pagar virtual, dan banyak lagi!\n\nGeser ke kanan untuk memulai!</string>
+    <string name="onboarding_6_titleText">Notifikasi Realtime!</string>
+    <string name="error_msg_internet_connection">Silakan periksa koneksi internet Anda</string>
+    <string name="loadingPleaseWait">Mohon menunggu</string>
+    <string name="target_confirm_enable_broadcast_true">Aktifkan Broadcast</string>
+    <string name="target_confirm_enable_broadcast_details">Mengaktifkan broadcast</string>
+    <string name="target_confirm_enable_broadcast_disabled_success">Broadcast diaktifkan</string>
+    <string name="target_confirm_disable_broadcast_ask">Anda yakin ingin menonaktifkan siaran? Rekan Anda tidak akan tahu apa yang terjadi jika Anda menonaktifkannya.</string>
+    <string name="target_confirm_disable_broadcast_true">Matikan Broadcast</string>
+    <string name="target_confirm_disable_broadcast_details">Mematikan broadcast</string>
+    <string name="target_confirm_disable_broadcast_disabled_success">Broadcast dimatikan</string>
+    <string name="target_confirm_disable_broadcast_disabled_failed">Gagal mematikan broadcast</string>
+</resources>

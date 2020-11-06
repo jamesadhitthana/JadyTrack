@@ -16,10 +16,10 @@
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
         android:hint="NAME"
-        android:textColorHint="#ffffff"
-        android:textAlignment="center"
         android:inputType="textPersonName"
-        android:textColor="#ffffff" />
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff" />
 
     <EditText
         android:id="@+id/signUpEmail"
@@ -47,7 +47,7 @@
         android:layout_marginBottom="115dp"
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
-        android:hint="PASSWORD"
+        android:hint="PASSWORD (6 CHARACTERS)"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="#ffffff"

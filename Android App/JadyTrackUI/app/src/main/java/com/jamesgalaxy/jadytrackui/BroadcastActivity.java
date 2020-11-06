@@ -19,11 +19,14 @@ import android.net.NetworkInfo;
 import android.net.ParseException;
 import android.os.Build;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
 
 import android.os.PowerManager;
@@ -80,7 +83,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
     // Marker
     private BitmapDescriptor icon;
-    private LatLng markerPosition = new LatLng(0f,0f);
+    private LatLng markerPosition = new LatLng(0f, 0f);
     private Marker currentMarker;
     private MarkerOptions markerOption;
     private boolean isFirstMarker = true;
@@ -139,9 +142,10 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private KProgressHUD loadingWindow;
 
     //loading bar WINDOW
-    boolean progressDialogIsShown =false;
+    boolean progressDialogIsShown = false;
     private KProgressHUD loadingWindowEnableBroadcast;
     private KProgressHUD loadingWindowDisableBroadcast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,15 +167,14 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         // Untuk menerima nilai dari nama yang diberikan oleh activity sebelumnya
-            //@Yefta, I changed the intents below to get it from the AppointmentActivity.java
-                Intent intent = getIntent();
-                nama = intent.getStringExtra(MainMenu.EXTRA_MESSAGE_NAME);
-                //nama = intent.getStringExtra("trackingSession_nama");
-                userUID = intent.getStringExtra(MainMenu.EXTRA_MESSAGE_UID);
-                //userUID = intent.getStringExtra("trackingSession_userUID");
-                    //Tambahan James untuk ambil tracking session key dari AppointmentActivity.java
-                    //trackingSessionKey = intent.getStringExtra("trackingSession_key");
-
+        //@Yefta, I changed the intents below to get it from the AppointmentActivity.java
+        Intent intent = getIntent();
+        nama = intent.getStringExtra(MainMenu.EXTRA_MESSAGE_NAME);
+        //nama = intent.getStringExtra("trackingSession_nama");
+        userUID = intent.getStringExtra(MainMenu.EXTRA_MESSAGE_UID);
+        //userUID = intent.getStringExtra("trackingSession_userUID");
+        //Tambahan James untuk ambil tracking session key dari AppointmentActivity.java
+        //trackingSessionKey = intent.getStringExtra("trackingSession_key");
 
 
         // Menyiapkan tampilan
@@ -186,7 +189,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         //final String id = trackingSessionKey;
         id = databaseReference.push().getKey(); //(James): Yef, I deleted this and changed it to the key sent by the previous intent
 
-        geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/"+id);
+        geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/" + id);
 
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -195,40 +198,40 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
                 // mengubah status
                 databaseReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.child(id).child("notifications").child("statusSOS").getValue() == "true"){
-                                    databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
-                                }
-                                if(dataSnapshot.child(id).child("notifications").child("statusInGeofence").getValue() == "true"){
-                                    databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
-                                }
-                                if(dataSnapshot.child(id).child("notifications").child("statusHasArrived").getValue() == "true"){
-                                    databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(false);
-                                }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(id).child("notifications").child("statusSOS").getValue() == "true") {
+                            databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
+                        }
+                        if (dataSnapshot.child(id).child("notifications").child("statusInGeofence").getValue() == "true") {
+                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
+                        }
+                        if (dataSnapshot.child(id).child("notifications").child("statusHasArrived").getValue() == "true") {
+                            databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(false);
+                        }
+                    }
 
-                            }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
                 });
 
 
-
                 Long endTime = location.getTime();
-                Long diffTime = endTime - startTime ;
+                Long diffTime = endTime - startTime;
 
                 // Mengubah current marker
                 markerPosition = new LatLng(location.getLatitude(), location.getLongitude());
                 currentMarker.setPosition(markerPosition);
-                if(!isMarkerDrawed){
+                if (!isMarkerDrawed) {
                     loadingWindow.dismiss();
                     isMarkerDrawed = true;
                 }
-                mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
 
                 // setiap 12 detik (12000) update database
-                if(diffTime > 5000 && isBroadcast) {
+                if (diffTime > 5000 && isBroadcast) {
 
                     status.setText("Broadcast is enabled");
 
@@ -256,16 +259,15 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     TimeZone tz = TimeZone.getDefault();
                     calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    java.util.Date currenTimeZone=new java.util.Date((long)1379487711*1000);
+                    java.util.Date currenTimeZone = new java.util.Date((long) 1379487711 * 1000);
                     String date = sdf.format(currenTimeZone).toString();
 
                     if (isFirstMarker) {
-                            // start marker
-                            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.start);
-                            mMap.addMarker(new MarkerOptions().position(markerPosition).title("First Marker").icon(icon));
-                            isFirstMarker = false;
-                    }
-                    else{
+                        // start marker
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.start);
+                        mMap.addMarker(new MarkerOptions().position(markerPosition).title("First Marker").icon(icon));
+                        isFirstMarker = false;
+                    } else {
                         // history marker
                         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
                         mMap.addMarker(new MarkerOptions().position(markerPosition).title(date).icon(icon));
@@ -280,22 +282,20 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     locationHistory.put(numMarker.toString(), location);
 
                     // handler untuk geofence
-                    if (isGeofenceDrawed){
-                        if(!pointInPolygon(currentMarker.getPosition(), polygon)){
+                    if (isGeofenceDrawed) {
+                        if (!pointInPolygon(currentMarker.getPosition(), polygon)) {
                             databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
                             notifyTargetCrossedGeofence();
                         }
                     }
 
 
-
-                }
-                else if(!isBroadcast){
+                } else if (!isBroadcast) {
                     status.setText("Broadcast is disabled");
 
-                    if(progressDialogIsShown) {
+                    if (progressDialogIsShown) {
                         loadingWindowDisableBroadcast.dismiss();
-                        progressDialogIsShown=false;
+                        progressDialogIsShown = false;
                     }
 
                 }
@@ -329,32 +329,25 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
-        }
-        else {
+        } else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
 
 
-        // Listener tombol untuk enable/disable broadcast
+        // *Listener tombol untuk enable/disable broadcast
         tombolBroadcast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if(isBroadcast){
-                    isBroadcast = false;
-                    loadingWindowDisableBroadcast = KProgressHUD.create(BroadcastActivity.this)
-                            .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                            .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                            .setLabel("Please wait")
-                            .setDetailsLabel("Disabling broadcast")
-                            .setCancellable(true)
-                            .setAnimationSpeed(2)
-                            .setDimAmount(0.5f)
-                            .show();
-                    progressDialogIsShown=true;
-                    //END OF: Start loading window
-                    tombolBroadcast.setText("Enable Broadcast");
-                }
-                else {
+
+
+                if (isBroadcast) {
+                    //Nov 6 2020 UTR09 New Feature to Ask if User is sure about disabling broadcast
+                    //Todo: aSK USER
+                    askUserDisableBroadcast();
+//
+
+
+                } else {
                     isBroadcast = true;
                     isBroadcast = true;
                     //---Start loading window
@@ -376,18 +369,16 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         // tombol untuk menampilkan id dan qr code
         tombolGetId.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if(isBroadcast){
+                if (isBroadcast) {
                     Intent intent = new Intent(view.getContext(), GenerateIdActivity.class);
                     intent.putExtra(EXTRA_MESSAGE_ID, id);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }
         });
-
 
 
         // check in dan sos bukan fungsi dalam activity Appointment, jadi ini akan dipindahkan ke broadcast activity
@@ -398,7 +389,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
 
-                if(isBroadcast){
+                if (isBroadcast) {
                     //Check In Alert Dialog
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
                     alertDialogBuilder.setMessage("Are you sure you want to enable SOS (Emergency) mode? If you are connected to the internet, your peers will get notified of an emergency immediately.");
@@ -437,8 +428,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                     //--
-                }
-                else{
+                } else {
                     Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
@@ -498,7 +488,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         super.onStart();
 
         // Menggambar history marker yang tersimpan di firebase
-        if(!isGeofenceDrawed){
+        if (!isGeofenceDrawed) {
             plotGeofence();
         }
     }
@@ -536,7 +526,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     }
 
     // untuk menggambar geofence
-    public void plotGeofence(){
+    public void plotGeofence() {
 
         geofenceReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -544,14 +534,14 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
                 //Toast.makeText(getApplicationContext(), "dataSnapshot "+ dataSnapshot , Toast.LENGTH_SHORT).show();
 
-                if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed){
+                if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed) {
                     ArrayList<Object> geofence = (ArrayList<Object>) dataSnapshot.child("geofence").getValue();
-                    int geofenceSize = geofence.size()-1;
+                    int geofenceSize = geofence.size() - 1;
                     int geofenceNum = (Integer) Integer.parseInt((String) dataSnapshot.child("geofenceNum").getValue().toString());
 
-                   // Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
 
-                    if(geofenceNum == geofenceSize) {
+                    if (geofenceNum == geofenceSize) {
                         isGeofenceDrawed = true;
 
                         //oast.makeText(BroadcastActivity.this, "Target has Geofence", Toast.LENGTH_LONG).show();
@@ -651,7 +641,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         markerOption = new MarkerOptions().position(markerPosition).title("Current Location").icon(icon);
         currentMarker = mMap.addMarker(markerOption);
         currentMarker.setZIndex(1.0f);
-        mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
 
     // permission untuk location
@@ -659,9 +649,9 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                    PackageManager.PERMISSION_GRANTED){
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
         }
@@ -676,21 +666,18 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
             @Override
             public void run() {
-                try{
-                    if (!isConnected(BroadcastActivity.this)){
-                        if(internetStatus == true){
+                try {
+                    if (!isConnected(BroadcastActivity.this)) {
+                        if (internetStatus == true) {
                             internetDialog(BroadcastActivity.this).show();
                             internetStatus = false;
                         }
-                    }
-                    else {
+                    } else {
                         internetStatus = true;
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // TODO: handle exception
-                }
-                finally{
+                } finally {
                     //also call the same runnable to call it at regular interval
                     handler.postDelayed(this, 1000);
                 }
@@ -708,7 +695,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting()))
+                return true;
             else return false;
         } else
             return false;
@@ -944,5 +932,51 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
+    }
+
+    //    James UTR09
+    private void askUserDisableBroadcast() {
+        //Check In Alert Dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
+        alertDialogBuilder.setMessage(getResources().getString(R.string.target_confirm_disable_broadcast_ask));
+        alertDialogBuilder.setPositiveButton(getResources().getString(R.string.target_confirm_disable_broadcast_true),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        //------------------------Emergency Status: ENABLE EMERGENCY----------------------//
+                        try {
+//                            --Execute broadcast disabler--//
+                            isBroadcast = false;
+                            loadingWindowDisableBroadcast = KProgressHUD.create(BroadcastActivity.this)
+                                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                                    .setBackgroundColor(Color.parseColor("#508AF1F7"))
+                                    .setLabel(getResources().getString(R.string.loadingPleaseWait))
+                                    .setDetailsLabel(getResources().getString(R.string.target_confirm_disable_broadcast_details))
+                                    .setCancellable(true)
+                                    .setAnimationSpeed(2)
+                                    .setDimAmount(0.5f)
+                                    .show();
+                            progressDialogIsShown = true;
+                            //END OF: Start loading window
+                            Alerter.create(BroadcastActivity.this).setText(getResources().getString(R.string.target_confirm_disable_broadcast_disabled_success)).setBackgroundColorRes(R.color.colorAccent).show();
+                            tombolBroadcast.setText(getResources().getString(R.string.target_confirm_enable_broadcast_true));
+                            //------//
+                        } catch (Exception e) {
+                            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.target_confirm_disable_broadcast_disabled_failed)).setText(getResources().getString(R.string.error_msg_internet_connection)).setBackgroundColorRes(R.color.colorAccent).show();
+                        }
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //------------------------Emergency Status: DISABLE EMERGENCY----------------------//
+//                            Alerter.create(BroadcastActivity.this).setTitle("You selected no!").setText("Emergency status set to false").setBackgroundColorRes(R.color.colorAccent).show();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

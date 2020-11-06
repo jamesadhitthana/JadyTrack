@@ -1,4 +1,39 @@
 <resources>
-    <string name="app_name">JadyTrackUI</string>
-    <string name="google_maps_key">AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM</string>
+    <string name="app_name">JadyTrack v2</string>
+    <string name="google_maps_key" translatable="false">AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM</string>
+    <!--Strings for Onboarding-->
+    <string name="onboarding_1_titleText">Welcome to JadyTrack!</string>
+    <string name="onboarding_1_descriptionText">"Your personal assistant to monitor your peer's location.\n\n Swipe right to continue"</string>
+
+    <string name="onboarding_2_titleText">Easily Track Your Family</string>
+    <string name="onboarding_2_descriptionText">No more worrying about your family! We show you where they are in real-time!</string>
+
+    <string name="onboarding_3_titleText">Travel Protection</string>
+    <string name="onboarding_3_descriptionText">Set-up safe zones and danger zones on customizable virtual fences and make sure your family is safe wherever they are going</string>
+
+    <string name="onboarding_4_titleText">SOS Button</string>
+    <string name="onboarding_4_descriptionText">Your peer can notify you of emergencies easier and faster by tapping the SOS button to automatically send an emergency alert!</string>
+
+    <string name="onboarding_5_titleText">Easy "Check-In"</string>
+    <string name="onboarding_5_descriptionText">No more of those annoying \"where are you?\" messages from your peer. Just tap the check-in button and let your peer know that you have arrived</string>
+
+    <string name="onboarding_6_titleText">Realtime Notifications</string>
+    <string name="onboarding_6_descriptionText">You get automatic notifications when your peers arrive at their destination, exit a virtual fence, and more!\n\n Swipe right to get started!</string>
+
+<!--    Common Errors:-->
+
+    <string name="error_msg_internet_connection">Please check your internet connection</string>
+    <!--    KLoader-->
+    <string name="loadingPleaseWait">Please wait</string>
+    <!--    Broadcast Enabler-->
+    <string name="target_confirm_enable_broadcast_true">Enable Broadcast</string>
+    <string name="target_confirm_enable_broadcast_details">Enabling broadcast</string>
+    <string name="target_confirm_enable_broadcast_disabled_success">Broadcast enabled</string>
+    <!--    Broadcast Disabler-->
+    <string name="target_confirm_disable_broadcast_ask">Are you sure you want to disable the broadcast?. Your peers will not know what is going on if you disable it.</string>
+    <string name="target_confirm_disable_broadcast_true">Disable Broadcast</string>
+    <string name="target_confirm_disable_broadcast_details">Disabling broadcast</string>
+    <string name="target_confirm_disable_broadcast_disabled_success">Broadcast disabled</string>
+    <string name="target_confirm_disable_broadcast_disabled_failed">Failed to disable broadcast</string>
+
 </resources>

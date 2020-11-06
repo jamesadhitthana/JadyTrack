@@ -66,17 +66,22 @@ public class Onboarding extends AppCompatActivity {
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
         // Onboarding Contents
 
-        PaperOnboardingPage scr1 = new PaperOnboardingPage("Welcome to JadyTrack", "Your personal assistant to monitor your beloved one's location",
+        PaperOnboardingPage scr1 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_1_titleText), getResources().getString(R.string.onboarding_1_descriptionText),
                 Color.parseColor("#6E8CA0"), R.drawable.onboarding_jadylogo, R.drawable.onboarding_jadylogo);
-        PaperOnboardingPage scr2 = new PaperOnboardingPage("Easily Track Your Family", "No more worrying about your family! We show you where they are in real-time!",
+
+        PaperOnboardingPage scr2 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_2_titleText), getResources().getString(R.string.onboarding_2_descriptionText),
                 Color.parseColor("#D97D54"), R.drawable.onboarding_binoc, R.drawable.onboarding_binoc);
-        PaperOnboardingPage scr3 = new PaperOnboardingPage("Travel Protection", " Set-up safe zones and danger zones on customizable virtual fences and make sure your family is safe wherever they are going",
+
+        PaperOnboardingPage scr3 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_3_titleText), getResources().getString(R.string.onboarding_3_descriptionText),
                 Color.parseColor("#87BCBF"), R.drawable.onboarding_travel, R.drawable.onboarding_travel);
-        PaperOnboardingPage scr4 = new PaperOnboardingPage("SOS Button", "Your peer can notify you of emergencies easier and faster by tapping the SOS button to automatically send you a notifyTargetReachDestination",
+
+        PaperOnboardingPage scr4 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_4_titleText), getResources().getString(R.string.onboarding_4_descriptionText),
                 Color.parseColor("#B1B0D1"), R.drawable.onboarding_sos, R.drawable.onboarding_sos);
-        PaperOnboardingPage scr5 = new PaperOnboardingPage("Easy \"Check-In\"", "No more of those annoying \"where are you?\" messages from your loved ones and instead just tap the check-in button to quickly let your loved ones know that you have arrived to your location",
+
+        PaperOnboardingPage scr5 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_5_titleText), getResources().getString(R.string.onboarding_5_descriptionText),
                 Color.parseColor("#D5A8A6"), R.drawable.onboarding_check_in, R.drawable.onboarding_check_in);
-        PaperOnboardingPage scr6 = new PaperOnboardingPage("Realtime Notifications!", "You get automatic notifications when your peers arrive at their destination, exit a virtual fence, and more!",
+
+        PaperOnboardingPage scr6 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_6_titleText), getResources().getString(R.string.onboarding_6_descriptionText),
                 Color.parseColor("#B2B694"), R.drawable.onboarding_notification, R.drawable.onboarding_notification);
 
 
