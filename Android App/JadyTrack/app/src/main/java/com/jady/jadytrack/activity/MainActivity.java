@@ -26,21 +26,19 @@ import com.orhanobut.hawk.Hawk;
 import com.tapadoo.alerter.Alerter;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "EmailPassword";
+
     private TextView title1;
     private TextView title2;
     private TextView description1;
     private TextView description2;
     private TextView garisTemporary;
-    String databaseParentPath;
-    FirebaseDatabase databaseKu;
-    DatabaseReference databaseUser;
-    private static final String TAG = "EmailPassword";
-    //---Firebase Stuff:-----------------------//
-    //Firebase authentication
+    private FirebaseDatabase databaseKu;
+    private DatabaseReference databaseUser;
+
+    // Firebase authentication
     private FirebaseAuth mAuth;
-
-    //END OF: Firebase Stuff ---//
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         description2 = (TextView)findViewById( R.id.description2 );
         garisTemporary = (TextView)findViewById( R.id.garisTemporary );
 
-    //---SETUP TABS---//
+        //---SETUP TABS---//
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Sign Up"));
         tabLayout.addTab(tabLayout.newTab().setText("Log In"));
@@ -83,30 +81,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-            //empty -james
+
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-            //empty -james
+
             }
         });
-    //END OF: SETUP TABS----//
+        //END OF: SETUP TABS----//
 
 
-        //-----------FIREBASE STUFF HERE-----------//
-        //Firebase Realtime Database//
-        databaseParentPath = "androidJames";
+        // -----------FIREBASE STUFF HERE-----------//
+        // Firebase Realtime Database
         databaseKu = FirebaseDatabase.getInstance();
-        //Firebase auth//
+        // Firebase auth
         mAuth = FirebaseAuth.getInstance();
-        //-----------------------------------------//
+        // -----------------------------------------//
 
-    }//END OF onCreate
-
-
-
-
+    }
 
     @Override
     public void onStart() {
@@ -117,20 +110,16 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null) {
             Alerter.create(MainActivity.this).setTitle("Login to Access JadyTrack").setText("You are currently not logged in").setBackgroundColorRes(R.color.colorAccent).show();
         } else {
-            //Toast.makeText(getApplicationContext(), "Welcome " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "signIn:" + currentUser.getEmail());
         }
 
         updateUI(currentUser);
 
-    }//end of OnStart
-
+    }
 
     public void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
         Alerter.create(MainActivity.this).setText("Logging in...").setBackgroundColorRes(R.color.colorAccent).show();
-
-        //showProgressDialog();
 
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
@@ -156,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Alerter.create(MainActivity.this).setTitle("Authentication Failed").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                         }
-
                         // [END_EXCLUDE]
                     }
                 });
@@ -176,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);//Auto flag Login After SignUp
+                            // Auto flag Login After SignUp
+                            updateUI(user);
 
                             databaseUser = databaseKu.getReference("users");
                             User registeredUser = new User(name,email,password);
@@ -195,16 +184,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(FirebaseUser user) {
-        //hideProgressDialog();
         if (user != null) {
             garisTemporary.setText("Current user: " + user.getEmail());
 
             //---------HAWK set SkipOnboarding to true if the user is logged in---------//
             Boolean skipOnboardingIfLoggedIn = true;
             Hawk.put("skipOnboardingIfLoggedIn", skipOnboardingIfLoggedIn);
-            //END OF: HAWK stuff james
+            // END OF: HAWK stuff james
 
-            //Change the Activity to Main Menu if user is logged in
+            // Change the Activity to Main Menu if user is logged in
                 Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 // set the new task and clear flags
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)

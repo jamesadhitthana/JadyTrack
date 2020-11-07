@@ -1,10 +1,10 @@
 package com.jady.jadytrack.entity;
 
 public class DestinationPoint {
+
     public double latitude;
     public double longitude;
     public float radius;
-
 
     public DestinationPoint(double latitude, double longitude, float radius) {
         this.latitude = latitude;

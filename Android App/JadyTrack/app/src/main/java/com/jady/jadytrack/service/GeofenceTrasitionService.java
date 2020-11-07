@@ -8,9 +8,10 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
@@ -21,10 +22,6 @@ import com.jady.jadytrack.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.core.app.NotificationCompat;
-
-// Ini untuk notifikasi geofence bulet
 
 public class GeofenceTrasitionService extends IntentService {
 
@@ -40,44 +37,41 @@ public class GeofenceTrasitionService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         // Handling errors
-        if ( geofencingEvent.hasError() ) {
-            String errorMsg = getErrorString(geofencingEvent.getErrorCode() );
-            Log.e( TAG, errorMsg );
+        if (geofencingEvent.hasError()) {
+            String errorMsg = getErrorString(geofencingEvent.getErrorCode());
+            Log.e(TAG, errorMsg);
             return;
         }
 
         int geoFenceTransition = geofencingEvent.getGeofenceTransition();
         // Check if the transition type is of interest
-        //if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-             if(  geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ) {
+        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             // Get the geofence that were triggered
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
-            String geofenceTransitionDetails = getGeofenceTrasitionDetails(geoFenceTransition, triggeringGeofences );
+            String geofenceTransitionDetails = getGeofenceTrasitionDetails(geoFenceTransition, triggeringGeofences);
 
             // Send notifyTargetReachDestination details as a String
-            sendNotification( geofenceTransitionDetails );
+            sendNotification(geofenceTransitionDetails);
         }
     }
 
 
     private String getGeofenceTrasitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
-        // get the ID of each geofence triggered
+        // Get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
-        for ( Geofence geofence : triggeringGeofences ) {
-            triggeringGeofencesList.add( geofence.getRequestId() );
+        for (Geofence geofence : triggeringGeofences) {
+            triggeringGeofencesList.add(geofence.getRequestId());
         }
 
         String status = null;
-        //if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
-        //    status = "Entering ";
-         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
+        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
             status = "Exiting ";
-        return status + TextUtils.join( ", ", triggeringGeofencesList);
+        return status + TextUtils.join(", ", triggeringGeofencesList);
     }
 
-    private void sendNotification( String msg ) {
-        Log.i(TAG, "sendNotification: " + msg );
+    private void sendNotification(String msg) {
+        Log.i(TAG, "sendNotification: " + msg);
 
         // Intent to start the main Activity
         Intent notificationIntent = AppointmentActivity.makeNotificationIntent(
@@ -89,14 +83,12 @@ public class GeofenceTrasitionService extends IntentService {
         stackBuilder.addNextIntent(notificationIntent);
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-        // Creating and sending Notification
+        // Create and send Notification
         NotificationManager notificatioMng =
-                (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificatioMng.notify(
                 GEOFENCE_NOTIFICATION_ID,
                 createNotification(msg, notificationPendingIntent));
-
     }
 
     // Create notifyTargetReachDestination
@@ -112,7 +104,6 @@ public class GeofenceTrasitionService extends IntentService {
                 .setAutoCancel(true);
         return notificationBuilder.build();
     }
-
 
     private static String getErrorString(int errorCode) {
         switch (errorCode) {

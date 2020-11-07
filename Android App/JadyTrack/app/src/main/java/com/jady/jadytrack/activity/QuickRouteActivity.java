@@ -15,6 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -42,11 +48,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jady.jadytrack.R;
 import com.jady.jadytrack.entity.DestinationPoint;
 import com.jady.jadytrack.entity.GeofencePoint;
+import com.jady.jadytrack.entity.Notification;
 import com.jady.jadytrack.service.GeofenceTrasitionService;
-import com.jady.jadytrack.entity.Notifications;
-import com.jady.jadytrack.R;
 import com.tapadoo.alerter.Alerter;
 
 import java.lang.reflect.Field;
@@ -59,12 +65,6 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 public class QuickRouteActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks,
@@ -75,14 +75,9 @@ public class QuickRouteActivity extends AppCompatActivity
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    // Attribut
-    private String userUID = "Test";
-    private String id;
+    public static final String EXTRA_MESSAGE_ID = "com.jady.jadytrack.SENDID";
+
     private String targetId = "Test juga";
-
-    public static final String EXTRA_MESSAGE_ID = "com.example.yeftaprototypev2.SENDID";
-    public static final String EXTRA_MESSAGE_UID = "com.example.yeftaprototypev2.SENDUID";
-
     private Double longitude;
     private Double latitude;
     private Long time;
@@ -98,40 +93,31 @@ public class QuickRouteActivity extends AppCompatActivity
     private Double markerLatitude;
 
     private DatabaseReference databaseReference;
-    private DatabaseReference locationReference;
     private DatabaseReference geofenceReference;
-    private DatabaseReference historyReference;
-    private DatabaseReference plotReference;
 
     // Google Map
     private GoogleMap map;
     private GoogleApiClient googleApiClient; // Untuk membuat lokasinya center
     private Location lastLocation = new Location(LocationManager.GPS_PROVIDER);
-    private MapFragment mapFragment; // Fragment peta
     private Marker locationMarker; // Marker untuk current location
     private Marker destinationMarker; // Marker untuk destination location
-    private boolean isCameraUpdate = false; // ini untuk animate camera pada current location pertama
-
-    // Jumlah marker
-    private int startingpoint = 0;
-
-    // Widget
-    private Button setAppointment;
 
     // Array list marker
-    private List<Marker> markers = new ArrayList<Marker>();
-    private List<Marker> drawer = new ArrayList<Marker>();
+    private List<Marker> markers = new ArrayList<>();
+    private List<Marker> drawer = new ArrayList<>();
+
+    public QuickRouteActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quickroute);
+        setContentView(R.layout.quick_route);
 
-        //Load Name and UserID from MainMenu Intent passing
+        // Load Name and UserID from MainMenu Intent
         Intent intentKu = getIntent();
         targetId = intentKu.getStringExtra(AppointmentActivity.EXTRA_MESSAGE_ID);
-        userUID = intentKu.getStringExtra(AppointmentActivity.EXTRA_MESSAGE_UID);
-
+        String userUID = intentKu.getStringExtra(AppointmentActivity.EXTRA_MESSAGE_UID);
 
         // initialize GoogleMaps
         initGMaps();
@@ -139,64 +125,60 @@ public class QuickRouteActivity extends AppCompatActivity
         createGoogleApi();
 
         // Firebase
-        locationReference = FirebaseDatabase.getInstance().getReference("trackingSession/"+targetId);
+        DatabaseReference locationReference = FirebaseDatabase.getInstance().getReference("trackingSession/" + targetId);
         locationReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 HashMap<String, Object> location =
                         (HashMap<String, Object>) dataSnapshot.child("targetLocation").getValue();
 
-                for(HashMap.Entry<String, Object> entry: location.entrySet()) {
-                    if(entry.getKey().equals("longitude")) {
+                for (HashMap.Entry<String, Object> entry : location.entrySet()) {
+                    if (entry.getKey().equals("longitude")) {
                         longitude = (Double) entry.getValue();
                         lastLocation.setLongitude(longitude);
                     }
-                    if(entry.getKey().equals("latitude")){
+                    if (entry.getKey().equals("latitude")) {
                         latitude = (Double) entry.getValue();
                         lastLocation.setLatitude(latitude);
                     }
-                    if(entry.getKey().equals("time")){
+                    if (entry.getKey().equals("time")) {
                         time = (Long) entry.getValue();
                     }
                 }
-
-                //Toast.makeText(AppointmentActivity.this, location.toString(), Toast.LENGTH_LONG).show();
-
                 getLastKnownLocation();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
 
-        setAppointment = (Button) findViewById(R.id.setgeofence);
+        // Widget
+        Button setAppointment = (Button) findViewById(R.id.setgeofence);
         setAppointment.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {//Set Appointment Button
-                //If a destination marker exists:
+            public void onClick(View v) {
                 if (destinationMarker != null) {
-                    //If a geofence markers minimal 3 exists (minimal bikin triangle):
+                    // If a geofence markers minimal 3 exists (minimal bikin triangle):
                     if (markers.size() >= 3) {
 
-                        //Try Catch for Uploading geofence data, destination point, and notification data to Firebase
+                        // Try Catch for Uploading geofence data, destination point, and notification data to Firebase
                         try {
 
-                            geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/"+targetId);
+                            geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/" + targetId);
 
                             geofenceReference.addValueEventListener(new ValueEventListener() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(!dataSnapshot.hasChild("geofence") && !isSent){
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (!dataSnapshot.hasChild("geofence") && !isSent) {
                                         sendtoFirebase();
                                         isSent = true;
 
                                         Intent intent = new Intent(QuickRouteActivity.this, TrackingActivity.class);
                                         intent.putExtra(EXTRA_MESSAGE_ID, targetId);
                                         startActivity(intent);
-                                    }
-                                    else if(!isSent){
+                                    } else if (!isSent) {
                                         Alerter.create(QuickRouteActivity.this).setTitle("Unable to set geofence").setText("Unable to set geofence because geofence has been created previously").setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
@@ -225,12 +207,12 @@ public class QuickRouteActivity extends AppCompatActivity
 
 
         // ini untuk mengambil history geofence yang pernah dibuat sebelumnya
-        historyReference = FirebaseDatabase.getInstance().getReference().child("users/"+userUID+"/trackingHistory");
+        DatabaseReference historyReference = FirebaseDatabase.getInstance().getReference().child("users/" + userUID + "/trackingHistory");
 
 
         // SPINNER
         // Get reference of SpinnerView from layout/main_activity.xml
-        final Spinner spinnerDropDown = (Spinner)findViewById(R.id.spinner);
+        final Spinner spinnerDropDown = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> historyTime = new ArrayList<String>();
         final ArrayList<String> historyId = new ArrayList<String>();
         final boolean[] isHistoryCollected = {false};
@@ -239,8 +221,8 @@ public class QuickRouteActivity extends AppCompatActivity
 
         historyReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null && !isHistoryCollected[0]){
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null && !isHistoryCollected[0]) {
 
                     HashMap<String, Object> data =
                             (HashMap<String, Object>) dataSnapshot.getValue();
@@ -264,6 +246,7 @@ public class QuickRouteActivity extends AppCompatActivity
                 }
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -280,14 +263,13 @@ public class QuickRouteActivity extends AppCompatActivity
 
             // Set popupWindow height to 500px
             popupWindow.setHeight(500);
-        }
-        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
 
         // masukkin array history ke dalam spinner
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
-                R.layout.simple_spinner_dropdown_item , historyTime);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
+                R.layout.simple_spinner_dropdown_item, historyTime);
 
         spinnerDropDown.setAdapter(adapter);
 
@@ -297,13 +279,13 @@ public class QuickRouteActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 // Get select item
-                int sid=spinnerDropDown.getSelectedItemPosition();
-                if(sid > 0){
-                    //Toast.makeText(getBaseContext(), "You have selected : " + historyId.get(sid-1), Toast.LENGTH_SHORT).show();
+                int sid = spinnerDropDown.getSelectedItemPosition();
+                if (sid > 0) {
                     // ini digunakan untuk menggambar geofence di mapnya
-                    plotGeofence(historyId.get(sid-1));
+                    plotGeofence(historyId.get(sid - 1));
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO Auto-generated method stub
@@ -311,42 +293,37 @@ public class QuickRouteActivity extends AppCompatActivity
         });
 
 
-
-
-
-
     }
 
-    public void sendtoFirebase(){
+    public void sendtoFirebase() {
         //---------Firebase Preparation---------//
         databaseReference = FirebaseDatabase.getInstance().getReference().child("trackingSession");
         //END OF: Firebase Preparation---------//
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChild(targetId)) {
 
-                        //Add Destination Point into Firebase
-                        DestinationPoint currentDestinationPoint = new DestinationPoint(destinationMarker.getPosition().latitude, destinationMarker.getPosition().longitude, GEOFENCE_RADIUS);
-                        databaseReference.child(targetId).child("destination").setValue(currentDestinationPoint);
+                    //Add Destination Point into Firebase
+                    DestinationPoint currentDestinationPoint = new DestinationPoint(destinationMarker.getPosition().latitude, destinationMarker.getPosition().longitude, GEOFENCE_RADIUS);
+                    databaseReference.child(targetId).child("destination").setValue(currentDestinationPoint);
 
-                        //Add Notifications into Firebase
-                        Notifications currentNotifications = new Notifications(false, true, false, false, false); //TODO: changeme
-                        databaseReference.child(targetId).child("notifications").setValue(currentNotifications);
+                    //Add Notifications into Firebase
+                    Notification currentNotifications = new Notification(false, true, false, false, false); //TODO: changeme
+                    databaseReference.child(targetId).child("notifications").setValue(currentNotifications);
 
-                        //Add Geofence Markers into Firebase
-                        for (int counterMarkerNumber = 0; counterMarkerNumber < markers.size(); counterMarkerNumber++) {//mulai dari 1 utk skip yang 0
-                            GeofencePoint temp = new GeofencePoint(markers.get(counterMarkerNumber).getPosition().latitude, markers.get(counterMarkerNumber).getPosition().longitude);
-                            databaseReference.child(targetId).child("geofence").child(Integer.toString(counterMarkerNumber + 1)).setValue(temp);
-                        }
+                    //Add Geofence Markers into Firebase
+                    for (int counterMarkerNumber = 0; counterMarkerNumber < markers.size(); counterMarkerNumber++) {//mulai dari 1 utk skip yang 0
+                        GeofencePoint temp = new GeofencePoint(markers.get(counterMarkerNumber).getPosition().latitude, markers.get(counterMarkerNumber).getPosition().longitude);
+                        databaseReference.child(targetId).child("geofence").child(Integer.toString(counterMarkerNumber + 1)).setValue(temp);
+                    }
 
-                        //Add Geofence Numbers into Firebase
-                        databaseReference.child(targetId).child("geofenceNum").setValue(markers.size());
+                    //Add Geofence Numbers into Firebase
+                    databaseReference.child(targetId).child("geofenceNum").setValue(markers.size());
 
-                        Alerter.create(QuickRouteActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
-                }
-                else{
+                    Alerter.create(QuickRouteActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
+                } else {
                     Alerter.create(QuickRouteActivity.this).setTitle("Oh no we failed to find tracking ID").setText("ID doesn't exist").setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
@@ -417,18 +394,15 @@ public class QuickRouteActivity extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult()");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQ_PERMISSION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted
-                    getLastKnownLocation();
+        if (requestCode == REQ_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                getLastKnownLocation();
 
-                } else {
-                    // Permission denied
-                    permissionsDenied();
-                }
-                break;
+            } else {
+                // Permission denied
+                permissionsDenied();
             }
         }
     }
@@ -441,7 +415,8 @@ public class QuickRouteActivity extends AppCompatActivity
 
     // Initialize GoogleMaps
     private void initGMaps() {
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        // Fragment peta
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -455,13 +430,13 @@ public class QuickRouteActivity extends AppCompatActivity
 
 
     // untuk menggambar geofence
-    public void plotGeofence(String trackingId){
+    public void plotGeofence(String trackingId) {
 
-        if(isGeofenceDrawed){
+        if (isGeofenceDrawed) {
             polygon.remove();
             destinationFence.remove();
             destinationMarker.remove();
-            while(markers.size() != 0){
+            while (markers.size() != 0) {
                 markers.get(markers.size() - 1).remove();
                 markers.remove(markers.size() - 1);
             }
@@ -469,20 +444,20 @@ public class QuickRouteActivity extends AppCompatActivity
         }
 
         //map.clear();
-        plotReference = FirebaseDatabase.getInstance().getReference("trackingSession/"+trackingId);
+        DatabaseReference plotReference = FirebaseDatabase.getInstance().getReference("trackingSession/" + trackingId);
         plotReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed){
+                if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed) {
 
                     ArrayList<Object> geofence = (ArrayList<Object>) dataSnapshot.child("geofence").getValue();
-                    int geofenceSize = geofence.size()-1;
+                    int geofenceSize = geofence.size() - 1;
                     int geofenceNum = (Integer) Integer.parseInt((String) dataSnapshot.child("geofenceNum").getValue().toString());
 
                     //Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
 
-                    if(geofenceNum == geofenceSize) {
+                    if (geofenceNum == geofenceSize) {
                         // Ini untuk menggambar destination
                         HashMap<String, Object> destination =
                                 (HashMap<String, Object>) dataSnapshot.child("destination").getValue();
@@ -570,7 +545,6 @@ public class QuickRouteActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d(TAG, "onMarkerClickListener: " + marker.getPosition());
@@ -629,57 +603,17 @@ public class QuickRouteActivity extends AppCompatActivity
             locationMarker = map.addMarker(markerOptions);
 
             float zoom = 17f;
-            //if (!isCameraUpdate) {
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
-                map.animateCamera(cameraUpdate);
-                isCameraUpdate = true;
-            //}
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
+            map.animateCamera(cameraUpdate);
+
 
         }
     }
 
-    private void markerForDestination(LatLng latLng) {
-        String title = latLng.latitude + ", " + latLng.longitude;
-        // Define marker options
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish))
-                .title(title);
-
-        destinationMarker = map.addMarker(markerOptions);
-    }
-
-
     // Attribute untuk membuat geofence bulet
-    private static final long GEO_DURATION = 60 * 60 * 1000;
-    private static final String GEOFENCE_REQ_ID = "My Geofence";
     private static final float GEOFENCE_RADIUS = 20.0f; // in meters
 
-    // Create a Geofence
-    private Geofence createGeofence(LatLng latLng, float radius) {
-        Log.d(TAG, "createGeofence");
-        return new Geofence.Builder()
-                .setRequestId(GEOFENCE_REQ_ID)
-                .setCircularRegion(latLng.latitude, latLng.longitude, radius)
-                .setExpirationDuration(GEO_DURATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                        | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build();
-    }
-
-    // Create a Geofence Request
-    // kalau misalkan keluar, notifikasi dimunculkan
-    private GeofencingRequest createGeofenceRequest(Geofence geofence) {
-        Log.d(TAG, "createGeofenceRequest");
-        return new GeofencingRequest.Builder()
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                .addGeofence(geofence)
-                .build();
-    }
-
-
     private PendingIntent geoFencePendingIntent;
-    private final int GEOFENCE_REQ_CODE = 0;
 
     private PendingIntent createGeofencePendingIntent() {
         Log.d(TAG, "createGeofencePendingIntent");
@@ -687,6 +621,7 @@ public class QuickRouteActivity extends AppCompatActivity
             return geoFencePendingIntent;
 
         Intent intent = new Intent(this, GeofenceTrasitionService.class);
+        int GEOFENCE_REQ_CODE = 0;
         return PendingIntent.getService(
                 this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -706,24 +641,19 @@ public class QuickRouteActivity extends AppCompatActivity
     @Override
     public void onResult(@NonNull Status status) {
         Log.i(TAG, "onResult: " + status);
-        if (status.isSuccess()) {
-            //saveGeofence();
-            //drawGeofence();
-        } else {
-            // inform about fail
-        }
     }
 
     // Draw Geofence circle on GoogleMap
     private Circle startingFence;
     private Circle destinationFence;
-    private Circle geoFence;
     private Polygon polygon;
     private Polyline polyline;
 
     private void drawGeofence() {
         Log.d(TAG, "drawGeofence()");
 
+        // Jumlah marker
+        int startingpoint = 0;
         if (startingpoint == 0) {
             if (destinationFence != null)
                 destinationFence.remove();
@@ -732,7 +662,6 @@ public class QuickRouteActivity extends AppCompatActivity
                     .center(destinationMarker.getPosition())
                     .strokeColor(Color.argb(50, 70, 70, 70))
                     .fillColor(Color.argb(100, 150, 150, 150))
-                    //.radius( GEOFENCE_RADIUS );
                     .radius(GEOFENCE_RADIUS);
             destinationFence = map.addCircle(circleOptions);
         }
@@ -766,7 +695,6 @@ public class QuickRouteActivity extends AppCompatActivity
             polygonOptions.add(drawer.get(0).getPosition());
 
             for (int i = 1; i < drawer.size(); i++) {
-                //polygonOptions.add(new LatLng(array[i].a, array[i].b));
                 polygonOptions.add(drawer.get(i).getPosition());
             }
 
@@ -834,15 +762,9 @@ public class QuickRouteActivity extends AppCompatActivity
             // so that q is added to result 'hull'
             p = q;
 
-        } while (p != l);  // While we don't come to first
-        // point
+        } while (p != l);
 
         drawer = new ArrayList<Marker>(hull);
-        // Print Result
-        /*for (Marker temp : hull)
-            System.out.println("(" + temp.x + ", " +
-                    temp.y + ")");
-        */
     }
 
 }

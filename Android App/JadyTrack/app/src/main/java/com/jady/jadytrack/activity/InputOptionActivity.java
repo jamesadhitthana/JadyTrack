@@ -10,12 +10,9 @@ import com.jady.jadytrack.R;
 
 public class InputOptionActivity extends AppCompatActivity {
 
-    // id message yang akan dipassing ke activity selanjutnya
-    public static final String EXTRA_MESSAGE_NAME = "com.example.yeftaprototypev2.SENDNAME";
-    public static final String EXTRA_MESSAGE_UID = "com.example.yeftaprototypev2.SENDUID";
-
-    // scenario message yang akan dipassing ke activity selanjutnya
-    public static final String EXTRA_MESSAGE_SCENARIO = "com.example.yeftaprototypev2.SENDSCENARIO";
+    public static final String EXTRA_MESSAGE_NAME = "com.jady.jadytrack.SENDNAME";
+    public static final String EXTRA_MESSAGE_UID = "com.jady.jadytrack.SENDUID";
+    public static final String EXTRA_MESSAGE_SCENARIO = "com.jady.jadytrack.SENDSCENARIO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

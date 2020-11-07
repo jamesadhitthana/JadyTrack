@@ -1,6 +1,6 @@
 package com.jady.jadytrack.fragment;
+
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,22 +8,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.jady.jadytrack.R;
 import com.jady.jadytrack.activity.MainActivity;
 
 public class TabLogin extends Fragment {
     private EditText loginEmail;
     private EditText loginPassword;
-    private Button buttonLogin;
-    String userEmail, userPassword;
+    private String userEmail, userPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View currentView = inflater.inflate(R.layout.tab_login,container,false);//set the current view to the appropriate xml file
+        // Set the current view to the appropriate xml file
+        View currentView = inflater.inflate(R.layout.tab_login, container, false);
 
-        buttonLogin = (Button) currentView.findViewById(R.id.buttonLogin);
-        loginEmail = (EditText)currentView.findViewById( R.id.loginEmail );
-        loginPassword = (EditText) currentView.findViewById( R.id.loginPassword );
+        Button buttonLogin = (Button) currentView.findViewById(R.id.buttonLogin);
+        loginEmail = (EditText) currentView.findViewById(R.id.loginEmail);
+        loginPassword = (EditText) currentView.findViewById(R.id.loginPassword);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,18 +33,13 @@ public class TabLogin extends Fragment {
                 userPassword = loginPassword.getText().toString();
 
                 if (!userEmail.isEmpty() && !userPassword.isEmpty()) {
-                    ((MainActivity)getActivity()).signIn(userEmail,userPassword); //Call parent Activity's Method to sign in
-
-
+                    // Call parent Activity's Method to sign in
+                    ((MainActivity) getActivity()).signIn(userEmail, userPassword);
                 } else {
                     Toast.makeText(getActivity(), "Password or email is empty", Toast.LENGTH_SHORT).show();
                 }
-
-
-
             }
         });
-
 
         return currentView;
     }

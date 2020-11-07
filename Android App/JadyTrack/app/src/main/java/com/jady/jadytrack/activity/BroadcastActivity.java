@@ -16,20 +16,17 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import android.os.Bundle;
-
 import androidx.core.content.ContextCompat;
-
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,7 +41,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,19 +63,15 @@ import java.util.Vector;
 
 public class BroadcastActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    //Firebase Key From Intent
-    private String trackingSessionKey;
+    public static final String EXTRA_MESSAGE_ID = "com.jady.jadytrack.SENDID";
 
     // Google Map
     private GoogleMap mMap;
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-    // Marker
-    private BitmapDescriptor icon;
     private LatLng markerPosition = new LatLng(0f, 0f);
     private Marker currentMarker;
-    private MarkerOptions markerOption;
     private boolean isFirstMarker = true;
     private boolean isMarkerDrawed = false;
 
@@ -93,33 +85,27 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private Marker destinationMarker;
     private Circle destinationFence;
 
-    private List<Marker> markers = new ArrayList<Marker>();
-    private List<Marker> drawer = new ArrayList<Marker>();
+    private List<Marker> markers = new ArrayList<>();
+    private List<Marker> drawer = new ArrayList<>();
 
     private Polygon polygon;
-    private Polyline polyline;
 
     // Handler
     private boolean isBroadcast = false;
     private boolean internetStatus = true;
-    private Long startTime = Long.valueOf(0);
+    private Long startTime = 0L;
 
-    // Attribut
+    // Attribute
     private String nama = "Test Aja";
     private String userUID = "Test Juga";
-    public static final String EXTRA_MESSAGE_ID = "com.example.yeftaprototypev2.SENDID";
     private boolean isGeofenceDrawed = false;
-    public boolean manualCheckIn = false; // ini buat check in secara manual dan mengubah nilai hasArrived jadi true
-    private boolean hasArrived = false;  //yang ini boolean kalo udah nyampe otoomatis
+    public boolean manualCheckIn = false;
+    private boolean hasArrived = false;
     private String id;
 
     // Widget
     private TextView status;
     private Button tombolBroadcast;
-    private Button tombolGetId;
-
-    private Button setSOS; //set SOS button
-    private Button setCheckIn;
 
     // Data yang akan diberikan ke firebase
     private Map<String, Location> locationHistory = new HashMap<>();
@@ -175,7 +161,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         // Widget
         status = (TextView) findViewById(R.id.status);
         tombolBroadcast = (Button) findViewById(R.id.startBroadcast);
-        tombolGetId = (Button) findViewById(R.id.getId);
+        Button tombolGetId = (Button) findViewById(R.id.getId);
         status.setText("Broadcast is disabled");
 
         // Menyiapkan Firebase
@@ -193,7 +179,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 // mengubah status
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.child(id).child("notifications").child("statusSOS").getValue() == "true") {
                             databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
                         }
@@ -213,7 +199,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
 
                 Long endTime = location.getTime();
-                Long diffTime = endTime - startTime;
+                long diffTime = endTime - startTime;
 
                 // Mengubah current marker
                 markerPosition = new LatLng(location.getLatitude(), location.getLongitude());
@@ -243,18 +229,13 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     databaseReference.child(id).child("numHistory").setValue(numMarker);
                     databaseReference.child(id).child("locationHistory").setValue(locationHistory);
 
-                    //--DEPRECEATED-- Membuat objek dan mengirim ke firebase //nggak boleh gini yef -james
-                    //harus satu satu buatnya, kalau ga, nanti yang lain ke replace semua.
-                    //Target target = new Target(userUID, nama, location, numMarker, locationHistory);
-                    //databaseReference.child(id).setValue(target);
-                    //---
                     // Current time
                     Calendar calendar = Calendar.getInstance();
                     TimeZone tz = TimeZone.getDefault();
                     calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     java.util.Date currenTimeZone = new java.util.Date((long) 1379487711 * 1000);
-                    String date = sdf.format(currenTimeZone).toString();
+                    String date = sdf.format(currenTimeZone);
 
                     if (isFirstMarker) {
                         // start marker
@@ -329,22 +310,20 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         }
 
 
-        // *Listener tombol untuk enable/disable broadcast
+        // Enable/Disable Broadcast
         tombolBroadcast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
 
                 if (isBroadcast) {
-                    //Nov 6 2020 UTR09 New Feature to Ask if User is sure about disabling broadcast
-                    //Todo: aSK USER
+                    // Nov 6 2020 UTR09 New Feature to Ask if User is sure about disabling broadcast
+                    // Todo: aSK USER
                     askUserDisableBroadcast();
-//
-
 
                 } else {
                     isBroadcast = true;
                     isBroadcast = true;
-                    //---Start loading window
+                    // ---Start loading window
                     loadingWindowEnableBroadcast = KProgressHUD.create(BroadcastActivity.this)
                             .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                             .setBackgroundColor(Color.parseColor("#508AF1F7"))
@@ -354,13 +333,13 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                             .setAnimationSpeed(2)
                             .setDimAmount(0.5f)
                             .show();
-                    //END OF: Start loading window
+                    // END OF: Start loading window
                     tombolBroadcast.setText("Disable Broadcast");
                 }
             }
         });
 
-        // tombol untuk menampilkan id dan qr code
+        // Button to show tracking ID and QR code
         tombolGetId.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (isBroadcast) {
@@ -374,11 +353,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             }
         });
 
-
-        // check in dan sos bukan fungsi dalam activity Appointment, jadi ini akan dipindahkan ke broadcast activity
         // Set up Buttons
-
-        setSOS = (Button) findViewById(R.id.buttonSOS);
+        Button setSOS = (Button) findViewById(R.id.buttonSOS);
         setSOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -421,7 +397,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
-                    //--
                 } else {
                     Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
                 }
@@ -429,11 +404,11 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             }
         });
 
-        setCheckIn = (Button) findViewById(R.id.checkin);
+        Button setCheckIn = (Button) findViewById(R.id.checkin);
         setCheckIn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (isGeofenceDrawed) {
-                    //Check In Alert Dialog
+                    // Check In Alert Dialog
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
                     alertDialogBuilder.setMessage("Are you sure you want to check in with your peers? You won't be able to cancel your decision and JadyTrack will automatically assume that you have arrived.");
                     alertDialogBuilder.setPositiveButton("Yes, Check me in!",
@@ -481,7 +456,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     protected void onStart() {
         super.onStart();
 
-        // Menggambar history marker yang tersimpan di firebase
         if (!isGeofenceDrawed) {
             plotGeofence();
         }
@@ -511,7 +485,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
-                //     .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Geofence")
                 .setContentText("Target has reached destination!")
                 .setContentInfo("Info");
@@ -519,12 +492,11 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
     }
 
-    // untuk menggambar geofence
     public void plotGeofence() {
 
         geofenceReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 //Toast.makeText(getApplicationContext(), "dataSnapshot "+ dataSnapshot , Toast.LENGTH_SHORT).show();
 
@@ -532,8 +504,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     ArrayList<Object> geofence = (ArrayList<Object>) dataSnapshot.child("geofence").getValue();
                     int geofenceSize = geofence.size() - 1;
                     int geofenceNum = (Integer) Integer.parseInt((String) dataSnapshot.child("geofenceNum").getValue().toString());
-
-                    // Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
 
                     if (geofenceNum == geofenceSize) {
                         isGeofenceDrawed = true;
@@ -563,7 +533,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                 .zIndex(100f);
 
                         destinationMarker = mMap.addMarker(markerOptions);
-                        //markers.add(destinationMarker);
 
                         CircleOptions circleOptions = new CircleOptions()
                                 .center(destinationMarker.getPosition())
@@ -573,14 +542,10 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                         destinationFence = mMap.addCircle(circleOptions);
 
 
-                        // Ini untuk menggambar geofencenya
-                        //Toast.makeText(BroadcastActivity.this, "Target (ini kenapa??)"+ geofenceSize, Toast.LENGTH_LONG).show();
-
+                        // Draw Geofence
                         for (int i = 1; i <= geofenceSize; i++) {
 
                             HashMap<String, Object> geofenceIndex = (HashMap<String, Object>) dataSnapshot.child("geofence").child(Integer.toString(i)).getValue();
-
-                            //Toast.makeText(TrackingActivity.this, "Target "+geofenceIndex, Toast.LENGTH_LONG).show();
 
                             for (HashMap.Entry<String, Object> entry : geofenceIndex.entrySet()) {
                                 if (entry.getKey().equals("longitude")) {
@@ -595,7 +560,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                             markers.add(marker);
                         }
 
-                        drawer = new ArrayList<Marker>(markers);
+                        drawer = new ArrayList<>(markers);
 
                         convexHull(markers.size());
                         PolygonOptions polygonOptions = new PolygonOptions();
@@ -625,20 +590,20 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         });
     }
 
-    // untuk menyiapkan peta
+    // Prepare the Map
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
-
-        // current marker
-        markerOption = new MarkerOptions().position(markerPosition).title("Current Location").icon(icon);
+        // Marker
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
+        // Current marker
+        MarkerOptions markerOption = new MarkerOptions().position(markerPosition).title("Current Location").icon(icon);
         currentMarker = mMap.addMarker(markerOption);
         currentMarker.setZIndex(1.0f);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
 
-    // permission untuk location
+    // Set Permission
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -661,8 +626,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void run() {
                 try {
-                    if (!isConnected(BroadcastActivity.this)) {
-                        if (internetStatus == true) {
+                    if (isConnected(BroadcastActivity.this)) {
+                        if (internetStatus) {
                             internetDialog(BroadcastActivity.this).show();
                             internetStatus = false;
                         }
@@ -672,7 +637,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 } catch (Exception e) {
                     // TODO: handle exception
                 } finally {
-                    //also call the same runnable to call it at regular interval
+                    // Call the same runnable to call it at regular interval
                     handler.postDelayed(this, 1000);
                 }
             }
@@ -689,11 +654,9 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting()))
-                return true;
-            else return false;
+            return (mobile == null || !mobile.isConnectedOrConnecting()) && (wifi == null || !wifi.isConnectedOrConnecting());
         } else
-            return false;
+            return true;
     }
 
     public AlertDialog.Builder internetDialog(Context c) {
@@ -709,12 +672,10 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             public void onClick(DialogInterface dialog, int which) {
 
                 dialog.cancel();
-                if (!isConnected(BroadcastActivity.this))
-
+                if (isConnected(BroadcastActivity.this)) {
                     internetDialog(BroadcastActivity.this).show();
-                else {
-
                 }
+
             }
         });
 
@@ -819,7 +780,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         } while (p != l);  // While we don't come to first
         // point
 
-        drawer = new ArrayList<Marker>(hull);
+        drawer = new ArrayList<>(hull);
         // Print Result
         /*for (Marker temp : hull)
             System.out.println("(" + temp.x + ", " +

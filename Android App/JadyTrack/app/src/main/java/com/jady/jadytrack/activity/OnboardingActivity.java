@@ -21,32 +21,31 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.onboarding_main_layout);
 
-        //--------------Shared Preference--------------
-        //SharedPreference untuk Onboarding & Tutorial Auto Skip kalau udah login//
+        // --------------Shared Preference--------------
+        // SharedPreference for Onboarding & Tutorial
+        // Auto Skip if logged in
         Hawk.init(OnboardingActivity.this).build(); //library SharedPreference yang lebih Gampang
         Boolean skipOnboarding = Hawk.get("skipOnboardingIfLoggedIn");
-        //END OF: Shared Preference--------------
 
         if (skipOnboarding == null) {
-            //If this value is still empty then revert to launching onboarding
+            // If this value is still empty then revert to launching onboarding
             launchOnboarding();
-        } else {//if the value is not empty then
-            //If skipOnboarding==true then just launch next intent
-            if (skipOnboarding == true) {
+        } else {
+            // If skipOnboarding == true then just launch next intent
+            if (skipOnboarding) {
                 Intent i = new Intent(OnboardingActivity.this, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                // set the new task and clear flags
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)
+                // Set the new task and clear flags
+                // Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
-            //If skipOnboarding==false then launch next intent
-            if (skipOnboarding == false) {
+            // If skipOnboarding == false then launch next intent
+            if (!skipOnboarding) {
                 launchOnboarding();
             }
         }
-
-
-    }//-------
+    }
 
     private void launchOnboarding() {
         PaperOnboardingEngine engine = new PaperOnboardingEngine(findViewById(R.id.onboardingRootView), getDataForOnboarding(), getApplicationContext());
@@ -56,14 +55,14 @@ public class OnboardingActivity extends AppCompatActivity {
             public void onRightOut() {
                 Intent i = new Intent(OnboardingActivity.this, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                // set the new task and clear flags
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)
+                // Set the new task and clear flags
+                // Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
         });
     }
 
-    // Onboarding Data
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
         // Onboarding Contents
 
@@ -84,7 +83,6 @@ public class OnboardingActivity extends AppCompatActivity {
 
         PaperOnboardingPage scr6 = new PaperOnboardingPage(getResources().getString(R.string.onboarding_6_titleText), getResources().getString(R.string.onboarding_6_descriptionText),
                 Color.parseColor("#B2B694"), R.drawable.onboarding_notification, R.drawable.onboarding_notification);
-
 
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();
         elements.add(scr1);

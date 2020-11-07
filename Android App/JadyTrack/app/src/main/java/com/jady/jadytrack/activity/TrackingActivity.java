@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,9 +71,6 @@ public class TrackingActivity extends AppCompatActivity implements
     private List<Marker> drawer = new ArrayList<Marker>();
 
     private Polygon polygon;
-    private Polyline polyline;
-
-    int geofenceSize;
 
     // Marker
     private BitmapDescriptor icon;
@@ -82,11 +78,7 @@ public class TrackingActivity extends AppCompatActivity implements
     private Marker currentMarker;
     private MarkerOptions markerOptions;
 
-    // Attribute
-    private String nama;
-    private String id;
     private int numMarker = 1; // gambar pointnya akan dimulai dari numMarker terakhir
-
 
     // Handler
     private boolean internetStatus = true;
@@ -123,7 +115,7 @@ public class TrackingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking);
 
-        //Set loading window
+        // Set loading window
         loadingWindow = KProgressHUD.create(TrackingActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setBackgroundColor(Color.parseColor("#508AF1F7"))
@@ -141,10 +133,11 @@ public class TrackingActivity extends AppCompatActivity implements
 
         // Menerima ID
         Intent intent = getIntent();
-        id = intent.getStringExtra(InputIdActivity.EXTRA_MESSAGE_ID);
+        // Attribute
+        String id = intent.getStringExtra(InputIdActivity.EXTRA_MESSAGE_ID);
 
         // Firebase
-        databaseReference = FirebaseDatabase.getInstance().getReference("trackingSession/"+id);
+        databaseReference = FirebaseDatabase.getInstance().getReference("trackingSession/"+ id);
 
         // Mengatur tampilan awal
         targetStatus = (TextView) findViewById(R.id.targetStatus);
@@ -157,8 +150,8 @@ public class TrackingActivity extends AppCompatActivity implements
             @Override
             public void run() {
                 try{
-                    if (!isConnected(TrackingActivity.this)){
-                        if(internetStatus == true){
+                    if (isConnected(TrackingActivity.this)){
+                        if(internetStatus){
                             internetDialog(TrackingActivity.this).show();
                             internetStatus = false;
                         }
@@ -167,17 +160,12 @@ public class TrackingActivity extends AppCompatActivity implements
                         internetStatus = true;
                     }
 
-                    Long tsLong = System.currentTimeMillis()/1000;
+                    long tsLong = System.currentTimeMillis()/1000;
                     tsLong = tsLong * 1000;
 
-                    Long diffTime = tsLong - time;
+                    long diffTime = tsLong - time;
                     // aktif selama 30 detik
-                    if(diffTime < 20000){
-                        isTargetOnline = true;
-                    }
-                    else{
-                        isTargetOnline = false;
-                    }
+                    isTargetOnline = diffTime < 20000;
 
                     if(isTargetOnline){
                         targetStatus.setText("Target is online");
@@ -189,14 +177,12 @@ public class TrackingActivity extends AppCompatActivity implements
                         notifyOffline();
                     }
 
-                    //Toast.makeText(TrackingActivity.this, time.toString(), Toast.LENGTH_SHORT).show();
-
                 }
                 catch (Exception e) {
                     // TODO: handle exception
                 }
                 finally{
-                    //also call the same runnable to call it at regular interval
+                    // Also call the same runnable to call it at regular interval
                     handler.postDelayed(this, 1000);
                 }
             }
@@ -219,7 +205,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 HashMap<String, Object> location =
                         (HashMap<String, Object>) dataSnapshot.child("targetLocation").getValue();
@@ -236,8 +222,6 @@ public class TrackingActivity extends AppCompatActivity implements
                     }
                 }
 
-                //Toast.makeText(TrackingActivity.this, location.toString(), Toast.LENGTH_LONG).show();
-
                 // mengubah lokasi current marker
                 markerPosition = new LatLng(latitude, longitude);
                 currentMarker.setPosition(markerPosition);
@@ -251,7 +235,6 @@ public class TrackingActivity extends AppCompatActivity implements
                 // menambahkan polyline
                 options.add(markerPosition);
                 mMap.addPolyline(options);
-
 
                 if(isGeofenceDrawed){
                     // Ini untuk mengambil data notifications dari firebase
@@ -277,19 +260,20 @@ public class TrackingActivity extends AppCompatActivity implements
                     }
 
 
-                    // trigger notifikasi
-
-                    if (statusHasArrived == true && isArrivedNotified == false) {//if the user has been notified ONCE, then dont notify again!
+                    // Notification trigger
+                    // If the user has been notified ONCE, then dont notify again!
+                    if (statusHasArrived && !isArrivedNotified) {
                         notifyTargetReachDestination();
                         isArrivedNotified = true;
                     }
 
-                    if (statusInGeofence == false && isGeofenceNotified == false) {//if the user has been notified ONCE, then dont notify again!
+                    // If the user has been notified ONCE, then dont notify again!
+                    if (!statusInGeofence && !isGeofenceNotified) {
                         notifyTargetCrossedGeofence();
                         isGeofenceNotified = true;
                     }
 
-                    if (statusSOS == true && isSOSNotified == false){
+                    if (statusSOS && !isSOSNotified){
                         notifySOS();
                         isSOSNotified = true;
                     }
@@ -300,7 +284,7 @@ public class TrackingActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -310,7 +294,7 @@ public class TrackingActivity extends AppCompatActivity implements
     public void plotGeofence(){
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 //Toast.makeText(getApplicationContext(), "dataSnapshot "+ dataSnapshot , Toast.LENGTH_SHORT).show();
 
@@ -359,9 +343,7 @@ public class TrackingActivity extends AppCompatActivity implements
                         destinationFence = mMap.addCircle(circleOptions);
 
 
-                        // Ini untuk menggambar geofencenya
-                        //Toast.makeText(BroadcastActivity.this, "Target (ini kenapa??)"+ geofenceSize, Toast.LENGTH_LONG).show();
-
+                        // Draw the Geofence
                         for (int i = 1; i <= geofenceSize; i++) {
 
                             HashMap<String, Object> geofenceIndex = (HashMap<String, Object>) dataSnapshot.child("geofence").child(Integer.toString(i)).getValue();
@@ -381,14 +363,13 @@ public class TrackingActivity extends AppCompatActivity implements
                             markers.add(marker);
                         }
 
-                        drawer = new ArrayList<Marker>(markers);
+                        drawer = new ArrayList<>(markers);
 
                         convexHull(markers.size());
                         PolygonOptions polygonOptions = new PolygonOptions();
                         polygonOptions.add(drawer.get(0).getPosition());
 
                         for (int i = 1; i < drawer.size(); i++) {
-                            //polygonOptions.add(new LatLng(array[i].a, array[i].b));
                             polygonOptions.add(drawer.get(i).getPosition());
                         }
 
@@ -416,7 +397,7 @@ public class TrackingActivity extends AppCompatActivity implements
         isMarkerDrawed = true;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 try {
                     // Ambil nilai jumlah marker yang ada pada history
@@ -430,12 +411,10 @@ public class TrackingActivity extends AppCompatActivity implements
                         double longitude = 0;
                         double latitude = 0;
                         LatLng point = new LatLng(0, 0);
-                        ArrayList<LatLng> pointList = new ArrayList<LatLng>();
 
                         System.out.println(location);
 
                         for (HashMap.Entry<String, Object> entry : location.entrySet()) {
-                            //Toast.makeText(TrackingActivity.this, entry.getKey().toString(), Toast.LENGTH_LONG).show();
                             if (entry.getKey().equals("latitude")) {
                                 latitude = (Double) entry.getValue();
                             }
@@ -446,13 +425,13 @@ public class TrackingActivity extends AppCompatActivity implements
                             point = new LatLng(latitude, longitude);
                         }
                         if (isFirstMarker) {
-                            // start marker
+                            // Start marker
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.start);
                             mMap.addMarker(new MarkerOptions().position(point).title("First Marker").icon(icon));
                             isFirstMarker = false;
 
                         } else {
-                            // history marker
+                            // History marker
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
                             mMap.addMarker(new MarkerOptions().position(point).title("History Marker").icon(icon));
                         }
@@ -468,7 +447,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -496,10 +475,9 @@ public class TrackingActivity extends AppCompatActivity implements
             NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
-            else return false;
+            return (mobile == null || !mobile.isConnectedOrConnecting()) && (wifi == null || !wifi.isConnectedOrConnecting());
         } else
-            return false;
+            return true;
     }
 
     public AlertDialog.Builder internetDialog(Context c) {
@@ -515,11 +493,8 @@ public class TrackingActivity extends AppCompatActivity implements
             public void onClick(DialogInterface dialog, int which) {
 
                 dialog.cancel();
-                if (!isConnected(TrackingActivity.this))
-
+                if (isConnected(TrackingActivity.this)) {
                     internetDialog(TrackingActivity.this).show();
-                else {
-
                 }
             }
         });
@@ -528,7 +503,6 @@ public class TrackingActivity extends AppCompatActivity implements
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 finish();
             }
         });
@@ -626,7 +600,7 @@ public class TrackingActivity extends AppCompatActivity implements
         } while (p != l);  // While we don't come to first
         // point
 
-        drawer = new ArrayList<Marker>(hull);
+        drawer = new ArrayList<>(hull);
         // Print Result
         /*for (Marker temp : hull)
             System.out.println("(" + temp.x + ", " +
@@ -661,7 +635,6 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
-                //     .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Geofence")
                 .setContentText("Target is offline")
                 .setContentInfo("Info");
@@ -693,7 +666,6 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
-                //     .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Geofence")
                 .setContentText("Target is in danger!")
                 .setContentInfo("Info");
@@ -725,7 +697,6 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
-                //     .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Geofence")
                 .setContentText("Target has reached destination!")
                 .setContentInfo("Info");
@@ -760,7 +731,6 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
-                //     .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Geofence")
                 .setContentText("Crossing the border")
                 .setContentInfo("Info");

@@ -6,10 +6,6 @@ public class ContactMessage {
     public String email;
     public String message;
 
-    public ContactMessage() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
-    }
-
     public ContactMessage(String name, String email, String password) {
         this.name = name;
         this.email = email;

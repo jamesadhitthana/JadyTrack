@@ -13,12 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private Button buttonContact, buttonManual;
+    public static final String EXTRA_MESSAGE_NAME = "com.jady.jadytrack.SENDNAME";
+    public static final String EXTRA_MESSAGE_EMAIL = "com.jady.jadytrack.SENDEMAIL";
+
     private String name;
     private String email;
-
-    public static final String EXTRA_MESSAGE_NAME = "com.example.yeftaprototypev2.SENDNAME";
-    public static final String EXTRA_MESSAGE_EMAIL = "com.example.yeftaprototypev2.SENDEMAIL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +27,12 @@ public class AboutActivity extends AppCompatActivity {
         Intent intent = getIntent();
         name = intent.getStringExtra(MainMenuActivity.EXTRA_MESSAGE_NAME);
         email = intent.getStringExtra(MainMenuActivity.EXTRA_MESSAGE_EMAIL);
-        //Reset tutorial in main menu For About Page
+
+        // Reset tutorial in main menu
         Boolean skipMainMenuTutorial = false;
         Hawk.put("skipMainMenuTutorial", skipMainMenuTutorial);
-        //--
-        buttonContact = (Button) findViewById(R.id.buttonContact);
+
+        Button buttonContact = (Button) findViewById(R.id.buttonContact);
         buttonContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +43,7 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        buttonManual= (Button) findViewById(R.id.buttonManual);
+        Button buttonManual = (Button) findViewById(R.id.buttonManual);
         buttonManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

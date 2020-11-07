@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -29,45 +30,45 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import com.orhanobut.hawk.Hawk;
 
 public class MainMenuActivity extends AppCompatActivity {
+
+    // Message ID
+    public static final String EXTRA_MESSAGE_NAME = "com.jady.jadytrack.SENDNAME";
+    public static final String EXTRA_MESSAGE_EMAIL = "com.jady.jadytrack.SENDEMAIL";
+    public static final String EXTRA_MESSAGE_UID = "com.jady.jadytrack.SENDUID";
+    public static final String EXTRA_MESSAGE_SCENARIO = "com.jady.jadytrack.SENDSCENARIO";
+
+    private static final String TAG = "EmailPassword";
+
     private TextView textViewCurrentUser;
     private TextView textViewUserName;
     private String userName;
     private String userEmail;
-    private Button buttonViewer, buttonTarget, buttonAppointment, buttonContact;
-    private ImageButton buttonLogout;
+    private Button buttonViewer, buttonTarget, buttonAppointment;
     private ImageButton buttonAboutPage;
-    private static final String TAG = "EmailPassword";
-    private String currentUserUID = "";
+    private String currentUserUID;
     private KProgressHUD loadingWindow;
-    // id message yang akan dipassing ke activity selanjutnya
-    public static final String EXTRA_MESSAGE_NAME = "com.example.yeftaprototypev2.SENDNAME";
-    public static final String EXTRA_MESSAGE_EMAIL = "com.example.yeftaprototypev2.SENDEMAIL";
-    public static final String EXTRA_MESSAGE_UID = "com.example.yeftaprototypev2.SENDUID";
-    public static final String EXTRA_MESSAGE_SCENARIO = "com.example.yeftaprototypev2.SENDSCENARIO";
 
-    //---Firebase Stuff:-----------------------//
-    //Firebase authentication
+    // Firebase authentication
     private FirebaseAuth mAuth;
     FirebaseDatabase databaseKu;
 
-    //END OF: Firebase Stuff ---//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
         textViewCurrentUser = (TextView) findViewById(R.id.textViewCurrentUser);
         textViewUserName = (TextView) findViewById(R.id.textViewUserName);
-        buttonLogout = (ImageButton) findViewById(R.id.buttonLogout);
+        ImageButton buttonLogout = (ImageButton) findViewById(R.id.buttonLogout);
         buttonViewer = (Button) findViewById(R.id.buttonViewer);
         buttonAboutPage = (ImageButton) findViewById(R.id.buttonAboutPage);
         buttonTarget = (Button) findViewById(R.id.buttonTarget);
         buttonAppointment = (Button) findViewById(R.id.buttonAppointment);
-//Disable the important buttons by default:
+        // Disable the important buttons by default:
         buttonViewer.setEnabled(false);
         buttonAboutPage.setEnabled(false);
         buttonTarget.setEnabled(false);
         buttonAppointment.setEnabled(false);
-        //Set loading window
+        // Set loading window
         loadingWindow = KProgressHUD.create(MainMenuActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setBackgroundColor(Color.parseColor("#508AF1F7"))
@@ -85,9 +86,6 @@ public class MainMenuActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         //-----------------------------------------//
 
-        //Bundle extras = getIntent().getExtras();
-        //Toast.makeText(getApplicationContext(), "!!!!user: " + extras.getString("loginEmail").toString() + " Pass: " + extras.getString("loginPassword").toString(), Toast.LENGTH_SHORT).show();
-
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,7 +96,6 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonAboutPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Open About Page
                 Intent i = new Intent(getApplicationContext(), AboutActivity.class);
                 i.putExtra(EXTRA_MESSAGE_NAME, userName);
                 i.putExtra(EXTRA_MESSAGE_EMAIL, userEmail);
@@ -108,7 +105,6 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonViewer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //Toast.makeText(getApplicationContext(),"buttonViewer pressed",Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), InputOptionActivity.class);
                 i.putExtra(EXTRA_MESSAGE_SCENARIO, "viewer");
                 startActivity(i);
@@ -117,7 +113,6 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"Button udah ga dibutuhin lagi, sekarang pencet appointment",Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), BroadcastActivity.class);
                 i.putExtra(EXTRA_MESSAGE_NAME, userName);
                 i.putExtra(EXTRA_MESSAGE_UID, currentUserUID);
@@ -127,7 +122,6 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"buttonQuickRoutes pressed",Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), InputOptionActivity.class);
                 i.putExtra(EXTRA_MESSAGE_NAME, userName);
                 i.putExtra(EXTRA_MESSAGE_UID, currentUserUID);
@@ -137,30 +131,25 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-    // Ini alert dialog yang muncul kalau user mau logout
+    // This is an alert dialog that will be shown when the user want to logout
     public AlertDialog.Builder backDialog(Context c) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle("Logout");
         builder.setMessage("Do you really want to Logout?");
         builder.setCancelable(false);
-
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 signOut();
             }
         });
-
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.cancel();
             }
         });
-
         return builder;
     }
 
@@ -168,23 +157,20 @@ public class MainMenuActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        //enable the tutorial if already loaded
-        //---HAWK set SkipOnboarding to true if the user is logged in---//
+        // Enable the tutorial if already loaded
+        // ---HAWK set SkipOnboarding to true if the user is logged in---//
         Boolean skipMainMenuTutorial = Hawk.get("skipMainMenuTutorial");
-        //END OF: HAWK stuff james
+        // END OF: HAWK stuff james
         if (skipMainMenuTutorial == null) {
             launchMainMenuTutorial();
             Boolean skipMainMenuTemp = true;
             Hawk.put("skipMainMenuTutorial", skipMainMenuTemp);
         } else {
-            //If skipOnboarding==false then launch tutorial again.
-            if (skipMainMenuTutorial == false) {
+            // If skipOnboarding == false then launch tutorial again.
+            if (!skipMainMenuTutorial) {
                 launchMainMenuTutorial();
                 Boolean skipMainMenuTemp = true;
                 Hawk.put("skipMainMenuTutorial", skipMainMenuTemp);
-            }
-            if (skipMainMenuTutorial == true) {
-                //do nothing
             }
         }
 
@@ -199,14 +185,12 @@ public class MainMenuActivity extends AppCompatActivity {
         if (currentUser == null) {
             Toast.makeText(getApplicationContext(), "Not logged in.", Toast.LENGTH_SHORT).show();
         } else {
-            currentUserUID = currentUser.getUid().toString();
-
-
+            currentUserUID = currentUser.getUid();
 
             //----CREATE A LISTENER FOR Name of User----
             databaseKu.getReference().child("users").child(currentUser.getUid()).child("name").addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot!= null) {
                         userName = dataSnapshot.getValue().toString();
                         //Toast.makeText(getApplicationContext(), "Welcome :" + userName, Toast.LENGTH_SHORT).show();
@@ -227,13 +211,10 @@ public class MainMenuActivity extends AppCompatActivity {
                             Hawk.put("skipMainMenuTutorial", skipMainMenuTemp);
                         } else {
                             //If skipOnboarding==false then launch tutorial again.
-                            if (skipMainMenuTutorial == false) {
+                            if (!skipMainMenuTutorial) {
                                 launchMainMenuTutorial();
                                 Boolean skipMainMenuTemp = true;
                                 Hawk.put("skipMainMenuTutorial", skipMainMenuTemp);
-                            }
-                            if (skipMainMenuTutorial == true) {
-                                //do nothing
                             }
                         }
 
@@ -250,7 +231,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.w(TAG, "Failed getting the user's name", databaseError.toException());
                     //Toast.makeText(getApplicationContext(), "Failed getting the user's name.", Toast.LENGTH_SHORT).show();
                 }
@@ -301,28 +282,23 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public AlertDialog.Builder gobackDialog(Context c) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle("Quit Application");
         builder.setMessage("Do you really want to quit from the application?");
         builder.setCancelable(false);
-
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finishAffinity();
             }
         });
-
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.cancel();
             }
         });
-
         return builder;
     }
 }
