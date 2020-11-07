@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:302386485893:android:6d8e0cd6fca0a133",
         "android_client_info": {
-          "package_name": "com.jamesgalaxy.jadytrackui"
+          "package_name": "com.jady.jadytrack"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "302386485893-6gk06nsq4b0o14hhh7knmtrsu6s78lj4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.jamesgalaxy.jadytrackui",
+            "package_name": "com.jady.jadytrack",
             "certificate_hash": "e71d970c9f6daf07333937b56a1fa1cd31bee89f"
           }
         },
