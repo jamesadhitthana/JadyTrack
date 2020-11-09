@@ -61,7 +61,7 @@ public class ContactUsActivity extends AppCompatActivity {
                     // Send message functionality
                     sendContactUsMessage();
                 } else {
-                    Alerter.create(ContactUsActivity.this).setTitle("Oh no!").setText("Make sure all your fields are filled properly").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(ContactUsActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_contact_us)).setText(getResources().getString(R.string.alert_msg_failed_contact_us)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }
@@ -81,14 +81,14 @@ public class ContactUsActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Your message was successfully sent. \nWe will respond to your message as soon as we can!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.alert_title_contact_us), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Alerter.create(ContactUsActivity.this).setTitle("Failed to send message!").setText("Please check your internet connection").setBackgroundColorRes(R.color.colorAccent).show();
+                        Alerter.create(ContactUsActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_send_message)).setText(getResources().getString(R.string.alert_msg_failed_send_message)).setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 });
 

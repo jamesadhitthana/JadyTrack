@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
         android:fontFamily="@font/roboto_thin"
-        android:text="Contact Us"
+        android:text="@string/layout_contact_us_title"
         android:textColor="#ffffff"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -47,7 +47,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="-72dp"
         android:fontFamily="@font/roboto_light"
-        android:text="jadytrack@gmail.com"
+        android:text="@string/layout_about_page_email"
         android:textAlignment="viewStart"
         android:textColor="#ffffff" />
 
@@ -63,7 +63,7 @@
         android:layout_marginBottom="62dp"
         android:background="#ffffff"
         android:ems="10"
-        android:hint="ENTER MESSAGE"
+        android:hint="@string/layout_placeholder_enter_message"
         android:inputType="textMultiLine"
         android:textAlignment="center"
         android:textColor="@android:color/black"
@@ -77,7 +77,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
         android:background="@drawable/rectangle_round"
-        android:text="SEND MESSAGE" />
+        android:text="@string/button_send_message" />
 
 
 </RelativeLayout>

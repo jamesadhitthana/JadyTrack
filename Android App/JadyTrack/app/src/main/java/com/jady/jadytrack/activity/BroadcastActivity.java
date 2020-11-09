@@ -134,8 +134,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         loadingWindow = KProgressHUD.create(BroadcastActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                .setLabel("Please wait")
-                .setDetailsLabel("Getting location data")
+                .setLabel(getResources().getString(R.string.loading_label_please_wait))
+                .setDetailsLabel(getResources().getString(R.string.loading_details_get_location_data))
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f)
@@ -162,7 +162,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         status = (TextView) findViewById(R.id.status);
         tombolBroadcast = (Button) findViewById(R.id.startBroadcast);
         Button tombolGetId = (Button) findViewById(R.id.getId);
-        status.setText("Broadcast is disabled");
+        status.setText(getResources().getString(R.string.label_broadcast_disabled));
 
         // Menyiapkan Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference().child("trackingSession");
@@ -213,7 +213,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 // setiap 12 detik (12000) update database
                 if (diffTime > 5000 && isBroadcast) {
 
-                    status.setText("Broadcast is enabled");
+                    status.setText(getResources().getString(R.string.label_broadcast_enabled));
 
                     //--stop loading window
                     loadingWindowEnableBroadcast.dismiss();
@@ -266,7 +266,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
 
                 } else if (!isBroadcast) {
-                    status.setText("Broadcast is disabled");
+                    status.setText(getResources().getString(R.string.label_broadcast_disabled));
 
                     if (progressDialogIsShown) {
                         loadingWindowDisableBroadcast.dismiss();
@@ -327,14 +327,14 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     loadingWindowEnableBroadcast = KProgressHUD.create(BroadcastActivity.this)
                             .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                             .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                            .setLabel("Please wait")
-                            .setDetailsLabel("Enabling broadcast")
+                            .setLabel(getResources().getString(R.string.loading_label_please_wait))
+                            .setDetailsLabel(getResources().getString(R.string.loading_details_enabling_broadcast))
                             .setCancellable(true)
                             .setAnimationSpeed(2)
                             .setDimAmount(0.5f)
                             .show();
                     // END OF: Start loading window
-                    tombolBroadcast.setText("Disable Broadcast");
+                    tombolBroadcast.setText(getResources().getString(R.string.button_disable_broadcast));
                 }
             }
         });
@@ -347,7 +347,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     intent.putExtra(EXTRA_MESSAGE_ID, id);
                     startActivity(intent);
                 } else {
-                    Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_broadcast_disabled)).setText(getResources().getString(R.string.alert_msg_broadcast_disabled)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }
@@ -362,34 +362,34 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 if (isBroadcast) {
                     //Check In Alert Dialog
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
-                    alertDialogBuilder.setMessage("Are you sure you want to enable SOS (Emergency) mode? If you are connected to the internet, your peers will get notified of an emergency immediately.");
-                    alertDialogBuilder.setPositiveButton("Yes, I'm in danger!",
+                    alertDialogBuilder.setMessage(getResources().getString(R.string.alert_title_enable_sos));
+                    alertDialogBuilder.setPositiveButton(getResources().getString(R.string.button_danger),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
                                     //------------------------Emergency Status: ENABLE EMERGENCY----------------------//
                                     try {
                                         databaseReference.child(id).child("notifications").child("statusSOS").setValue(true);
-                                        Alerter.create(BroadcastActivity.this).setText("Emergency status sent").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(BroadcastActivity.this).setText(getResources().getString(R.string.alert_title_emergency_status_sent)).setBackgroundColorRes(R.color.colorAccent).show();
 
                                     } catch (Exception e) {
-                                        Alerter.create(BroadcastActivity.this).setTitle("Failed to send emergency status!").setText("Please check your internet connection").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_send_emergency_status)).setText(getResources().getString(R.string.alert_msg_failed_send_emergency_status)).setBackgroundColorRes(R.color.colorAccent).show();
 
                                     }
                                 }
                             });
 
-                    alertDialogBuilder.setNegativeButton("No I'm safe!",
+                    alertDialogBuilder.setNegativeButton(getResources().getString(R.string.button_safe),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     //------------------------Emergency Status: DISABLE EMERGENCY----------------------//
                                     try {
                                         databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
-                                        Alerter.create(BroadcastActivity.this).setTitle("You selected no!").setText("Emergency status set to false").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_select_no)).setText(getResources().getString(R.string.alert_msg_select_no)).setBackgroundColorRes(R.color.colorAccent).show();
 
                                     } catch (Exception e) {
-                                        Alerter.create(BroadcastActivity.this).setTitle("Failed to set Emergency status to false!").setText(", if you did not previously enabled your emergency status then you are fine. If you have, then please check your internet connection and try again.").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_set_emergency_status)).setText(getResources().getString(R.string.alert_msg_failed_set_emergency_status)).setBackgroundColorRes(R.color.colorAccent).show();
                                     }
 
                                 }
@@ -398,7 +398,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 } else {
-                    Alerter.create(BroadcastActivity.this).setTitle("Oops you forgot something!").setText("Broadcast is disabled").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_broadcast_disabled)).setText(getResources().getString(R.string.alert_msg_broadcast_disabled)).setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
             }
@@ -410,8 +410,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 if (isGeofenceDrawed) {
                     // Check In Alert Dialog
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
-                    alertDialogBuilder.setMessage("Are you sure you want to check in with your peers? You won't be able to cancel your decision and JadyTrack will automatically assume that you have arrived.");
-                    alertDialogBuilder.setPositiveButton("Yes, Check me in!",
+                    alertDialogBuilder.setMessage(getResources().getString(R.string.alert_title_check_in_arrived));
+                    alertDialogBuilder.setPositiveButton(getResources().getString(R.string.button_check_me_in),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
@@ -422,19 +422,19 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                         manualCheckIn = true;
                                         hasArrived = true;
                                         notifyTargetReachDestination();
-                                        Alerter.create(BroadcastActivity.this).setTitle("Checked In").setText("You have checked in manually").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_check_in)).setText(getResources().getString(R.string.alert_msg_check_in)).setBackgroundColorRes(R.color.colorAccent).show();
 
                                     } catch (Exception e) {
-                                        Alerter.create(BroadcastActivity.this).setTitle("Oh no! We failed to check you in").setText("Please check your internet connection").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_check_in)).setText(getResources().getString(R.string.alert_msg_failed_check_in)).setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
                             });
 
-                    alertDialogBuilder.setNegativeButton("No I'm not there yet!",
+                    alertDialogBuilder.setNegativeButton(getResources().getString(R.string.button_not_there_yet),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Alerter.create(BroadcastActivity.this).setText("You selected no").setBackgroundColorRes(R.color.colorAccent).show();
+                                    Alerter.create(BroadcastActivity.this).setText(getResources().getString(R.string.alert_title_select_no)).setBackgroundColorRes(R.color.colorAccent).show();
                                 }
                             });
 
@@ -442,7 +442,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     alertDialog.show();
                     //--
                 } else {
-                    Alerter.create(BroadcastActivity.this).setText("You don't have geofence").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(BroadcastActivity.this).setText(getResources().getString(R.string.alert_title_dont_have_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }
@@ -486,7 +486,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
                 .setContentTitle("Geofence")
-                .setContentText("Target has reached destination!")
+                .setContentText(getResources().getString(R.string.notification_target_arrived))
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
@@ -497,8 +497,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         geofenceReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //Toast.makeText(getApplicationContext(), "dataSnapshot "+ dataSnapshot , Toast.LENGTH_SHORT).show();
 
                 if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed) {
                     ArrayList<Object> geofence = (ArrayList<Object>) dataSnapshot.child("geofence").getValue();
@@ -567,7 +565,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                         polygonOptions.add(drawer.get(0).getPosition());
 
                         for (int i = 1; i < drawer.size(); i++) {
-                            //polygonOptions.add(new LatLng(array[i].a, array[i].b));
                             polygonOptions.add(drawer.get(i).getPosition());
                         }
 
@@ -662,11 +659,11 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     public AlertDialog.Builder internetDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("No Internet Connection");
-        builder.setMessage("You need to have Mobile Data or wifi to access this. Press Try Again or Exit");
+        builder.setTitle(getResources().getString(R.string.alert_title_no_internet_connection));
+        builder.setMessage(getResources().getString(R.string.alert_msg_no_internet_connection));
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_try_again), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -679,7 +676,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             }
         });
 
-        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -701,11 +698,11 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     public AlertDialog.Builder backDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("Quit Broadcasting?");
-        builder.setMessage("Do you really want to quit broadcasting?");
+        builder.setTitle(getResources().getString(R.string.alert_title_quit_broadcasting));
+        builder.setMessage(getResources().getString(R.string.alert_msg_quit_broadcasting));
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 isBroadcast = false;
@@ -713,7 +710,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_no), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -856,7 +853,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private void notifyTargetCrossedGeofence() {
         polygon.setFillColor(Color.RED);
 
-        Alerter.create(BroadcastActivity.this).setTitle("CROSSING THE BORDER!").setText("Watch out! You are crossing the border!").setBackgroundColorRes(R.color.colorAccent).show();
+        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
@@ -881,9 +878,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
-                //     .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Geofence")
-                .setContentText("Crossing the border")
+                .setContentText(getResources().getString(R.string.notification_target_crossing_border))
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
@@ -893,8 +889,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private void askUserDisableBroadcast() {
         //Check In Alert Dialog
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BroadcastActivity.this);
-        alertDialogBuilder.setMessage(getResources().getString(R.string.target_confirm_disable_broadcast_ask));
-        alertDialogBuilder.setPositiveButton(getResources().getString(R.string.target_confirm_disable_broadcast_true),
+        alertDialogBuilder.setMessage(getResources().getString(R.string.alert_title_disable_broadcast_ask));
+        alertDialogBuilder.setPositiveButton(getResources().getString(R.string.button_disable_broadcast),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -905,24 +901,24 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                             loadingWindowDisableBroadcast = KProgressHUD.create(BroadcastActivity.this)
                                     .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                                     .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                                    .setLabel(getResources().getString(R.string.loadingPleaseWait))
-                                    .setDetailsLabel(getResources().getString(R.string.target_confirm_disable_broadcast_details))
+                                    .setLabel(getResources().getString(R.string.loading_label_please_wait))
+                                    .setDetailsLabel(getResources().getString(R.string.loading_details_disabling_broadcast))
                                     .setCancellable(true)
                                     .setAnimationSpeed(2)
                                     .setDimAmount(0.5f)
                                     .show();
                             progressDialogIsShown = true;
                             //END OF: Start loading window
-                            Alerter.create(BroadcastActivity.this).setText(getResources().getString(R.string.target_confirm_disable_broadcast_disabled_success)).setBackgroundColorRes(R.color.colorAccent).show();
-                            tombolBroadcast.setText(getResources().getString(R.string.target_confirm_enable_broadcast_true));
+                            Alerter.create(BroadcastActivity.this).setText(getResources().getString(R.string.alert_title_confirm_disable)).setBackgroundColorRes(R.color.colorAccent).show();
+                            tombolBroadcast.setText(getResources().getString(R.string.button_enable_broadcast));
                             //------//
                         } catch (Exception e) {
-                            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.target_confirm_disable_broadcast_disabled_failed)).setText(getResources().getString(R.string.error_msg_internet_connection)).setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_disable_broadcast)).setText(getResources().getString(R.string.alert_msg_failed_disable_broadcast)).setBackgroundColorRes(R.color.colorAccent).show();
                         }
                     }
                 });
 
-        alertDialogBuilder.setNegativeButton("Cancel",
+        alertDialogBuilder.setNegativeButton(getResources().getString(R.string.button_cancel),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

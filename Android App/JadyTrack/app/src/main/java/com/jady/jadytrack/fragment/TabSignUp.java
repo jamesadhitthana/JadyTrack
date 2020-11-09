@@ -40,7 +40,7 @@ public class TabSignUp extends Fragment {
                     // Call parent Activity's Method to create account
                     ((MainActivity) getActivity()).createAccount(userName, userEmail, userPassword);
                 } else {
-                    Toast.makeText(getActivity(), "Make sure all your fields are filled and that your password is at least 6 characters long", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.alert_title_password_criteria), Toast.LENGTH_SHORT).show();
                 }
             }
         });

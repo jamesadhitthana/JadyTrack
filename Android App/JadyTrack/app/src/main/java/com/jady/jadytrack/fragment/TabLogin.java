@@ -36,7 +36,7 @@ public class TabLogin extends Fragment {
                     // Call parent Activity's Method to sign in
                     ((MainActivity) getActivity()).signIn(userEmail, userPassword);
                 } else {
-                    Toast.makeText(getActivity(), "Password or email is empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.alert_title_password_email_empty), Toast.LENGTH_SHORT).show();
                 }
             }
         });

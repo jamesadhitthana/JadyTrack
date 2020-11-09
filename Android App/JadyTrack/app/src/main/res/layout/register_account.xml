@@ -15,7 +15,7 @@
         android:layout_marginStart="55dp"
         android:layout_marginLeft="55dp"
         android:layout_marginTop="45dp"
-        android:text="Create a"
+        android:text="@string/label_title_create_account_1"
         android:textColor="#ffffff"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -30,7 +30,7 @@
         android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
         android:layout_marginTop="84dp"
-        android:text="New Account"
+        android:text="@string/label_title_create_account_2"
         android:textColor="#ffffff"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -43,7 +43,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="148dp"
-        android:text="For the best experience"
+        android:text="@string/label_desc_create_account_1"
         android:textColor="#ffffff" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="170dp"
-        android:text="with JadyTrack"
+        android:text="@string/label_desc_create_account_2"
         android:textColor="#ffffff" />
 
     <TextView
@@ -65,7 +65,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="-1dp"
         android:layout_marginTop="125dp"
-        android:text="-----------"
+        android:text="@string/layout_dash"
         android:textColor="#ffffff" />
 
     <com.google.android.material.tabs.TabLayout

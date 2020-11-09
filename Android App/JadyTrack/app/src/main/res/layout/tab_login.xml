@@ -14,7 +14,7 @@
         android:layout_marginBottom="235dp"
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
-        android:hint="E-MAIL"
+        android:hint="@string/layout_login_email_placeholder"
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="179dp"
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
-        android:hint="PASSWORD"
+        android:hint="@string/layout_login_password_placeholder"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="#ffffff"
@@ -52,7 +52,7 @@
         android:layout_marginRight="91dp"
         android:layout_marginBottom="38dp"
         android:background="@drawable/rectangle_round"
-        android:text="LOGIN" />
+        android:text="@string/button_login" />
 
 
 </RelativeLayout>

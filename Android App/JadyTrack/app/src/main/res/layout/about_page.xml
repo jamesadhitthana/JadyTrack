@@ -29,7 +29,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="70dp"
             android:fontFamily="@font/roboto_light"
-            android:text="About JadyTrack"
+            android:text="@string/layout_about_page_title"
             android:textColor="@android:color/white"
             android:textSize="25sp" />
 
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|left"
                 android:fontFamily="@font/roboto_thin"
-                android:text="Know whats going on, don't worry about…"
+                android:text="@string/layout_about_page_sub_title"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -75,7 +75,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginRight="30dp"
         android:fontFamily="@font/roboto"
-        android:text="JadyTrack allows you or your loved ones to track and share your current LIVE location in real time as easy as 1,2,3!\n\nSimply open the app, set your destination and geofence customization, then tap go! It will then create a new QR code (or link) that you can share with your peers so that they can track you for the current session.\n\nAlso JadyTrack isn't going to spy on you, compared to our competitors, we believe that privacy is your privilege, so we won’t track you 24/7. JadyTrack only works per session, so once the session is done, that’s it!"
+        android:text="@string/layout_about_page_content"
         android:textAllCaps="false"
         android:textColor="#717171" />
 
@@ -88,7 +88,7 @@
         android:layout_marginTop="196dp"
         android:layout_marginEnd="108dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="Contact:"
+        android:text="@string/layout_about_page_contact"
         android:textAlignment="viewStart"
         android:textColor="#3E3E3E" />
 
@@ -101,7 +101,7 @@
         android:layout_marginTop="1dp"
         android:layout_marginEnd="-73dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="jadytrack@gmail.com"
+        android:text="@string/layout_about_page_email"
         android:textAlignment="viewStart"
         android:textColor="#3E3E3E"
         android:textStyle="bold" />
@@ -124,7 +124,7 @@
         android:background="@drawable/contact_us_button"
         android:paddingLeft="10px"
         android:paddingRight="10px"
-        android:text="Contact Us"
+        android:text="@string/button_contact_us"
         android:textColor="#ffffff" />
 
     <Button
@@ -138,7 +138,7 @@
         android:textColor="#ffffff"
         android:paddingLeft="10px"
         android:paddingRight="10px"
-        android:text="View User Manual" />
+        android:text="@string/button_user_manual" />
 
 
 </RelativeLayout>

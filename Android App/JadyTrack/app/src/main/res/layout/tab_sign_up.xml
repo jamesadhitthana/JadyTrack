@@ -15,7 +15,7 @@
         android:layout_marginBottom="235dp"
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
-        android:hint="NAME"
+        android:hint="@string/layout_sign_up_name_placeholder"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="#ffffff"
@@ -30,7 +30,7 @@
         android:layout_marginBottom="177dp"
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
-        android:hint="E-MAIL"
+        android:hint="@string/layout_login_email_placeholder"
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -47,7 +47,7 @@
         android:layout_marginBottom="115dp"
         android:background="@drawable/rectangle_round_textbox"
         android:ems="10"
-        android:hint="PASSWORD (6 CHARACTERS)"
+        android:hint="@string/layout_sign_up_password_placeholder"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="#ffffff"
@@ -62,7 +62,7 @@
         android:layout_marginStart="49dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/rectangle_round"
-        android:text="SIGN UP" />
+        android:text="@string/button_sign_up" />
 
 
 </RelativeLayout>

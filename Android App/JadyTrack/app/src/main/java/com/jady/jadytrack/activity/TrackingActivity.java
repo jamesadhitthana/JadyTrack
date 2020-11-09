@@ -67,8 +67,8 @@ public class TrackingActivity extends AppCompatActivity implements
     private Marker destinationMarker;
     private Circle destinationFence;
 
-    private List<Marker> markers = new ArrayList<Marker>();
-    private List<Marker> drawer = new ArrayList<Marker>();
+    private List<Marker> markers = new ArrayList<>();
+    private List<Marker> drawer = new ArrayList<>();
 
     private Polygon polygon;
 
@@ -119,8 +119,8 @@ public class TrackingActivity extends AppCompatActivity implements
         loadingWindow = KProgressHUD.create(TrackingActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                .setLabel("Please wait")
-                .setDetailsLabel("Getting location data")
+                .setLabel(getResources().getString(R.string.loading_label_please_wait))
+                .setDetailsLabel(getResources().getString(R.string.loading_details_get_location_data))
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f)
@@ -141,7 +141,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
         // Mengatur tampilan awal
         targetStatus = (TextView) findViewById(R.id.targetStatus);
-        targetStatus.setText("Target is offline");
+        targetStatus.setText(getResources().getString(R.string.label_title_target_offline));
 
         // Internet Connection handler
         final Handler handler = new Handler();
@@ -168,11 +168,11 @@ public class TrackingActivity extends AppCompatActivity implements
                     isTargetOnline = diffTime < 20000;
 
                     if(isTargetOnline){
-                        targetStatus.setText("Target is online");
+                        targetStatus.setText(getResources().getString(R.string.label_title_target_online));
                         isOfflineNotified = false;
                     }
                     else if (!isTargetOnline && !isOfflineNotified){
-                        targetStatus.setText("Target is offline");
+                        targetStatus.setText(getResources().getString(R.string.label_title_target_offline));
                         isOfflineNotified = true;
                         notifyOffline();
                     }
@@ -229,7 +229,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
                 // menambahkan history marker
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
-                markerOptions = new MarkerOptions().position(markerPosition).title("Marker History").icon(icon);
+                markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_history)).icon(icon);
                 mMap.addMarker(markerOptions);
 
                 // menambahkan polyline
@@ -296,19 +296,13 @@ public class TrackingActivity extends AppCompatActivity implements
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //Toast.makeText(getApplicationContext(), "dataSnapshot "+ dataSnapshot , Toast.LENGTH_SHORT).show();
-
                 if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed){
                     ArrayList<Object> geofence = (ArrayList<Object>) dataSnapshot.child("geofence").getValue();
                     int geofenceSize = geofence.size()-1;
                     int geofenceNum = (Integer) Integer.parseInt((String) dataSnapshot.child("geofenceNum").getValue().toString());
 
-                    //Toast.makeText(getApplicationContext(), "geofenceSize "+ geofenceSize + " geofenceNum " + geofenceNum, Toast.LENGTH_SHORT).show();
-
                     if(geofenceNum == geofenceSize) {
                         isGeofenceDrawed = true;
-
-                        //oast.makeText(BroadcastActivity.this, "Target has Geofence", Toast.LENGTH_LONG).show();
 
                         // Ini untuk menggambar destination
                         HashMap<String, Object> destination =
@@ -329,11 +323,10 @@ public class TrackingActivity extends AppCompatActivity implements
                         MarkerOptions markerOptions = new MarkerOptions()
                                 .position(new LatLng(destLatitude, destLongitude))
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish))
-                                .title("Destination")
+                                .title(getResources().getString(R.string.marker_destination))
                                 .zIndex(100f);
 
                         destinationMarker = mMap.addMarker(markerOptions);
-                        //markers.add(destinationMarker);
 
                         CircleOptions circleOptions = new CircleOptions()
                                 .center(destinationMarker.getPosition())
@@ -347,8 +340,6 @@ public class TrackingActivity extends AppCompatActivity implements
                         for (int i = 1; i <= geofenceSize; i++) {
 
                             HashMap<String, Object> geofenceIndex = (HashMap<String, Object>) dataSnapshot.child("geofence").child(Integer.toString(i)).getValue();
-
-                            //Toast.makeText(TrackingActivity.this, "Target "+geofenceIndex, Toast.LENGTH_LONG).show();
 
                             for (HashMap.Entry<String, Object> entry : geofenceIndex.entrySet()) {
                                 if (entry.getKey().equals("longitude")) {
@@ -427,13 +418,13 @@ public class TrackingActivity extends AppCompatActivity implements
                         if (isFirstMarker) {
                             // Start marker
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.start);
-                            mMap.addMarker(new MarkerOptions().position(point).title("First Marker").icon(icon));
+                            mMap.addMarker(new MarkerOptions().position(point).title(getResources().getString(R.string.marker_starting_point)).icon(icon));
                             isFirstMarker = false;
 
                         } else {
                             // History marker
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
-                            mMap.addMarker(new MarkerOptions().position(point).title("History Marker").icon(icon));
+                            mMap.addMarker(new MarkerOptions().position(point).title(getResources().getString(R.string.marker_history)).icon(icon));
                         }
                         options.add(point);
                         numMarker++;
@@ -441,7 +432,7 @@ public class TrackingActivity extends AppCompatActivity implements
                     mMap.addPolyline(options);
                 }
                 catch (Error e){
-                    Alerter.create(TrackingActivity.this).setTitle("Oh no!").setText("You dont have a history marker").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_history_marker)).setText(getResources().getString(R.string.alert_msg_history_marker)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
 
@@ -459,7 +450,7 @@ public class TrackingActivity extends AppCompatActivity implements
         mMap = googleMap;
         icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
 
-        markerOptions = new MarkerOptions().position(markerPosition).title("Target is here").icon(icon);
+        markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
         currentMarker = mMap.addMarker(markerOptions);
         currentMarker.setZIndex(1.0f);
         mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f) );
@@ -483,11 +474,11 @@ public class TrackingActivity extends AppCompatActivity implements
     public AlertDialog.Builder internetDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("No Internet Connection");
-        builder.setMessage("You need to have Mobile Data or wifi to access this. Press Try Again or Exit");
+        builder.setTitle(getResources().getString(R.string.alert_title_no_internet_connection));
+        builder.setMessage(getResources().getString(R.string.alert_msg_no_internet_connection));
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_try_again), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -499,7 +490,7 @@ public class TrackingActivity extends AppCompatActivity implements
             }
         });
 
-        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -518,11 +509,11 @@ public class TrackingActivity extends AppCompatActivity implements
     public AlertDialog.Builder backDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("Quit Tracking");
-        builder.setMessage("Do you really want to quit tracking?");
+        builder.setTitle(getResources().getString(R.string.alert_title_quit_tracking));
+        builder.setMessage(getResources().getString(R.string.alert_msg_quit_tracking));
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
@@ -531,7 +522,7 @@ public class TrackingActivity extends AppCompatActivity implements
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_no), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -636,7 +627,7 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
                 .setContentTitle("Geofence")
-                .setContentText("Target is offline")
+                .setContentText(getResources().getString(R.string.notification_target_offline))
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
@@ -667,7 +658,7 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
                 .setContentTitle("Geofence")
-                .setContentText("Target is in danger!")
+                .setContentText(getResources().getString(R.string.notification_target_in_danger))
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
@@ -698,7 +689,7 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
                 .setContentTitle("Geofence")
-                .setContentText("Target has reached destination!")
+                .setContentText(getResources().getString(R.string.notification_target_arrived))
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
@@ -706,7 +697,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
     private void notifyTargetCrossedGeofence() {
         polygon.setFillColor(Color.RED);
-        Alerter.create(TrackingActivity.this).setTitle("Target crossed the Geofence!").setText("Target has exited the geofence!").setBackgroundColorRes(R.color.colorAccent).show();
+        Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_crossed_geofence)).setText(getResources().getString(R.string.alert_msg_crossed_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
@@ -732,7 +723,7 @@ public class TrackingActivity extends AppCompatActivity implements
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setTicker("Hearty365")
                 .setContentTitle("Geofence")
-                .setContentText("Crossing the border")
+                .setContentText(getResources().getString(R.string.notification_target_crossing_border))
                 .setContentInfo("Info");
 
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());

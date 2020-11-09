@@ -67,15 +67,15 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 if(tab.getPosition()==0) {
-                    title1.setText("Create a");
-                    title2.setText("New Account");
-                    description1.setText("For the best experience");
-                    description2.setText("with JadyTrack");
+                    title1.setText(getResources().getString(R.string.label_title_create_account_1));
+                    title2.setText(getResources().getString(R.string.label_title_create_account_2));
+                    description1.setText(getResources().getString(R.string.label_desc_create_account_1));
+                    description2.setText(getResources().getString(R.string.label_desc_create_account_2));
                 }else {
-                    title1.setText("Login to");
-                    title2.setText("Your Account");
-                    description1.setText("Your beloved one is important");
-                    description2.setText("so is your account.");
+                    title1.setText(getResources().getString(R.string.label_title_login_1));
+                    title2.setText(getResources().getString(R.string.label_title_login_2));
+                    description1.setText(getResources().getString(R.string.label_desc_login_1));
+                    description2.setText(getResources().getString(R.string.label_desc_login_2));
                 }
             }
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
-            Alerter.create(MainActivity.this).setTitle("Login to Access JadyTrack").setText("You are currently not logged in").setBackgroundColorRes(R.color.colorAccent).show();
+            Alerter.create(MainActivity.this).setTitle(getResources().getString(R.string.alert_title_not_logged_in)).setText(getResources().getString(R.string.alert_msg_not_logged_in)).setBackgroundColorRes(R.color.colorAccent).show();
         } else {
             Log.d(TAG, "signIn:" + currentUser.getEmail());
         }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
-        Alerter.create(MainActivity.this).setText("Logging in...").setBackgroundColorRes(R.color.colorAccent).show();
+        Alerter.create(MainActivity.this).setText(getResources().getString(R.string.alert_title_logging_in)).setBackgroundColorRes(R.color.colorAccent).show();
 
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(getApplicationContext(), "Logged in as " + mAuth.getCurrentUser().getEmail(),
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.alert_title_logged_in_as) + mAuth.getCurrentUser().getEmail(),
                                     Toast.LENGTH_SHORT).show(); //diemin aja
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
@@ -137,13 +137,13 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Alerter.create(MainActivity.this).setTitle("Login Failed").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(MainActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_login)).setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                             updateUI(null);
                         }
 
                         // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
-                            Alerter.create(MainActivity.this).setTitle("Authentication Failed").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(MainActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_authentication)).setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                         }
                         // [END_EXCLUDE]
                     }
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void createAccount(final String name, final String email, final String password) {
         Log.d(TAG, "createAccount:" + email);
-        Alerter.create(MainActivity.this).setTitle("Creating Account").setText("Setting up your account...").setBackgroundColorRes(R.color.colorAccent).show();
+        Alerter.create(MainActivity.this).setTitle(getResources().getString(R.string.alert_title_creating_account)).setText(getResources().getString(R.string.alert_msg_creating_account)).setBackgroundColorRes(R.color.colorAccent).show();
 
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If register fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Alerter.create(MainActivity.this).setTitle("Failed to Register").setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(MainActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_register)).setText(task.getException().getMessage()).setBackgroundColorRes(R.color.colorAccent).show();
                             updateUI(null);
                         }
 
@@ -185,11 +185,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateUI(FirebaseUser user) {
         if (user != null) {
-            garisTemporary.setText("Current user: " + user.getEmail());
+            garisTemporary.setText(user.getEmail());
 
             //---------HAWK set SkipOnboarding to true if the user is logged in---------//
-            Boolean skipOnboardingIfLoggedIn = true;
-            Hawk.put("skipOnboardingIfLoggedIn", skipOnboardingIfLoggedIn);
+            Hawk.put("skipOnboardingIfLoggedIn", true);
             // END OF: HAWK stuff james
 
             // Change the Activity to Main Menu if user is logged in
@@ -199,11 +198,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
         } else {
             //---------HAWK set SkipOnboarding to FALSE if the user is NOT logged in---------//
-            Boolean skipOnboardingIfLoggedIn = false;
-            Hawk.put("skipOnboardingIfLoggedIn", skipOnboardingIfLoggedIn);
+            Hawk.put("skipOnboardingIfLoggedIn", false);
             //---------HAWK set Home Tutorial to FALSE if the user is NOT logged in (MainActivity)---------//
-            Boolean skipMainMenuTutorial = false;
-            Hawk.put("skipMainMenuTutorial", skipMainMenuTutorial);
+            Hawk.put("skipMainMenuTutorial", false);
         }
     }
 }

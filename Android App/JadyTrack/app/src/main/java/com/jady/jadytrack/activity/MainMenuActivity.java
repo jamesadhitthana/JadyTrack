@@ -72,8 +72,8 @@ public class MainMenuActivity extends AppCompatActivity {
         loadingWindow = KProgressHUD.create(MainMenuActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                .setLabel("Please wait")
-                .setDetailsLabel("Downloading data")
+                .setLabel(getResources().getString(R.string.loading_label_please_wait))
+                .setDetailsLabel(getResources().getString(R.string.loading_details_downloading_data))
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f)
@@ -134,16 +134,16 @@ public class MainMenuActivity extends AppCompatActivity {
     // This is an alert dialog that will be shown when the user want to logout
     public AlertDialog.Builder backDialog(Context c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("Logout");
-        builder.setMessage("Do you really want to Logout?");
+        builder.setTitle(getResources().getString(R.string.alert_title_logout));
+        builder.setMessage(getResources().getString(R.string.alert_msg_logout));
         builder.setCancelable(false);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 signOut();
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_no), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -182,9 +182,7 @@ public class MainMenuActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (currentUser == null) {
-            Toast.makeText(getApplicationContext(), "Not logged in.", Toast.LENGTH_SHORT).show();
-        } else {
+        if (currentUser != null) {
             currentUserUID = currentUser.getUid();
 
             //----CREATE A LISTENER FOR Name of User----
@@ -193,7 +191,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot!= null) {
                         userName = dataSnapshot.getValue().toString();
-                        //Toast.makeText(getApplicationContext(), "Welcome :" + userName, Toast.LENGTH_SHORT).show();
                         textViewUserName.setText(userName);
                         //Enable buttons if username is loaded
                         buttonViewer.setEnabled(true);
@@ -233,11 +230,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.w(TAG, "Failed getting the user's name", databaseError.toException());
-                    //Toast.makeText(getApplicationContext(), "Failed getting the user's name.", Toast.LENGTH_SHORT).show();
                 }
             }); //END OF: Listen User's name
             userEmail = currentUser.getEmail();
-            //Toast.makeText(getApplicationContext(), "Welcome " + userName + "\nEmail: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
         }
         updateUI(currentUser);
 
@@ -247,11 +242,11 @@ public class MainMenuActivity extends AppCompatActivity {
         //Tap Target methods (INTRO TUTORIAL PART)//
         new TapTargetSequence(MainMenuActivity.this)
                 .targets(
-                        TapTarget.forView(findViewById(R.id.buttonAppointment), "Appointment ", "Create and setup the geofence and destination for your target's trip here!").outerCircleColor(R.color.jamesBlue).tintTarget(false),
-                        TapTarget.forView(findViewById(R.id.buttonTarget), "Target ", "You can broadcast your location as well as share your tracking session to create appointments!").outerCircleColor(R.color.jamesBlue).tintTarget(false),
-                        TapTarget.forView(findViewById(R.id.buttonViewer), "Viewer ", "You can view your target by scanning the QR Code or tracking ID here!").outerCircleColor(R.color.jamesBlue).tintTarget(false),
-                        TapTarget.forView(findViewById(R.id.buttonLogout), "Logout ", "You can logout and switch accounts here!").outerCircleColor(R.color.jamesBlue),
-                        TapTarget.forView(findViewById(R.id.buttonAboutPage), "Help ", "Your help menu is here! Pressing the help menu will reset the quick tutorial. You can also contact us through the contact form inside").outerCircleColor(R.color.jamesBlue))
+                        TapTarget.forView(findViewById(R.id.buttonAppointment), getResources().getString(R.string.tutorial_title_appointment), getResources().getString(R.string.tutorial_desc_appointment)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
+                        TapTarget.forView(findViewById(R.id.buttonTarget), getResources().getString(R.string.tutorial_title_target), getResources().getString(R.string.tutorial_desc_target)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
+                        TapTarget.forView(findViewById(R.id.buttonViewer), getResources().getString(R.string.tutorial_title_viewer), getResources().getString(R.string.tutorial_desc_viewer)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
+                        TapTarget.forView(findViewById(R.id.buttonLogout), getResources().getString(R.string.tutorial_title_logout), getResources().getString(R.string.tutorial_desc_logout)).outerCircleColor(R.color.jamesBlue),
+                        TapTarget.forView(findViewById(R.id.buttonAboutPage), getResources().getString(R.string.tutorial_title_help), getResources().getString(R.string.tutorial_desc_help)).outerCircleColor(R.color.jamesBlue))
                 .start();
         //END OF: Tap Target methods (INTRO TUTORIAL PART)//
     }
@@ -261,7 +256,7 @@ public class MainMenuActivity extends AppCompatActivity {
             textViewCurrentUser.setText(user.getEmail());
             textViewUserName.setText(userName);
         } else {
-            textViewCurrentUser.setText("Not logged in");
+            textViewCurrentUser.setText(getResources().getString(R.string.label_title_not_logged_in));
             //Change the Activity to Loggin/Register Screen if the user is not logged in to the app.
             Intent i = new Intent(this, MainActivity.class);
             // set the new task and clear flags
@@ -283,16 +278,16 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public AlertDialog.Builder gobackDialog(Context c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("Quit Application");
-        builder.setMessage("Do you really want to quit from the application?");
+        builder.setTitle(getResources().getString(R.string.alert_title_quit_application));
+        builder.setMessage(getResources().getString(R.string.alert_msg_quit_application));
         builder.setCancelable(false);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finishAffinity();
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_no), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

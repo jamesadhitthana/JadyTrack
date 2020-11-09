@@ -1,39 +1,193 @@
 <resources>
+
+    <!--Application Information-->
     <string name="app_name">JadyTrack v2</string>
     <string name="google_maps_key" translatable="false">AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM</string>
+
     <!--Strings for Onboarding-->
     <string name="onboarding_1_titleText">Welcome to JadyTrack!</string>
     <string name="onboarding_1_descriptionText">"Your personal assistant to monitor your peer's location.\n\n Swipe right to continue"</string>
-
     <string name="onboarding_2_titleText">Easily Track Your Family</string>
     <string name="onboarding_2_descriptionText">No more worrying about your family! We show you where they are in real-time!</string>
-
     <string name="onboarding_3_titleText">Travel Protection</string>
     <string name="onboarding_3_descriptionText">Set-up safe zones and danger zones on customizable virtual fences and make sure your family is safe wherever they are going</string>
-
     <string name="onboarding_4_titleText">SOS Button</string>
     <string name="onboarding_4_descriptionText">Your peer can notify you of emergencies easier and faster by tapping the SOS button to automatically send an emergency alert!</string>
-
     <string name="onboarding_5_titleText">Easy "Check-In"</string>
     <string name="onboarding_5_descriptionText">No more of those annoying \"where are you?\" messages from your peer. Just tap the check-in button and let your peer know that you have arrived</string>
-
     <string name="onboarding_6_titleText">Realtime Notifications</string>
     <string name="onboarding_6_descriptionText">You get automatic notifications when your peers arrive at their destination, exit a virtual fence, and more!\n\n Swipe right to get started!</string>
 
-<!--    Common Errors:-->
+    <!--Alert-->
+    <string name="alert_title_geofence">Unable to set Geofence</string>
+    <string name="alert_msg_geofence">Unable to set Geofence because Geofence has been created previously</string>
+    <string name="alert_title_forgot_draw">You forgot to draw your Geofence!</string>
+    <string name="alert_msg_forgot_draw">Please draw at least three points for your Geofence</string>
+    <string name="alert_title_forgot_destination">You forgot to set your destination!</string>
+    <string name="alert_msg_forgot_destination">Please set your destination by tapping on the desired destination</string>
+    <string name="alert_title_failed_set_object">Oops something went wrong!</string>
+    <string name="alert_msg_failed_set_object">We failed to set the object on the database</string>
+    <string name="alert_title_failed_find_id">Oh no we failed to find Tracking ID</string>
+    <string name="alert_msg_failed_find_id">ID doesn\'t exist</string>
+    <string name="alert_title_synchronize_geofence">Successfully synchronized Geofence online</string>
+    <string name="alert_msg_broadcast_disabled">Broadcast is disabled</string>
+    <string name="alert_title_broadcast_disabled">Oops you forgot something!</string>
+    <string name="alert_title_failed_send_emergency_status">Failed to send emergency status!</string>
+    <string name="alert_msg_failed_send_emergency_status">Please check your internet connection</string>
+    <string name="alert_title_select_no">You selected no!</string>
+    <string name="alert_msg_select_no">Emergency status set to false</string>
+    <string name="alert_title_failed_set_emergency_status">Failed to set Emergency status to false!</string>
+    <string name="alert_msg_failed_set_emergency_status">If you did not previously enabled your emergency status then you are fine. If you have, then please check your internet connection and try again.</string>
+    <string name="alert_title_check_in">Checked In</string>
+    <string name="alert_msg_check_in">You have checked in manually</string>
+    <string name="alert_title_failed_check_in">Oh no! We failed to check you in</string>
+    <string name="alert_msg_failed_check_in">Please check your internet connection</string>
+    <string name="alert_title_no_internet_connection">No Internet Connection</string>
+    <string name="alert_msg_no_internet_connection">You need to have Mobile Data or wifi to access this. Press Try Again or Exit</string>
+    <string name="alert_title_quit_broadcasting">Quit Broadcasting?</string>
+    <string name="alert_msg_quit_broadcasting">Do you really want to quit Broadcasting?</string>
+    <string name="alert_title_crossing_border">CROSSING THE BORDER!</string>
+    <string name="alert_msg_crossing_border">Watch out! You are crossing the border!</string>
+    <string name="alert_title_emergency_status_sent">Emergency status sent</string>
+    <string name="alert_title_dont_have_geofence">You don\'t have Geofence</string>
+    <string name="alert_title_confirm_disable">Broadcast disabled</string>
+    <string name="alert_title_enable_sos">Are you sure you want to enable SOS (Emergency) mode? If you are connected to the internet, your peers will get notified of an emergency immediately.</string>
+    <string name="alert_title_check_in_arrived">Are you sure you want to check in with your peers? You won\'t be able to cancel your decision and JadyTrack will automatically assume that you have arrived.</string>
+    <string name="alert_title_failed_disable_broadcast">Failed to disable Broadcast</string>
+    <string name="alert_msg_failed_disable_broadcast">Please check your internet connection</string>
+    <string name="alert_title_disable_broadcast_ask">Are you sure you want to disable the Broadcast?. Your peers will not know what is going on if you disable it.</string>
+    <string name="alert_title_failed_contact_us">Oh no!</string>
+    <string name="alert_msg_failed_contact_us">Make sure all your fields are filled properly</string>
+    <string name="alert_title_contact_us">Your message was successfully sent. \\nWe will respond to your message as soon as we can!</string>
+    <string name="alert_title_failed_send_message">Failed to send message!</string>
+    <string name="alert_msg_failed_send_message">Please check your internet connection</string>
+    <string name="alert_title_input_tracking_id">Tracking ID</string>
+    <string name="alert_msg_input_tracking_id">Please input the Tracking ID</string>
+    <string name="alert_title_not_logged_in">Login to Access JadyTrack</string>
+    <string name="alert_msg_not_logged_in">You are currently not logged in</string>
+    <string name="alert_title_logging_in">Logging in...</string>
+    <string name="alert_title_logged_in_as">Logged in as</string>
+    <string name="alert_title_failed_login">Login Failed</string>
+    <string name="alert_title_failed_authentication">Authentication Failed</string>
+    <string name="alert_title_creating_account">Creating Account</string>
+    <string name="alert_msg_creating_account">Setting up your account...</string>
+    <string name="alert_title_failed_register">Failed to Register</string>
+    <string name="alert_title_logout">Logout</string>
+    <string name="alert_msg_logout">Do you really want to Logout?</string>
+    <string name="alert_title_quit_application">Quit Application</string>
+    <string name="alert_msg_quit_application">Do you really want to quit from the application?</string>
+    <string name="alert_title_set_quick_route">Please set your Quick Route</string>
+    <string name="alert_title_history_marker">Oh no!</string>
+    <string name="alert_msg_history_marker">You don\'t have a history marker</string>
+    <string name="alert_title_quit_tracking">Quit Tracking</string>
+    <string name="alert_msg_quit_tracking">Do you really want to quit Tracking?</string>
+    <string name="alert_title_crossed_geofence">Target crossed the Geofence!</string>
+    <string name="alert_msg_crossed_geofence">Target has exited the Geofence!</string>
+    <string name="alert_title_password_criteria">Make sure all your fields are filled and that your password is at least 6 characters long</string>
+    <string name="alert_title_password_email_empty">Password or email is empty</string>
 
-    <string name="error_msg_internet_connection">Please check your internet connection</string>
-    <!--    KLoader-->
-    <string name="loadingPleaseWait">Please wait</string>
-    <!--    Broadcast Enabler-->
-    <string name="target_confirm_enable_broadcast_true">Enable Broadcast</string>
-    <string name="target_confirm_enable_broadcast_details">Enabling broadcast</string>
-    <string name="target_confirm_enable_broadcast_disabled_success">Broadcast enabled</string>
-    <!--    Broadcast Disabler-->
-    <string name="target_confirm_disable_broadcast_ask">Are you sure you want to disable the broadcast?. Your peers will not know what is going on if you disable it.</string>
-    <string name="target_confirm_disable_broadcast_true">Disable Broadcast</string>
-    <string name="target_confirm_disable_broadcast_details">Disabling broadcast</string>
-    <string name="target_confirm_disable_broadcast_disabled_success">Broadcast disabled</string>
-    <string name="target_confirm_disable_broadcast_disabled_failed">Failed to disable broadcast</string>
+    <!--Button-->
+    <string name="button_disable_broadcast">Disable Broadcast</string>
+    <string name="button_try_again">Try Again</string>
+    <string name="button_exit">Exit</string>
+    <string name="button_not_there_yet">No I\'m not there yet!</string>
+    <string name="button_enable_broadcast">Enable Broadcast</string>
+    <string name="button_danger">Yes, I\'m in danger!</string>
+    <string name="button_safe">No I\'m safe!</string>
+    <string name="button_check_me_in">Yes, Check me in!</string>
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
+    <string name="button_cancel">Cancel</string>
+
+    <string name="button_contact_us">Contact Us</string>
+    <string name="button_user_manual">View User Manual</string>
+    <string name="button_undo">Undo</string>
+    <string name="button_quick_route">Quick Route</string>
+    <string name="button_set_geofence">Set Geofence</string>
+    <string name="button_check_in">Check In</string>
+    <string name="button_sos">SOS</string>
+    <string name="button_get_tracking_id">Get Tracking ID</string>
+    <string name="button_send_message">Send Message</string>
+    <string name="button_share_id">Share ID</string>
+    <string name="button_appointment">Appointment</string>
+    <string name="button_target">Target</string>
+    <string name="button_viewer">Viewer</string>
+    <string name="button_track">Track</string>
+    <string name="button_scan_qr">Scan QR Code</string>
+    <string name="button_input_tracking_id">Input Tracking ID</string>
+    <string name="button_set_quick_route">Set Quick Route</string>
+    <string name="button_login" translatable="false">Login</string>
+    <string name="button_sign_up" translatable="false">Sign Up</string>
+
+    <!--KLoader-->
+    <string name="loading_label_please_wait">Please wait</string>
+    <string name="loading_details_enabling_broadcast">Enabling Broadcast</string>
+    <string name="loading_details_disabling_broadcast">Disabling Broadcast</string>
+    <string name="loading_details_get_location_data">Getting location data</string>
+    <string name="loading_details_downloading_data">Downloading data</string>
+    <string name="loading_details_finding_id">Finding tracking id</string>
+
+    <!--Notification-->
+    <string name="notification_target_arrived">Target has reached destination!</string>
+    <string name="notification_target_crossing_border">Crossing the border</string>
+    <string name="notification_target_offline">Target is offline</string>
+    <string name="notification_target_in_danger">Target is in danger!</string>
+
+    <!--Tutorial-->
+    <string name="tutorial_title_appointment">"Appointment "</string>
+    <string name="tutorial_desc_appointment">Create and setup the Geofence and destination for your target\'s trip here!</string>
+    <string name="tutorial_title_target">"Target "</string>
+    <string name="tutorial_desc_target">You can broadcast your location as well as share your tracking session to create appointments!</string>
+    <string name="tutorial_title_viewer">"Viewer "</string>
+    <string name="tutorial_desc_viewer">You can view your target by scanning the QR Code or Tracking ID here!</string>
+    <string name="tutorial_title_logout">"Logout "</string>
+    <string name="tutorial_desc_logout">You can logout and switch accounts here!</string>
+    <string name="tutorial_title_help">"Help "</string>
+    <string name="tutorial_desc_help">Your help menu is here! Pressing the help menu will reset the quick tutorial. You can also contact us through the contact form inside</string>
+
+    <!--Marker-->
+    <string name="marker_history">History</string>
+    <string name="marker_destination">Destination</string>
+    <string name="marker_starting_point">Starting point</string>
+    <string name="marker_current_location">Target is here</string>
+
+    <!--Label-->
+    <string name="label_broadcast_disabled">Broadcast is disabled</string>
+    <string name="label_broadcast_enabled">Broadcast is enabled</string>
+    <string name="label_title_create_account_1">Create a</string>
+    <string name="label_title_create_account_2">New Account</string>
+    <string name="label_desc_create_account_1">For the best experience</string>
+    <string name="label_desc_create_account_2">with JadyTrack</string>
+    <string name="label_title_login_1">Login to</string>
+    <string name="label_title_login_2">Your Account</string>
+    <string name="label_desc_login_1">Your beloved one is important</string>
+    <string name="label_desc_login_2">so is your account.</string>
+    <string name="label_title_not_logged_in">Not logged in</string>
+    <string name="label_title_tap_to_select_quick_route">Tap to select Quick Route</string>
+    <string name="label_title_target_offline">Target is offline</string>
+    <string name="label_title_target_online">Target is online</string>
+
+    <!--Layout-->
+    <string name="layout_about_page_title">About JadyTrack</string>
+    <string name="layout_about_page_sub_title">Know whats going on, don\'t worry about…</string>
+    <string name="layout_about_page_content">JadyTrack allows you or your loved ones to track and share your current LIVE location in real time as easy as 1,2,3!\\n\\nSimply open the app, set your destination and geofence customization, then tap go! It will then create a new QR code (or link) that you can share with your peers so that they can track you for the current session.\\n\\nAlso JadyTrack isn\'t going to spy on you, compared to our competitors, we believe that privacy is your privilege, so we won’t track you 24/7. JadyTrack only works per session, so once the session is done, that’s it!</string>
+    <string name="layout_about_page_contact">Contact:</string>
+    <string name="layout_about_page_email" translatable="false">jadytrack@gmail.com</string>
+    <string name="layout_appointment_current_status">Current Status</string>
+    <string name="layout_contact_us_title">Contact Us</string>
+    <string name="layout_placeholder_enter_message">Enter Message Here</string>
+    <string name="layout_tracking_id_content">Tracking ID</string>
+    <string name="layout_home_page_email" translatable="false">someoneemail@mail.com</string>
+    <string name="layout_home_page_name">Someone\'s name here</string>
+    <string name="layout_input_id_placeholder">Input the tracking ID here</string>
+    <string name="layout_input_id_title">Tracking ID</string>
+    <string name="layout_input_option_title">Choose Method</string>
+    <string name="layout_quick_route_title">Quick Route</string>
+    <string name="layout_tracking_current_status">Current Target\'s Status</string>
+    <string name="layout_dash" translatable="false">-----------</string>
+    <string name="layout_login_email_placeholder" translatable="false">e-mail</string>
+    <string name="layout_login_password_placeholder" translatable="false">password</string>
+    <string name="layout_sign_up_name_placeholder">name</string>
+    <string name="layout_sign_up_password_placeholder">password (min 6 character)</string>
 
 </resources>
