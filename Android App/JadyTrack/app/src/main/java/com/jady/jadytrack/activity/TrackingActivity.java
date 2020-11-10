@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Vector;
 
 public class TrackingActivity extends AppCompatActivity implements
-        OnMapReadyCallback{
+        OnMapReadyCallback {
 
     // Google Map
     private GoogleMap mMap;
@@ -74,7 +74,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
     // Marker
     private BitmapDescriptor icon;
-    private LatLng markerPosition = new LatLng(0,0);
+    private LatLng markerPosition = new LatLng(0, 0);
     private Marker currentMarker;
     private MarkerOptions markerOptions;
 
@@ -137,7 +137,7 @@ public class TrackingActivity extends AppCompatActivity implements
         String id = intent.getStringExtra(InputIdActivity.EXTRA_MESSAGE_ID);
 
         // Firebase
-        databaseReference = FirebaseDatabase.getInstance().getReference("trackingSession/"+ id);
+        databaseReference = FirebaseDatabase.getInstance().getReference("trackingSession/" + id);
 
         // Mengatur tampilan awal
         targetStatus = (TextView) findViewById(R.id.targetStatus);
@@ -149,39 +149,35 @@ public class TrackingActivity extends AppCompatActivity implements
 
             @Override
             public void run() {
-                try{
-                    if (isConnected(TrackingActivity.this)){
-                        if(internetStatus){
+                try {
+                    if (isConnected(TrackingActivity.this)) {
+                        if (internetStatus) {
                             internetDialog(TrackingActivity.this).show();
                             internetStatus = false;
                         }
-                    }
-                    else {
+                    } else {
                         internetStatus = true;
                     }
 
-                    long tsLong = System.currentTimeMillis()/1000;
+                    long tsLong = System.currentTimeMillis() / 1000;
                     tsLong = tsLong * 1000;
 
                     long diffTime = tsLong - time;
                     // aktif selama 30 detik
                     isTargetOnline = diffTime < 20000;
 
-                    if(isTargetOnline){
+                    if (isTargetOnline) {
                         targetStatus.setText(getResources().getString(R.string.label_title_target_online));
                         isOfflineNotified = false;
-                    }
-                    else if (!isTargetOnline && !isOfflineNotified){
+                    } else if (!isTargetOnline && !isOfflineNotified) {
                         targetStatus.setText(getResources().getString(R.string.label_title_target_offline));
                         isOfflineNotified = true;
                         notifyOffline();
                     }
 
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // TODO: handle exception
-                }
-                finally{
+                } finally {
                     // Also call the same runnable to call it at regular interval
                     handler.postDelayed(this, 1000);
                 }
@@ -195,11 +191,11 @@ public class TrackingActivity extends AppCompatActivity implements
         super.onStart();
 
         // Menggambar history marker yang tersimpan di firebase
-        if(!isMarkerDrawed){
+        if (!isMarkerDrawed) {
             plotMarkerHistory();
             loadingWindow.dismiss();
         }
-        if(!isGeofenceDrawed){
+        if (!isGeofenceDrawed) {
             plotGeofence();
         }
 
@@ -210,14 +206,14 @@ public class TrackingActivity extends AppCompatActivity implements
                 HashMap<String, Object> location =
                         (HashMap<String, Object>) dataSnapshot.child("targetLocation").getValue();
 
-                for(HashMap.Entry<String, Object> entry: location.entrySet()) {
-                    if(entry.getKey().equals("longitude")) {
+                for (HashMap.Entry<String, Object> entry : location.entrySet()) {
+                    if (entry.getKey().equals("longitude")) {
                         longitude = (Double) entry.getValue();
                     }
-                    if(entry.getKey().equals("latitude")){
+                    if (entry.getKey().equals("latitude")) {
                         latitude = (Double) entry.getValue();
                     }
-                    if(entry.getKey().equals("time")){
+                    if (entry.getKey().equals("time")) {
                         time = (Long) entry.getValue();
                     }
                 }
@@ -225,7 +221,7 @@ public class TrackingActivity extends AppCompatActivity implements
                 // mengubah lokasi current marker
                 markerPosition = new LatLng(latitude, longitude);
                 currentMarker.setPosition(markerPosition);
-                mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
 
                 // menambahkan history marker
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
@@ -236,25 +232,25 @@ public class TrackingActivity extends AppCompatActivity implements
                 options.add(markerPosition);
                 mMap.addPolyline(options);
 
-                if(isGeofenceDrawed){
+                if (isGeofenceDrawed) {
                     // Ini untuk mengambil data notifications dari firebase
                     HashMap<String, Object> notifKu =
                             (HashMap<String, Object>) dataSnapshot.child("notifications").getValue();
 
-                    for(HashMap.Entry<String, Object> entry: notifKu.entrySet()) {
-                        if(entry.getKey().equals("manualCheckIn")) {
+                    for (HashMap.Entry<String, Object> entry : notifKu.entrySet()) {
+                        if (entry.getKey().equals("manualCheckIn")) {
                             manualCheckIn = (boolean) entry.getValue();
                         }
-                        if(entry.getKey().equals("statusHasArrived")){
+                        if (entry.getKey().equals("statusHasArrived")) {
                             statusHasArrived = (boolean) entry.getValue();
                         }
-                        if(entry.getKey().equals("statusInGeofence")){
+                        if (entry.getKey().equals("statusInGeofence")) {
                             statusInGeofence = (boolean) entry.getValue();
                         }
-                        if(entry.getKey().equals("statusLinkExpired")){
+                        if (entry.getKey().equals("statusLinkExpired")) {
                             statusLinkExpired = (boolean) entry.getValue();
                         }
-                        if(entry.getKey().equals("statusSOS")){
+                        if (entry.getKey().equals("statusSOS")) {
                             statusSOS = (boolean) entry.getValue();
                         }
                     }
@@ -273,7 +269,7 @@ public class TrackingActivity extends AppCompatActivity implements
                         isGeofenceNotified = true;
                     }
 
-                    if (statusSOS && !isSOSNotified){
+                    if (statusSOS && !isSOSNotified) {
                         notifySOS();
                         isSOSNotified = true;
                     }
@@ -291,17 +287,17 @@ public class TrackingActivity extends AppCompatActivity implements
     }
 
     // untuk menggambar geofence
-    public void plotGeofence(){
+    public void plotGeofence() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed){
+                if (dataSnapshot.hasChild("geofenceNum") && !isGeofenceDrawed) {
                     ArrayList<Object> geofence = (ArrayList<Object>) dataSnapshot.child("geofence").getValue();
-                    int geofenceSize = geofence.size()-1;
+                    int geofenceSize = geofence.size() - 1;
                     int geofenceNum = (Integer) Integer.parseInt((String) dataSnapshot.child("geofenceNum").getValue().toString());
 
-                    if(geofenceNum == geofenceSize) {
+                    if (geofenceNum == geofenceSize) {
                         isGeofenceDrawed = true;
 
                         // Ini untuk menggambar destination
@@ -384,7 +380,7 @@ public class TrackingActivity extends AppCompatActivity implements
     }
 
     // untuk menggambar marker history pertama kali
-    public void plotMarkerHistory (){
+    public void plotMarkerHistory() {
         isMarkerDrawed = true;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -430,13 +426,13 @@ public class TrackingActivity extends AppCompatActivity implements
                         numMarker++;
                     }
                     mMap.addPolyline(options);
-                }
-                catch (Error e){
+                } catch (Error e) {
                     Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_history_marker)).setText(getResources().getString(R.string.alert_msg_history_marker)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -453,7 +449,7 @@ public class TrackingActivity extends AppCompatActivity implements
         markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
         currentMarker = mMap.addMarker(markerOptions);
         currentMarker.setZIndex(1.0f);
-        mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f) );
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
 
 
@@ -602,7 +598,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
     // Notifikasi
 
-    private void notifyOffline(){
+    private void notifyOffline() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
 
@@ -633,7 +629,7 @@ public class TrackingActivity extends AppCompatActivity implements
         notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
     }
 
-    public void notifySOS(){
+    public void notifySOS() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
 

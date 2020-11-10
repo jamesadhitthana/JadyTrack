@@ -21,6 +21,28 @@
             </intent-filter>
         </activity>
 
+
+        <!--        Activites with Intent Filters-->
+        <activity
+            android:name="com.jady.jadytrack.activity.WebActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+
+                <!--*Data Filter-->
+                <!-- Accepts URIs that begin with "http://myjadytrack.web.app/app” -->
+                <data
+                    android:host="myjadytrack.web.app"
+                    android:pathPrefix="/app"
+                    android:scheme="https" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+            </intent-filter>
+        </activity>
         <!--Additional Activities Needed Here -->
         <activity
             android:name="com.jady.jadytrack.activity.OnboardingActivity"
@@ -38,10 +60,7 @@
             android:name="com.jady.jadytrack.activity.AboutActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.TrackingActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name="com.jady.jadytrack.activity.BroadcastActivity"
             android:configChanges="orientation"
@@ -74,6 +93,10 @@
             android:name="com.jady.jadytrack.activity.AppointmentActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.jady.jadytrack.activity.TrackingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <!--END OF: Additional Activities-->
 
         <meta-data
@@ -94,6 +117,7 @@
     <!--Permission-->
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />

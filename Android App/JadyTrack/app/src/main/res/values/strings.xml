@@ -190,5 +190,15 @@
     <string name="layout_login_password_placeholder" translatable="false">password</string>
     <string name="layout_sign_up_name_placeholder">name</string>
     <string name="layout_sign_up_password_placeholder">password (min 6 character)</string>
-
+    <!--    Web Link-->
+    <string name="layout_web_link_title">You are Tracking</string>
+    <string name="layout_web_link_placeholder_id">Loading Tracking ID..</string>
+    <string name="layout_web_link_placeholder_user_displayname">Loading Target Name..</string>
+    <string name="layout_web_link_tracking_id_not_found">TRACKING ID NOT FOUND</string>
+    <string name="layout_web_link_appointment">Appointment</string>
+    <string name="layout_web_link_viewer">Viewer</string>
+    <string name="layout_web_link_alerter_login_title">Oops!</string>
+    <string name="layout_web_link_alerter_login">User is not logged in</string>
+    <string name="layout_web_link_found_tracking_id">Tracking ID Loaded</string>
+    <string name="layout_web_link_found_tracking_id_desc">Successfully loaded the tracking ID</string>
 </resources>

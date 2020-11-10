@@ -162,4 +162,14 @@
     <string name="layout_about_page_sub_title">Tahu apa yang terjadi, jangan khawatir...</string>
     <string name="layout_about_page_content">JadyTrack memungkinkan Anda atau orang yang Anda cintai untuk melacak dan berbagi lokasi LANGSUNG Anda saat ini secara real time semudah 1,2,3!\n\nCukup buka aplikasi, tetapkan tujuan dan kustomisasi Geofence Anda, lalu ketuk Go! JadyTrack akan membuat kode QR (atau tautan) yang dapat Anda bagikan dengan rekan Anda sehingga mereka dapat melacak Anda. \n\nJadyTrack tidak akan memata-matai Anda. Dibandingkan dengan pesaing kami, kami percaya bahwa privasi adalah hak istimewa Anda, jadi kami tidak akan melacak Anda 24/7. JadyTrack hanya bekerja per sesi!</string>
     <string name="button_share_link">Bagikan Tautan Pelacakan</string>
+    <string name="layout_web_link_title">Anda sedang Melacak</string>
+    <string name="layout_web_link_appointment">Janji</string>
+    <string name="layout_web_link_viewer">Pelacak</string>
+    <string name="layout_web_link_placeholder_id">Memuat...</string>
+    <string name="layout_web_link_alerter_login_title">Ups!</string>
+    <string name="layout_web_link_alerter_login">Pengguna belum masuk (login)</string>
+    <string name="layout_web_link_found_tracking_id_desc">Berhasil memuat Tracking ID</string>
+    <string name="layout_web_link_found_tracking_id">Tracking ID Dimuat</string>
+    <string name="layout_web_link_placeholder_user_displayname">Memuat Nama target..</string>
+    <string name="layout_web_link_tracking_id_not_found">TRACKING ID TIDAK DITEMUKAN</string>
 </resources>
