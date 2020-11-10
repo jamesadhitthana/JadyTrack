@@ -109,6 +109,7 @@
     <string name="button_get_tracking_id">Get Tracking ID</string>
     <string name="button_send_message">Send Message</string>
     <string name="button_share_id">Share ID</string>
+    <string name="button_share_link">Share Tracking Link</string>
     <string name="button_appointment">Appointment</string>
     <string name="button_target">Target</string>
     <string name="button_viewer">Viewer</string>

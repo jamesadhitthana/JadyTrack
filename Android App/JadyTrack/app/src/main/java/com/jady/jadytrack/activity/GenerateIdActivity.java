@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -49,5 +50,31 @@ public class GenerateIdActivity extends AppCompatActivity {
             }
 
         });
+
+//        Button to share link
+        Button shareLinkButton = (Button) findViewById(R.id.shareLinkButton);
+        shareLinkButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String trackingLink = buildTrackingLink(id);
+//                Toast.makeText(getApplicationContext(), "Hasil link nya: " + trackingLink, Toast.LENGTH_SHORT).show();
+
+//                Sharing Intent
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                // Set type to text
+                sharingIntent.setType("text/plain");
+
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "JadyTrack Tracking Link");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, trackingLink);
+
+                startActivity(Intent.createChooser(sharingIntent, "Share JadyTrack Tracking Link via"));
+
+            }
+        });
+    }
+
+    private String buildTrackingLink(String trackingID) {
+        String template = "https://myjadytrack.web.app/app/index.html?id="; //-L_tTv8ulabhy1vPOdo0
+        return template += trackingID;
+
     }
 }

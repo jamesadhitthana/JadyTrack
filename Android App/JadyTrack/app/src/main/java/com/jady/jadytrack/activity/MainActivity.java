@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jady.jadytrack.fragment.PagerAdapter;
@@ -167,9 +168,27 @@ public class MainActivity extends AppCompatActivity {
                             // Auto flag Login After SignUp
                             updateUI(user);
 
+//                            Write User data to DB
                             databaseUser = databaseKu.getReference("users");
-                            User registeredUser = new User(name,email,password);
+                            User registeredUser = new User(name,email);//,password); //Nov 10 2020 (Password is now encrypted) using SCRYPT hashing
                             databaseUser.child(user.getUid()).setValue(registeredUser);
+
+//                            Update ENCRYPTED User Display Name in Firebase Auth //TODO: This
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name) //user displayName
+//                                    .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg")) //profile picture
+                                    .build();
+
+                            user.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User profile updated.");
+                                            }
+                                        }
+                                    });
+
 
                         } else {
                             // If register fails, display a message to the user.

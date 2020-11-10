@@ -161,4 +161,5 @@
     <string name="layout_sign_up_password_placeholder">password (min 6 karakter)</string>
     <string name="layout_about_page_sub_title">Tahu apa yang terjadi, jangan khawatir...</string>
     <string name="layout_about_page_content">JadyTrack memungkinkan Anda atau orang yang Anda cintai untuk melacak dan berbagi lokasi LANGSUNG Anda saat ini secara real time semudah 1,2,3!\n\nCukup buka aplikasi, tetapkan tujuan dan kustomisasi Geofence Anda, lalu ketuk Go! JadyTrack akan membuat kode QR (atau tautan) yang dapat Anda bagikan dengan rekan Anda sehingga mereka dapat melacak Anda. \n\nJadyTrack tidak akan memata-matai Anda. Dibandingkan dengan pesaing kami, kami percaya bahwa privasi adalah hak istimewa Anda, jadi kami tidak akan melacak Anda 24/7. JadyTrack hanya bekerja per sesi!</string>
+    <string name="button_share_link">Bagikan Tautan Pelacakan</string>
 </resources>

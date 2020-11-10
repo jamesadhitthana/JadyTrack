@@ -343,7 +343,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         tombolGetId.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (isBroadcast) {
-                    Intent intent = new Intent(view.getContext(), GenerateIdActivity.class);
+                    Intent intent = new Intent(view.getContext(), GenerateIdActivity.class); //TODO: THIS!
                     intent.putExtra(EXTRA_MESSAGE_ID, id);
                     startActivity(intent);
                 } else {
