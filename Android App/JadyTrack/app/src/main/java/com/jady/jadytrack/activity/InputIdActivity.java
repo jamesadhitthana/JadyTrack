@@ -86,7 +86,7 @@ public class InputIdActivity extends AppCompatActivity {
         id = targetId.getText().toString();
 
         if (id.isEmpty()) {
-            Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_input_tracking_id)).setText(getResources().getString(R.string.alert_msg_input_tracking_id)).setBackgroundColorRes(R.color.colorAccent).show();
+            Alerter.create(InputIdActivity.this).setTitle("Tracking ID").setText("Please input the tracking ID").setBackgroundColorRes(R.color.colorAccent).show();
         } else {
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("trackingSession");
             rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -99,14 +99,15 @@ public class InputIdActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else if (scenario.equals("appointment")) {
 
-                            Intent intent = new Intent(InputIdActivity.this, AppointmentActivity.class);
+                            //Intent intent = new Intent(InputIdActivity.this, AppointmentActivity.class);
+                            Intent intent = new Intent(InputIdActivity.this, InputRouteActivity.class);
                             intent.putExtra(EXTRA_MESSAGE_ID, id);
                             intent.putExtra(EXTRA_MESSAGE_UID, uid);
                             startActivity(intent);
                         }
 
                     } else {
-                        Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
+                        Alerter.create(InputIdActivity.this).setTitle("Failed to find ID").setText("ID does not exist").setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 }
 
@@ -136,11 +137,11 @@ public class InputIdActivity extends AppCompatActivity {
     public AlertDialog.Builder buildDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle(getResources().getString(R.string.alert_title_no_internet_connection));
-        builder.setMessage(getResources().getString(R.string.alert_msg_no_internet_connection));
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press Try Again or Exit");
         builder.setCancelable(false);
 
-        builder.setPositiveButton(getResources().getString(R.string.button_try_again), new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -152,7 +153,7 @@ public class InputIdActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
