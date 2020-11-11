@@ -74,6 +74,10 @@
             android:name="com.jady.jadytrack.activity.AppointmentActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.jady.jadytrack.activity.InputRouteActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <!--END OF: Additional Activities-->
 
         <meta-data

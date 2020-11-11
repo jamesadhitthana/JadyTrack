@@ -1,17 +1,20 @@
 package com.jady.jadytrack.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,6 +83,7 @@ public class AppointmentActivity extends AppCompatActivity
     private Double latitude;
     private Long time;
 
+    private boolean geofenceActivated = false; //set geofence not activated by default
     private DatabaseReference databaseReference;
     private DatabaseReference geofenceReference;
     private String id;
@@ -91,12 +95,16 @@ public class AppointmentActivity extends AppCompatActivity
     private Marker destinationMarker; // Marker untuk destination location
     private boolean isSent = false;
 
+    //Button
+    private Button setStartingPoint, setAppointment;
+    private boolean nextStep = false;
+
     // Jumlah marker
     private int startingpoint = 0;
 
     // Array list marker
-    private List<Marker> markers = new ArrayList<>();
-    private List<Marker> drawer = new ArrayList<>();
+    private List<Marker> markers = new ArrayList<Marker>();
+    private List<Marker> drawer = new ArrayList<Marker>();
 
     // Create a Intent send by the notifyTargetReachDestination
     public static Intent makeNotificationIntent(Context context, String msg) {
@@ -114,10 +122,13 @@ public class AppointmentActivity extends AppCompatActivity
 
         // Load Name and UserID from MainMenu Intent passing
         Intent intentKu = getIntent();
-        id = intentKu.getStringExtra(InputIdActivity.EXTRA_MESSAGE_ID);
+       /* id = intentKu.getStringExtra(InputIdActivity.EXTRA_MESSAGE_ID);
         id = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_ID);
         userUID = intentKu.getStringExtra(InputIdActivity.EXTRA_MESSAGE_UID);
-        userUID = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_UID);
+        userUID = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_UID);*/
+
+        id = intentKu.getStringExtra(InputRouteActivity.EXTRA_MESSAGE_ID);
+        userUID = intentKu.getStringExtra(InputRouteActivity.EXTRA_MESSAGE_UID);
 
         // Initialize GoogleMaps
         initGMaps();
@@ -156,41 +167,66 @@ public class AppointmentActivity extends AppCompatActivity
         });
 
         // Widget
-        Button setStartingPoint = (Button) findViewById(R.id.undo);
+        setStartingPoint = (Button) findViewById(R.id.undo);
         setStartingPoint.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (startingpoint == 1) {//if there is a destination point then
                     destinationMarker.remove();
                     destinationFence.remove();
                     startingpoint = 0;
+
+                    disableButton(2);
+                    nextStep = false;
+
+                    setAppointment.setText("Confirm Destination");
+
                 }
                 if (startingpoint == 2) {
                     markers.get(markers.size() - 1).remove();
                     markers.remove(markers.size() - 1);
                     startingpoint = 1;
+
+                    setAppointment.setText("Confirm Destination");
+                    nextStep = false;
+
+                    enableButton();
                 }
                 if (startingpoint == 3) {
                     polyline.remove();
                     markers.get(markers.size() - 1).remove();
                     markers.remove(markers.size() - 1);
                     startingpoint = 2;
+                    disableButton(1);
                 }
                 if (startingpoint == 4) {
                     undoPolygon();
+                    disableButton(1);
                 }
                 if (startingpoint > 4) {
                     undoPolygon();
                     drawGeofence();
+                    enableButton();
                 }
             }
         });
 
+
         // Set Geofence button will create the trackingSession ID and contents (@Yefta, maybe you should put your stuff here)
-        Button setAppointment = (Button) findViewById(R.id.setgeofence);
+        setAppointment = (Button) findViewById(R.id.setgeofence);
         setAppointment.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {//Set Appointment Button
                 // If a destination marker exists:
                 if (destinationMarker != null) {
+
+                    if(startingpoint == 1){
+                        nextStep = true;
+                        disableButton(1);
+
+                        showCustomDialog("Create geofence by clicking in the map area");
+                        setAppointment.setText("Confirm Geofence");
+
+                    }
+
                     // If a geofence markers minimal 3 exists (minimal bikin triangle):
                     if (markers.size() >= 3) {
 
@@ -213,7 +249,7 @@ public class AppointmentActivity extends AppCompatActivity
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     } else if (!isSent) {
-                                        Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_geofence)).setText(getResources().getString(R.string.alert_msg_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(AppointmentActivity.this).setTitle("Unable to set geofence").setText("Unable to set geofence because geofence has been created previously").setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
 
@@ -225,21 +261,24 @@ public class AppointmentActivity extends AppCompatActivity
 
 
                         } catch (Exception e) {
-                            Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_set_object)).setText(getResources().getString(R.string.alert_msg_failed_set_object)).setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(AppointmentActivity.this).setTitle("Oops something went wrong!").setText("We failed to set the object on the database").setBackgroundColorRes(R.color.colorAccent).show();
                         }
                     } else {
-                        Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_draw)).setText(getResources().getString(R.string.alert_msg_forgot_draw)).setBackgroundColorRes(R.color.colorAccent).show();
+                        Alerter.create(AppointmentActivity.this).setTitle("You forgot to draw your geofence!").setText("Please draw at least three points for your geofence").setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 } else {
-                    Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_destination)).setText(getResources().getString(R.string.alert_msg_forgot_destination)).setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(AppointmentActivity.this).setTitle("You forgot to set your destination!").setText("Please set your destination by tapping on the desired destination").setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
             }
         });
 
+        disableButton(2);
+
+        showCustomDialog("Pick destination by clicking in the map area");
 
         // To choose Quick Route
-        Button quickroute = (Button) findViewById(R.id.quickroute);
+        /*Button quickroute = (Button) findViewById(R.id.quickroute);
         quickroute.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(AppointmentActivity.this, QuickRouteActivity.class);
@@ -247,7 +286,7 @@ public class AppointmentActivity extends AppCompatActivity
                 intent.putExtra(EXTRA_MESSAGE_UID, userUID);
                 startActivity(intent);
             }
-        });
+        });*/
 
     }
 
@@ -284,10 +323,11 @@ public class AppointmentActivity extends AppCompatActivity
                     // Add Geofence Numbers into Firebase
                     databaseReference.child(id).child("geofenceNum").setValue(markers.size());
 
-                    Alerter.create(AppointmentActivity.this).setText(getResources().getString(R.string.alert_title_synchronize_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
+                    geofenceActivated = true;//activate geofence
+                    Alerter.create(AppointmentActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
 
                 } else {
-                    Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(AppointmentActivity.this).setTitle("Oh no we failed to find tracking ID").setText("ID doesn't exist").setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }
@@ -299,6 +339,50 @@ public class AppointmentActivity extends AppCompatActivity
         });
 
 
+    }
+
+    public void enableButton() {
+        setStartingPoint.setEnabled(true);
+        setAppointment.setEnabled(true);
+
+        setStartingPoint.getBackground().setColorFilter(null);
+        setAppointment.getBackground().setColorFilter(null);
+    }
+
+    public void disableButton(int number) {
+
+        if(number == 1){
+            setAppointment.setEnabled(false);
+            setAppointment.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        } else if (number == 2){
+            setStartingPoint.setEnabled(false);
+            setAppointment.setEnabled(false);
+
+            setStartingPoint.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+            setAppointment.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        }
+    }
+
+    public void showCustomDialog(String msg) {
+        final Dialog dialog = new Dialog(AppointmentActivity.this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        //Mention the name of the layout of your custom dialog.
+        dialog.setContentView(R.layout.notification_dialog);
+
+        TextView notifMsg = dialog.findViewById(R.id.notificationText);
+        Button confirmButton = dialog.findViewById(R.id.confirm);
+
+        notifMsg.setText(msg);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     public void undoPolygon() {
@@ -418,8 +502,10 @@ public class AppointmentActivity extends AppCompatActivity
             drawGeofence();
 
             startingpoint = 1;
-            System.out.println("Stage 1 " + markers.size());
-        } else if (startingpoint == 1) {
+
+            enableButton();
+
+        } else if (startingpoint == 1 && nextStep == true) {
             createPolygon(latLng);
         } else if (startingpoint == 2) {
             createPolygon(latLng);
@@ -427,6 +513,8 @@ public class AppointmentActivity extends AppCompatActivity
         } else if (startingpoint > 2) {
             createPolygon(latLng);
             drawGeofence();
+
+            enableButton();
         }
 
     }
