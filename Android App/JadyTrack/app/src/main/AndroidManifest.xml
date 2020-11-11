@@ -1,120 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jady.jadytrack">
-
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_jady_square"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_jady_circle"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <!--Main/First Activity to Run-->
-        <activity
-            android:name="com.jady.jadytrack.activity.SplashActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
-        <!--        Activites with Intent Filters-->
-        <activity
-            android:name="com.jady.jadytrack.activity.WebActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-
-                <!--*Data Filter-->
-                <!-- Accepts URIs that begin with "http://myjadytrack.web.app/app” -->
-                <data
-                    android:host="myjadytrack.web.app"
-                    android:pathPrefix="/app"
-                    android:scheme="https" />
-                <!-- note that the leading "/" is required for pathPrefix-->
-            </intent-filter>
-        </activity>
-        <!--Additional Activities Needed Here -->
-        <activity
-            android:name="com.jady.jadytrack.activity.OnboardingActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.MainMenuActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.AboutActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.jady.jadytrack.activity.BroadcastActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.GenerateIdActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.InputIdActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.InputOptionActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.ScanQrActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.ContactUsActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.QuickRouteActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.AppointmentActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.jady.jadytrack.activity.TrackingActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <!--END OF: Additional Activities-->
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
-
-        <service android:name="com.jady.jadytrack.service.GeofenceTrasitionService" />
-
-    </application>
-
-    <!--Permission-->
+    <!-- Permission -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
 
@@ -125,5 +12,109 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_jady_square"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_jady_circle"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.ForgotPasswordActivity"></activity>
+        <!-- Main/First Activity to Run -->
+        <activity
+            android:name=".activity.SplashActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Activites with Intent Filters -->
+        <activity
+            android:name=".activity.WebActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+
+
+                <!-- *Data Filter -->
+                <!-- Accepts URIs that begin with "http://myjadytrack.web.app/app” -->
+                <data
+                    android:host="myjadytrack.web.app"
+                    android:pathPrefix="/app"
+                    android:scheme="https" />
+                <!-- note that the leading "/" is required for pathPrefix -->
+            </intent-filter>
+        </activity> <!-- Additional Activities Needed Here -->
+        <activity
+            android:name=".activity.OnboardingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MainMenuActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BroadcastActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GenerateIdActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InputIdActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InputOptionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ScanQrActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ContactUsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.QuickRouteActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AppointmentActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TrackingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" /> <!-- END OF: Additional Activities -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <service android:name=".service.GeofenceTrasitionService" />
+    </application>
 
 </manifest>

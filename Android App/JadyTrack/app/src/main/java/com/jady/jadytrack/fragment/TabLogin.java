@@ -1,5 +1,6 @@
 package com.jady.jadytrack.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,15 @@ public class TabLogin extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.alert_title_password_email_empty), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        //--Adding Forgot Pass button 11/11/2020//
+        Button buttonForgotPassword = (Button) currentView.findViewById(R.id.forgotPasswordButton);
+        buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).startForgotPasswordIntent();
             }
         });
 

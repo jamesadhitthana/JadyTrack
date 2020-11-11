@@ -172,4 +172,12 @@
     <string name="layout_web_link_found_tracking_id">Tracking ID Dimuat</string>
     <string name="layout_web_link_placeholder_user_displayname">Memuat Nama target..</string>
     <string name="layout_web_link_tracking_id_not_found">TRACKING ID TIDAK DITEMUKAN</string>
+    <string name="layout_login_forgot_password" translatable="false">LUPA PASSWORD?</string>
+    <string name="forget_password_description">Masukkan email terdaftar. Kami akan mengirimkan email untuk mengatur ulang kata sandi Anda.</string>
+    <string name="forget_password_title">Atur ulang kata sandi</string>
+    <string name="forget_password_notif">Email pengaturan ulang kata sandi telah dikirim</string>
+    <string name="forget_password_button">Lanjutkan</string>
+    <string name="forget_password_notif_desc">Anda dapat menutup halaman ini.</string>
+    <string name="forget_password_error">Ups!</string>
+    <string name="forget_password_error_desc">Email tidak ditemukan.</string>
 </resources>

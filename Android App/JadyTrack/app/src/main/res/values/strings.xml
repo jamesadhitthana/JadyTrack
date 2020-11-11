@@ -18,6 +18,14 @@
     <string name="onboarding_6_titleText">Realtime Notifications</string>
     <string name="onboarding_6_descriptionText">You get automatic notifications when your peers arrive at their destination, exit a virtual fence, and more!\n\n Swipe right to get started!</string>
 
+    <!--    Forgot Password-->
+    <string name="forget_password_title">Reset Password</string>
+    <string name="forget_password_description">Enter the registered e-mail. We will send you an email to reset your password.</string>
+    <string name="forget_password_button">Continue</string>
+    <string name="forget_password_notif">Password reset email sent</string>
+    <string name="forget_password_notif_desc">You can now close this page.</string>
+    <string name="forget_password_error">Oops!</string>
+    <string name="forget_password_error_desc">Email not found.</string>
     <!--Alert-->
     <string name="alert_title_geofence">Unable to set Geofence</string>
     <string name="alert_msg_geofence">Unable to set Geofence because Geofence has been created previously</string>
@@ -188,6 +196,7 @@
     <string name="layout_dash" translatable="false">-----------</string>
     <string name="layout_login_email_placeholder" translatable="false">e-mail</string>
     <string name="layout_login_password_placeholder" translatable="false">password</string>
+    <string name="layout_login_forgot_password" translatable="false">FORGOT PASSWORD?</string>
     <string name="layout_sign_up_name_placeholder">name</string>
     <string name="layout_sign_up_password_placeholder">password (min 6 character)</string>
     <!--    Web Link-->

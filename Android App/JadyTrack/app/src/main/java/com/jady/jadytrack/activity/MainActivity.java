@@ -1,12 +1,15 @@
 package com.jady.jadytrack.activity;
 
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.viewpager.widget.ViewPager;
 
 import android.widget.TextView;
@@ -46,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_account);
 
-        title1 = (TextView)findViewById( R.id.title1 );
-        title2 = (TextView)findViewById( R.id.title2 );
-        description1 = (TextView)findViewById( R.id.description1 );
-        description2 = (TextView)findViewById( R.id.description2 );
-        garisTemporary = (TextView)findViewById( R.id.garisTemporary );
+        title1 = (TextView) findViewById(R.id.title1);
+        title2 = (TextView) findViewById(R.id.title2);
+        description1 = (TextView) findViewById(R.id.description1);
+        description2 = (TextView) findViewById(R.id.description2);
+        garisTemporary = (TextView) findViewById(R.id.garisTemporary);
 
         //---SETUP TABS---//
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -67,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if(tab.getPosition()==0) {
+                if (tab.getPosition() == 0) {
                     title1.setText(getResources().getString(R.string.label_title_create_account_1));
                     title2.setText(getResources().getString(R.string.label_title_create_account_2));
                     description1.setText(getResources().getString(R.string.label_desc_create_account_1));
                     description2.setText(getResources().getString(R.string.label_desc_create_account_2));
-                }else {
+                } else {
                     title1.setText(getResources().getString(R.string.label_title_login_1));
                     title2.setText(getResources().getString(R.string.label_title_login_2));
                     description1.setText(getResources().getString(R.string.label_desc_login_1));
@@ -170,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                            Write User data to DB
                             databaseUser = databaseKu.getReference("users");
-                            User registeredUser = new User(name,email);//,password); //Nov 10 2020 (Password is now encrypted) using SCRYPT hashing
+                            User registeredUser = new User(name, email);//,password); //Nov 10 2020 (Password is now encrypted) using SCRYPT hashing
                             databaseUser.child(user.getUid()).setValue(registeredUser);
 
 //                            Update ENCRYPTED User Display Name in Firebase Auth //TODO: This
@@ -211,15 +214,20 @@ public class MainActivity extends AppCompatActivity {
             // END OF: HAWK stuff james
 
             // Change the Activity to Main Menu if user is logged in
-                Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
-                // set the new task and clear flags
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)
-                startActivity(i);
+            Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+            // set the new task and clear flags
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Clear the previous activities (so that when the user press back, the user will not be brought to the login/register screen)
+            startActivity(i);
         } else {
             //---------HAWK set SkipOnboarding to FALSE if the user is NOT logged in---------//
             Hawk.put("skipOnboardingIfLoggedIn", false);
             //---------HAWK set Home Tutorial to FALSE if the user is NOT logged in (MainActivity)---------//
             Hawk.put("skipMainMenuTutorial", false);
         }
+    }
+
+    public void startForgotPasswordIntent() {
+        Intent i = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+        startActivity(i);
     }
 }
