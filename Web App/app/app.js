@@ -448,6 +448,56 @@ function elementLanguage(elementId, languageChosen, indexArray) {
     }
 }
 
+//------------------------Update UI------------------------//
+function updateLabels(selectedLanguage) {//update labels for coords target and targetname
+
+    //  * Clear the label
+    elementLanguage('titleInput', selectedLanguage, 8);
+    elementLanguage('titleNumHistory', selectedLanguage, 9);
+    elementLanguage('titleTargetId', selectedLanguage, 10);
+    elementLanguage('titleTargetName', selectedLanguage, 11);
+    elementLanguage('titleHasArrived', selectedLanguage, 12);
+    elementLanguage('titleManualCheckIn', selectedLanguage, 13);
+    elementLanguage('titleInsideGeofence', selectedLanguage, 14);
+    elementLanguage('titleStatusSOS', selectedLanguage, 15);
+    elementLanguage('titleLinkExpired', selectedLanguage, 16);
+    // elementLanguage('textCopyrightJady', selectedLanguage, 17);
+
+    //* Concat
+    if (manualCheckIn == true) {
+        document.getElementById("titleManualCheckIn").innerHTML += " " + manualCheckIn + " (User manually pressed the Check In button)";
+    } else {
+        document.getElementById("titleManualCheckIn").innerHTML += " " + manualCheckIn;
+    }
+    document.getElementById("titleInput").innerHTML += " " + inputSessionID;
+    document.getElementById("titleNumHistory").innerHTML += " " + numHistory;
+    document.getElementById("titleTargetId").innerHTML += " " + targetId;
+    document.getElementById("titleTargetName").innerHTML += " " + targetName;
+    document.getElementById("titleHasArrived").innerHTML += " " + hasArrived;
+    document.getElementById("titleInsideGeofence").innerHTML += " " + statusInGeofence;
+    document.getElementById("titleStatusSOS").innerHTML += " " + statusSOS;
+    document.getElementById("titleLinkExpired").innerHTML += " " + linkExpired;
+}
+
+function updateLabelsAsError() {
+    let failedText = " Cant find \"" + inputSessionID + "\"";
+    if (selectedLanguage == 'id') {
+        failedText = " Gagal menemukan \"" + inputSessionID + "\"";
+    }
+
+    document.getElementById("titleInput").innerHTML += failedText;
+    document.getElementById("titleNumHistory").innerHTML += failedText;
+    document.getElementById("titleTargetId").innerHTML += failedText;
+    document.getElementById("titleTargetName").innerHTML += failedText;
+    document.getElementById("titleHasArrived").innerHTML += failedText;
+    document.getElementById("titleManualCheckIn").innerHTML += failedText;
+    document.getElementById("titleInsideGeofence").innerHTML += failedText;
+    document.getElementById("titleStatusSOS").innerHTML += failedText;
+    document.getElementById("titleLinkExpired").innerHTML += failedText;
+    console.log("Updated Labels as error using language:", selectedLanguage);
+}
+//END OF:Update UI--//
+
 //! ---------------DEPRECEATED--------------- //
 //--Update Web Page with Database Info--//
 function showUserData(items) {
@@ -465,3 +515,4 @@ function showUserData(items) {
 function showError(err) {
     console.log(err)
 }
+

@@ -2,6 +2,8 @@
 //TODO: Fix bugs for map markers not clearing when a new tracking id is added
 
 //------------------------Variables------------------------//
+var boolFirstTimeLoaded = true;
+var boolFirstTimeMapLoaded = true;
 var inputSessionID; //contoh: "-L_tTv8ulabhy1vPOdo0"
 var numHistory;
 var targetId;
@@ -83,19 +85,31 @@ function loadSelectedTrackingId(trackingId) {
       var dbDestinationPoint = db.ref('trackingSession/' + inputSessionID + "/destination");
       dbDestinationPoint.on('value', addDestinationPoint, logError);
       //---
-      //Update page labels
-      updateLabels();
-      document.getElementById('mapView').scrollIntoView();
-      disableInputTrackingId() //Disable user input textbox
-      finalTrackingId= trackingId
+      //*Update page labels//
+      updateLabels(selectedLanguage);
+
+      //* If the page is loaded for the first time (so that it doesnt annoy the user)
+      if (boolFirstTimeLoaded) {
+        disableInputTrackingId() //Disable user input textbox
+        finalTrackingId = trackingId
+        // Scroll down to the map
+        document.getElementById('mapView').scrollIntoView();
+        // Send Succesfull Notif
+        if (selectedLanguage == 'id') {
+          iziToast.success({ title: "Berhasil Dimuat:", message: inputSessionID });//Success
+        } else {
+          iziToast.success({ title: "Successfully Loaded:", message: inputSessionID });//Success
+        }
+        boolFirstTimeLoaded = false;
+      }
     } else {
       console.log("[PARENT Data] Can't find tracking ID");
       //! Depreceated?? Set page labels  as error
       // updateLabelsAsError(); //? Depreceated??
       // alertFailure(`Tracking ID:<br><b>${trackingId}</b><br>is not found`)
 
-      if(selectedLanguage=='id'){
-        iziToast.error({ title: "Tidak dapat menemukan Tracking ID ", message:" Harap periksa apakah Anda salah mengetik Tracking ID. " })
+      if (selectedLanguage == 'id') {
+        iziToast.error({ title: "Tidak dapat menemukan Tracking ID ", message: " Harap periksa apakah Anda salah mengetik Tracking ID. " })
         swal.fire(
           {
             title: `Tidak dapat menemukan Tracking ID`,
@@ -105,7 +119,7 @@ function loadSelectedTrackingId(trackingId) {
             allowEscapeKey: false,
             allowEnterKey: false
           });
-      }else{
+      } else {
         iziToast.error({ title: "Can't find Tracking ID", message: "Please check if you mistyped your tracking ID." })
         swal.fire(
           {
@@ -118,7 +132,7 @@ function loadSelectedTrackingId(trackingId) {
           });
       }
 
-     
+
 
 
 
@@ -317,8 +331,8 @@ function loadSelectedTrackingId(trackingId) {
       });
 
       //Move Camera
-      jadyMap.setZoom(14);
-      jadyMap.panTo(new google.maps.LatLng(destinationCoordinates[0], destinationCoordinates[1])); //Pan to the first coordinate
+      // jadyMap.setZoom(14);
+      // jadyMap.panTo(new google.maps.LatLng(destinationCoordinates[0], destinationCoordinates[1])); //Pan to the first coordinate
 
     } else {
       // alert("Failed to load Destination Coordinates - Make sure that the destination is created beforehand.");
@@ -341,6 +355,14 @@ function UpdateMapJady() {
     icon: "images/start.png",
     map: jadyMap //attach the map onto our map name (our map name is "map" -james)
   });
+  if (boolFirstTimeMapLoaded) {
+    // Pan to first starting location marker
+    jadyMap.panTo(new google.maps.LatLng(sessionCoordinates[0][1], sessionCoordinates[0][2])); //Pan to the first coordinate
+    // Zoom to 14
+    jadyMap.setZoom(14);
+    boolFirstTimeMapLoaded = false;
+  }
+
 
   //Create markers after the initial start line
   for (i = 1; i < sessionCoordinates.length; i++) { //awalnya locations
@@ -373,7 +395,6 @@ function UpdateMapJady() {
       };
     })(marker, i));
   }
-
 }
 //END OF:Update JadyTrack Map--//
 
@@ -402,51 +423,7 @@ function addGeofenceOnMap() {
 }
 //Add Finish line and the Circular Finish Line Geofence//
 
-//------------------------Update UI------------------------//
-function updateLabels() {//update labels for coords target and targetname
-  if (manualCheckIn == true) {
-    document.getElementById("titleManualCheckIn").innerHTML += " " + manualCheckIn + " (User manually pressed the Check In button)";
-  } else {
-    document.getElementById("titleManualCheckIn").innerHTML += " " + manualCheckIn;
-  }
-  document.getElementById("titleInput").innerHTML += " " + inputSessionID;
-  document.getElementById("titleNumHistory").innerHTML += " " + numHistory;
-  document.getElementById("titleTargetId").innerHTML += " " + targetId;
-  document.getElementById("titleTargetName").innerHTML += " " + targetName;
-  document.getElementById("titleHasArrived").innerHTML += " " + hasArrived;
-  document.getElementById("titleInsideGeofence").innerHTML += " " + statusInGeofence;
-  document.getElementById("titleStatusSOS").innerHTML += " " + statusSOS;
-  document.getElementById("titleLinkExpired").innerHTML += " " + linkExpired;
 
-
-  // Send Succesfull Notif
-  if(selectedLanguage=='id'){
-    iziToast.success({ title: "Berhasil Dimuat:", message: inputSessionID });//Success
-  }else{
-    iziToast.success({ title: "Successfully Loaded:", message: inputSessionID });//Success
-  }
-  
-
-}
-
-function updateLabelsAsError() {
-  let failedText = " Cant find \"" + inputSessionID + "\"";
-  if (selectedLanguage == 'id') {
-    failedText = " Gagal menemukan \"" + inputSessionID + "\"";
-  }
-
-  document.getElementById("titleInput").innerHTML += failedText;
-  document.getElementById("titleNumHistory").innerHTML += failedText;
-  document.getElementById("titleTargetId").innerHTML += failedText;
-  document.getElementById("titleTargetName").innerHTML += failedText;
-  document.getElementById("titleHasArrived").innerHTML += failedText;
-  document.getElementById("titleManualCheckIn").innerHTML += failedText;
-  document.getElementById("titleInsideGeofence").innerHTML += failedText;
-  document.getElementById("titleStatusSOS").innerHTML += failedText;
-  document.getElementById("titleLinkExpired").innerHTML += failedText;
-  console.log("Updated Labels as error using language:", selectedLanguage);
-}
-//END OF:Update UI--//
 
 //------------------------Convex Hull Polygon Functionality------------------------//
 function convexHullJady(counterPolyLineGeofence, polyLineTargetGeofence) {
