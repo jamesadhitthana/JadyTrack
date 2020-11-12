@@ -182,7 +182,7 @@ public class QuickRouteActivity extends AppCompatActivity
                                         intent.putExtra(EXTRA_MESSAGE_ID, targetId);
                                         startActivity(intent);
                                     } else if (!isSent) {
-                                        Alerter.create(QuickRouteActivity.this).setTitle("Unable to set geofence").setText("Unable to set geofence because geofence has been created previously").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(QuickRouteActivity.this).setTitle(getResources().getString(R.string.alert_title_geofence)).setText(getResources().getString(R.string.alert_msg_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
 
@@ -194,15 +194,15 @@ public class QuickRouteActivity extends AppCompatActivity
 
 
                         } catch (Exception e) {
-                            Alerter.create(QuickRouteActivity.this).setTitle("Oops something went wrong!").setText("We failed to set the object on the database").setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(QuickRouteActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_set_object)).setText(getResources().getString(R.string.alert_msg_failed_set_object)).setBackgroundColorRes(R.color.colorAccent).show();
 
                         }
                     } else {
-                        Alerter.create(QuickRouteActivity.this).setTitle("You forgot to draw your geofence!").setText("Please draw at least three points for your geofence").setBackgroundColorRes(R.color.colorAccent).show();
+                        Alerter.create(QuickRouteActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_draw)).setText(getResources().getString(R.string.alert_msg_forgot_draw)).setBackgroundColorRes(R.color.colorAccent).show();
 
                     }
                 } else {
-                    Alerter.create(QuickRouteActivity.this).setText("Please set your quickroute").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(QuickRouteActivity.this).setText(getResources().getString(R.string.alert_title_set_quick_route)).setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
             }
@@ -219,7 +219,7 @@ public class QuickRouteActivity extends AppCompatActivity
         final ArrayList<String> historyTime = new ArrayList<String>();
         final ArrayList<String> historyId = new ArrayList<String>();
         final boolean[] isHistoryCollected = {false};
-        historyTime.add("TAP TO SELECT QUICK ROUTE");
+        historyTime.add(getResources().getString(R.string.label_title_tap_to_select_quick_route));
 
 
         historyReference.addValueEventListener(new ValueEventListener() {
@@ -325,9 +325,9 @@ public class QuickRouteActivity extends AppCompatActivity
                     //Add Geofence Numbers into Firebase
                     databaseReference.child(targetId).child("geofenceNum").setValue(markers.size());
 
-                    Alerter.create(QuickRouteActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(QuickRouteActivity.this).setText(getResources().getString(R.string.alert_title_synchronize_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
                 } else {
-                    Alerter.create(QuickRouteActivity.this).setTitle("Oh no we failed to find tracking ID").setText("ID doesn't exist").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(QuickRouteActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }

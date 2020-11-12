@@ -86,7 +86,7 @@ public class InputIdActivity extends AppCompatActivity {
         id = targetId.getText().toString();
 
         if (id.isEmpty()) {
-            Alerter.create(InputIdActivity.this).setTitle("Tracking ID").setText("Please input the tracking ID").setBackgroundColorRes(R.color.colorAccent).show();
+            Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_input_tracking_id)).setText(getResources().getString(R.string.alert_msg_input_tracking_id)).setBackgroundColorRes(R.color.colorAccent).show();
         } else {
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("trackingSession");
             rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -107,7 +107,7 @@ public class InputIdActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        Alerter.create(InputIdActivity.this).setTitle("Failed to find ID").setText("ID does not exist").setBackgroundColorRes(R.color.colorAccent).show();
+                        Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 }
 
@@ -137,11 +137,11 @@ public class InputIdActivity extends AppCompatActivity {
     public AlertDialog.Builder buildDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("No Internet Connection");
-        builder.setMessage("You need to have Mobile Data or wifi to access this. Press Try Again or Exit");
+        builder.setTitle(getResources().getString(R.string.alert_title_no_internet_connection));
+        builder.setMessage(getResources().getString(R.string.alert_msg_no_internet_connection));
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_try_again), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -153,7 +153,8 @@ public class InputIdActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
+//        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -249,7 +249,7 @@ public class AppointmentActivity extends AppCompatActivity
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     } else if (!isSent) {
-                                        Alerter.create(AppointmentActivity.this).setTitle("Unable to set geofence").setText("Unable to set geofence because geofence has been created previously").setBackgroundColorRes(R.color.colorAccent).show();
+                                        Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_geofence)).setText(getResources().getString(R.string.alert_msg_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
                                     }
                                 }
 
@@ -261,13 +261,13 @@ public class AppointmentActivity extends AppCompatActivity
 
 
                         } catch (Exception e) {
-                            Alerter.create(AppointmentActivity.this).setTitle("Oops something went wrong!").setText("We failed to set the object on the database").setBackgroundColorRes(R.color.colorAccent).show();
+                            Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_set_object)).setText(getResources().getString(R.string.alert_msg_failed_set_object)).setBackgroundColorRes(R.color.colorAccent).show();
                         }
                     } else {
-                        Alerter.create(AppointmentActivity.this).setTitle("You forgot to draw your geofence!").setText("Please draw at least three points for your geofence").setBackgroundColorRes(R.color.colorAccent).show();
+                        Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_draw)).setText(getResources().getString(R.string.alert_msg_forgot_draw)).setBackgroundColorRes(R.color.colorAccent).show();
                     }
                 } else {
-                    Alerter.create(AppointmentActivity.this).setTitle("You forgot to set your destination!").setText("Please set your destination by tapping on the desired destination").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_destination)).setText(getResources().getString(R.string.alert_msg_forgot_destination)).setBackgroundColorRes(R.color.colorAccent).show();
                 }
 
             }
@@ -323,11 +323,11 @@ public class AppointmentActivity extends AppCompatActivity
                     // Add Geofence Numbers into Firebase
                     databaseReference.child(id).child("geofenceNum").setValue(markers.size());
 
+                    Alerter.create(AppointmentActivity.this).setText(getResources().getString(R.string.alert_title_synchronize_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
                     geofenceActivated = true;//activate geofence
-                    Alerter.create(AppointmentActivity.this).setText("Successfully synchronized Geofence online").setBackgroundColorRes(R.color.colorAccent).show();
 
                 } else {
-                    Alerter.create(AppointmentActivity.this).setTitle("Oh no we failed to find tracking ID").setText("ID doesn't exist").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
 
                 }
             }

@@ -113,8 +113,8 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
             loadingWindow = KProgressHUD.create(ScanQrActivity.this)
                     .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setBackgroundColor(Color.parseColor("#508AF1F7"))
-                    .setLabel("Please wait")
-                    .setDetailsLabel("Finding tracking id")
+                    .setLabel(getResources().getString(R.string.loading_label_please_wait))
+                    .setDetailsLabel(getResources().getString(R.string.loading_details_finding_id))
                     .setCancellable(true)
                     .setAnimationSpeed(2)
                     .setDimAmount(0.5f)
@@ -157,7 +157,7 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
                         startActivity(intent);
                     }
                 } else {
-                    Alerter.create(ScanQrActivity.this).setTitle("Oh no!").setText("ID does not exist").setBackgroundColorRes(R.color.colorAccent).show();
+                    Alerter.create(ScanQrActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
 
                     loadingWindow.dismiss();
                     sessionHandler = 0;
@@ -189,11 +189,11 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
     public AlertDialog.Builder buildDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("No Internet Connection");
-        builder.setMessage("You need to have Mobile Data or wifi to access this. Press Try Again or Exit");
+        builder.setTitle(getResources().getString(R.string.alert_title_no_internet_connection));
+        builder.setMessage(getResources().getString(R.string.alert_msg_no_internet_connection));
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.button_try_again), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -205,7 +205,7 @@ public class ScanQrActivity extends AppCompatActivity implements ZXingScannerVie
             }
         });
 
-        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
