@@ -1,4 +1,6 @@
 //-Languages-//
+var shortTrackingIdUsed = false;
+var shortTrackingIdKey = null;
 var selectedLanguage = 'en'; //GLOBAL LANGUAGE SELECTOR
 var finalTrackingId = null;
 const languageList = {
@@ -48,6 +50,23 @@ const boolShowCoordinatesInHamburgerMenu = false;
 // document.getElementById("logoutButton").addEventListener("click", function () {
 //     alertConfirmLogout();
 // });
+document.getElementById("buttonSubmitTrackingId").addEventListener("click", function () {
+    if (document.getElementById("inputSessionID").value == "") {
+        // alert("Please fill in the Tracking ID in the textbox!");
+        iziToast.error({ message: "Please fill in the Tracking ID in the textbox!" })
+    } else {
+        loadSelectedTrackingId(document.getElementById("inputSessionID").value)
+    }
+})
+
+document.getElementById("buttonSubmitTrackingId").addEventListener("click", function () {
+    if (document.getElementById("inputSessionID").value == "") {
+        // alert("Please fill in the Tracking ID in the textbox!");
+        iziToast.error({ message: "Please fill in the Tracking ID in the textbox!" })
+    } else {
+        loadSelectedTrackingId(document.getElementById("inputSessionID").value)
+    }
+})
 document.getElementById("flagBahasaIndonesia").addEventListener("click", function () {
     event.preventDefault();
     flagToggleLanguage('id')
@@ -74,7 +93,8 @@ document.getElementById("buttonClearTrackingId").addEventListener("click", funct
     if (finalTrackingId == null) {
         document.location.reload(true)
     } else {
-        window.location.href = `/app/index.html#textInputTrackingId`
+        console.log("Replacing page to the page with id 0. Then after it is replaced, it will be redirected by the urlParams");
+        location.replace(`/app/index.html?id=0#textInputTrackingId`)
     }
 });
 document.getElementById("buttonExampleTrackingId").addEventListener("click", function (e) {
@@ -115,10 +135,15 @@ function loadSearchedURLParams() {
     searchedUrlParams = urlParams.get('id')
     if (searchedUrlParams != null && searchedUrlParams != "") {
         if (searchedUrlParams.trim() != "") {
-            console.log("Using querystring id: " + searchedUrlParams);
-            // iziToast.info({ title: "Loading Tracking ID:", message: searchedUrlParams });//Reminder
-            document.getElementById("inputSessionID").innerHTML = searchedUrlParams
-            loadSelectedTrackingId(searchedUrlParams)
+            if (searchedUrlParams != '0') {
+                console.log("Using querystring id: " + searchedUrlParams);
+                // iziToast.info({ title: "Loading Tracking ID:", message: searchedUrlParams });//Reminder
+                document.getElementById("inputSessionID").innerHTML = searchedUrlParams
+                loadSelectedTrackingId(searchedUrlParams)
+            } else {
+                console.warn("Forcing replace page because detected querystring for id is 0");
+                window.location.href = `/app/index.html#textInputTrackingId`
+            }
         }
 
     }
@@ -464,12 +489,17 @@ function updateLabels(selectedLanguage) {//update labels for coords target and t
     // elementLanguage('textCopyrightJady', selectedLanguage, 17);
 
     //* Concat
-    if (manualCheckIn == true) {
+    if (manualCheckIn) {
         document.getElementById("titleManualCheckIn").innerHTML += " " + manualCheckIn + " (User manually pressed the Check In button)";
     } else {
         document.getElementById("titleManualCheckIn").innerHTML += " " + manualCheckIn;
     }
-    document.getElementById("titleInput").innerHTML += " " + inputSessionID;
+    if (shortTrackingIdUsed) {
+        document.getElementById("titleInput").innerHTML += ` ${inputSessionID} (${shortTrackingIdKey})`;
+    } else {
+        document.getElementById("titleInput").innerHTML += ` ${inputSessionID}`;
+    }
+
     document.getElementById("titleNumHistory").innerHTML += " " + numHistory;
     document.getElementById("titleTargetId").innerHTML += " " + targetId;
     document.getElementById("titleTargetName").innerHTML += " " + targetName;

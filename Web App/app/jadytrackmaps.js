@@ -32,18 +32,37 @@ var infowindow = new google.maps.InfoWindow(); //make info window
 
 
 //------------------------Button and Firebase------------------------//
-document.getElementById("buttonSubmitTrackingId").addEventListener("click", function () {
-  if (document.getElementById("inputSessionID").value == "") {
-    // alert("Please fill in the Tracking ID in the textbox!");
-    iziToast.error({ message: "Please fill in the Tracking ID in the textbox!" })
-  } else {
-    loadSelectedTrackingId(document.getElementById("inputSessionID").value)
-  }
-})
+
 
 function loadSelectedTrackingId(trackingId) {
-  inputSessionID = trackingId; //get value from textarea
+  // *13Nov2020 - Feature shortTrackingId //
+  var dbShortTrackingSession = db.ref('shortTrackingSession/' + trackingId);
+  dbShortTrackingSession.once('value', function (data) {
+    if (data.val() != null) {
+      //* Convert shortTrackingId (if it is short) to fullTrackingId
+      inputSessionID = data.val(); //get value from textarea
+      if (selectedLanguage == 'id') {
+        iziToast.success({ message: `Update Tracking ID menjadi: ${inputSessionID}` })
+      } else {
+        iziToast.success({ message: `Updated Short Tracking ID to: ${inputSessionID}` })
+      }
+      console.log(`Found shortTrackingId in db and loading fullTrackingId: ${data.val()}`)
+      // *Set shortTrackingId keys and boolean
+      shortTrackingIdUsed = true; //used to print the shortTrackingId on the web page if true
+      shortTrackingIdKey = trackingId;
+      // *------- Load Normally
+      loadFullTrackingId(inputSessionID)
+    } else {
+      console.log(`shortTrackingId not found in db! Loading using the raw input`)
+      inputSessionID = trackingId;
+      // *------- Load Normally
+      shortTrackingIdUsed = false; //used to print the shortTrackingId on the web page if true
+      loadFullTrackingId(inputSessionID)
+    }
+  }, logError);
+}
 
+function loadFullTrackingId(inputSessionID) {
   //--Load Session Parent--//
   var dbTrackingSession = db.ref('trackingSession/' + inputSessionID);
   dbTrackingSession.on('value', showTrackingSessionData, logError);
@@ -91,7 +110,7 @@ function loadSelectedTrackingId(trackingId) {
       //* If the page is loaded for the first time (so that it doesnt annoy the user)
       if (boolFirstTimeLoaded) {
         disableInputTrackingId() //Disable user input textbox
-        finalTrackingId = trackingId
+        finalTrackingId = inputSessionID
         // Scroll down to the map
         document.getElementById('mapView').scrollIntoView();
         // Send Succesfull Notif
@@ -104,16 +123,12 @@ function loadSelectedTrackingId(trackingId) {
       }
     } else {
       console.log("[PARENT Data] Can't find tracking ID");
-      //! Depreceated?? Set page labels  as error
-      // updateLabelsAsError(); //? Depreceated??
-      // alertFailure(`Tracking ID:<br><b>${trackingId}</b><br>is not found`)
-
       if (selectedLanguage == 'id') {
         iziToast.error({ title: "Tidak dapat menemukan Tracking ID ", message: " Harap periksa apakah Anda salah mengetik Tracking ID. " })
         swal.fire(
           {
             title: `Tidak dapat menemukan Tracking ID`,
-            html: `<b>${trackingId}</b> tidak ditemukan.<br>Harap periksa apakah Anda salah mengetik Tracking ID.`,
+            html: `<b>${inputSessionID}</b> tidak ditemukan.<br>Harap periksa apakah Anda salah mengetik Tracking ID.`,
             icon: 'error',
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -124,21 +139,17 @@ function loadSelectedTrackingId(trackingId) {
         swal.fire(
           {
             title: `Tracking ID Not Found`,
-            html: `<b>${trackingId}</b> is not found.<br>Please check if you mistyped your tracking ID.`,
+            html: `<b>${inputSessionID}</b> is not found.<br>Please check if you mistyped your tracking ID.`,
             icon: 'error',
             allowOutsideClick: false,
             allowEscapeKey: false,
             allowEnterKey: false
           });
       }
-
-
-
-
-
-
     }
   }
+
+
 
   function notifyStatusLinkExpired(items) {
     console.log("statusLinkExpired: " + items.val());
