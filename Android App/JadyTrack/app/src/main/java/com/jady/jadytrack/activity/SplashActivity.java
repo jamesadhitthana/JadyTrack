@@ -50,8 +50,8 @@ public class SplashActivity extends AppCompatActivity {
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
-            Uri soundUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_info);
 
+            Uri infoSoundUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_info);
             NotificationChannel trackingChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
                     "Info Notification",
                     NotificationManager.IMPORTANCE_HIGH);
@@ -60,9 +60,10 @@ public class SplashActivity extends AppCompatActivity {
             trackingChannel.setLightColor(Color.BLUE);
             trackingChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             trackingChannel.enableVibration(true);
-            trackingChannel.setSound(soundUri, audioAttributes);
+            trackingChannel.setSound(infoSoundUri, audioAttributes);
             notificationManager.createNotificationChannel(trackingChannel);
 
+            Uri alertSoundUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_alert);
             NotificationChannel broadcastingChannel = new NotificationChannel(ALERT_CHANNEL_ID,
                     "Alert Notification",
                     NotificationManager.IMPORTANCE_HIGH);
@@ -71,7 +72,7 @@ public class SplashActivity extends AppCompatActivity {
             broadcastingChannel.setLightColor(Color.RED);
             broadcastingChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
             broadcastingChannel.enableVibration(true);
-            broadcastingChannel.setSound(soundUri, audioAttributes);
+            broadcastingChannel.setSound(alertSoundUri, audioAttributes);
             notificationManager.createNotificationChannel(broadcastingChannel);
         }
     }
