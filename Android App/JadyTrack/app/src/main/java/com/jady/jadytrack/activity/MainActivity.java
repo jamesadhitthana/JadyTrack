@@ -49,24 +49,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_account);
 
-        title1 = (TextView) findViewById(R.id.title1);
-        title2 = (TextView) findViewById(R.id.title2);
-        description1 = (TextView) findViewById(R.id.description1);
-        description2 = (TextView) findViewById(R.id.description2);
-        garisTemporary = (TextView) findViewById(R.id.garisTemporary);
+        title1 = findViewById(R.id.title1);
+        title2 = findViewById(R.id.title2);
+        description1 = findViewById(R.id.description1);
+        description2 = findViewById(R.id.description2);
+        garisTemporary = findViewById(R.id.garisTemporary);
 
         //---SETUP TABS---//
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Sign Up"));
         tabLayout.addTab(tabLayout.newTab().setText("Log In"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final ViewPager viewPager = findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());

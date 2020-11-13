@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,8 +27,6 @@ import java.util.List;
 public class GeofenceTrasitionService extends IntentService {
 
     private static final String TAG = GeofenceTrasitionService.class.getSimpleName();
-
-    public static final int GEOFENCE_NOTIFICATION_ID = 0;
 
     public GeofenceTrasitionService() {
         super(TAG);
@@ -71,8 +70,6 @@ public class GeofenceTrasitionService extends IntentService {
     }
 
     private void sendNotification(String msg) {
-        Log.i(TAG, "sendNotification: " + msg);
-
         // Intent to start the main Activity
         Intent notificationIntent = AppointmentActivity.makeNotificationIntent(
                 getApplicationContext(), msg
@@ -84,25 +81,21 @@ public class GeofenceTrasitionService extends IntentService {
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create and send Notification
-        NotificationManager notificatioMng =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificatioMng.notify(
-                GEOFENCE_NOTIFICATION_ID,
-                createNotification(msg, notificationPendingIntent));
-    }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String NOTIFICATION_CHANNEL_ID = "info_01";
 
-    // Create notifyTargetReachDestination
-    private Notification createNotification(String msg, PendingIntent notificationPendingIntent) {
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         notificationBuilder
-                .setSmallIcon(R.drawable.ic_action_location)
+                .setSmallIcon(R.drawable.jadylogo1)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.jadylogo_254))
                 .setColor(Color.RED)
                 .setContentTitle(msg)
                 .setContentText("Geofence Notification!")
                 .setContentIntent(notificationPendingIntent)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
                 .setAutoCancel(true);
-        return notificationBuilder.build();
+
+        notificationManager.notify(1, notificationBuilder.build());
     }
 
     private static String getErrorString(int errorCode) {

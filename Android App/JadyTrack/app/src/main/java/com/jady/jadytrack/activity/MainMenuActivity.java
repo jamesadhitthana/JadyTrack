@@ -56,13 +56,13 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
-        textViewCurrentUser = (TextView) findViewById(R.id.textViewCurrentUser);
-        textViewUserName = (TextView) findViewById(R.id.textViewUserName);
-        ImageButton buttonLogout = (ImageButton) findViewById(R.id.buttonLogout);
-        buttonViewer = (Button) findViewById(R.id.buttonViewer);
-        buttonAboutPage = (ImageButton) findViewById(R.id.buttonAboutPage);
-        buttonTarget = (Button) findViewById(R.id.buttonTarget);
-        buttonAppointment = (Button) findViewById(R.id.buttonAppointment);
+        textViewCurrentUser = findViewById(R.id.textViewCurrentUser);
+        textViewUserName = findViewById(R.id.textViewUserName);
+        ImageButton buttonLogout = findViewById(R.id.buttonLogout);
+        buttonViewer = findViewById(R.id.buttonViewer);
+        buttonAboutPage = findViewById(R.id.buttonAboutPage);
+        buttonTarget = findViewById(R.id.buttonTarget);
+        buttonAppointment = findViewById(R.id.buttonAppointment);
         // Disable the important buttons by default:
         buttonViewer.setEnabled(false);
         buttonAboutPage.setEnabled(false);

@@ -2,23 +2,22 @@ package com.jady.jadytrack.activity;
 
 import android.app.AlertDialog;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-
-import android.os.Bundle;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -172,7 +171,7 @@ public class TrackingActivity extends AppCompatActivity implements
                     } else if (!isTargetOnline && !isOfflineNotified) {
                         targetStatus.setText(getResources().getString(R.string.label_title_target_offline));
                         isOfflineNotified = true;
-                        notifyOffline();
+                        notifyInfo(getResources().getString(R.string.notification_target_offline));
                     }
 
                 } catch (Exception e) {
@@ -259,18 +258,21 @@ public class TrackingActivity extends AppCompatActivity implements
                     // Notification trigger
                     // If the user has been notified ONCE, then dont notify again!
                     if (statusHasArrived && !isArrivedNotified) {
-                        notifyTargetReachDestination();
+                        notifyInfo(getResources().getString(R.string.notification_target_arrived));
                         isArrivedNotified = true;
                     }
 
                     // If the user has been notified ONCE, then dont notify again!
                     if (!statusInGeofence && !isGeofenceNotified) {
-                        notifyTargetCrossedGeofence();
+                        polygon.setFillColor(Color.RED);
+                        Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_crossed_geofence)).setText(getResources().getString(R.string.alert_msg_crossed_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
+
+                        notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
                         isGeofenceNotified = true;
                     }
 
                     if (statusSOS && !isSOSNotified) {
-                        notifySOS();
+                        notifyAlert(getResources().getString(R.string.notification_target_in_danger));
                         isSOSNotified = true;
                     }
 
@@ -596,133 +598,43 @@ public class TrackingActivity extends AppCompatActivity implements
     }
 
 
-    // Notifikasi
-
-    private void notifyOffline() {
+    // Notification
+    private void notifyInfo(String msg) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notifyTargetReachDestination channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
+        String NOTIFICATION_CHANNEL_ID = "info_01";
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
         notificationBuilder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_action_location)
+                .setSmallIcon(R.drawable.jadylogo1)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.jadylogo_254))
                 .setTicker("Hearty365")
-                .setContentTitle("Geofence")
-                .setContentText(getResources().getString(R.string.notification_target_offline))
-                .setContentInfo("Info");
+                .setContentTitle("JadyTrack Info")
+                .setContentText(msg)
+                .setContentInfo("Info")
+                .setSound(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_info));
 
-        notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
+        notificationManager.notify(1, notificationBuilder.build());
     }
 
-    public void notifySOS() {
+    private void notifyAlert(String msg) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notifyTargetReachDestination channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
+        String NOTIFICATION_CHANNEL_ID = "alert_01";
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_action_location)
+                .setSmallIcon(R.drawable.jadylogo1)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.jadylogo_254))
                 .setTicker("Hearty365")
-                .setContentTitle("Geofence")
-                .setContentText(getResources().getString(R.string.notification_target_in_danger))
-                .setContentInfo("Info");
+                .setContentTitle("JadyTrack Alert")
+                .setContentText(msg)
+                .setContentInfo("Alert")
+                .setSound(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_alert));
 
-        notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
-    }
-
-    public void notifyTargetReachDestination() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notifyTargetReachDestination channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
-        notificationBuilder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_action_location)
-                .setTicker("Hearty365")
-                .setContentTitle("Geofence")
-                .setContentText(getResources().getString(R.string.notification_target_arrived))
-                .setContentInfo("Info");
-
-        notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
-    }
-
-    private void notifyTargetCrossedGeofence() {
-        polygon.setFillColor(Color.RED);
-        Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_crossed_geofence)).setText(getResources().getString(R.string.alert_msg_crossed_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notifyTargetReachDestination channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
-        notificationBuilder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_action_location)
-                .setTicker("Hearty365")
-                .setContentTitle("Geofence")
-                .setContentText(getResources().getString(R.string.notification_target_crossing_border))
-                .setContentInfo("Info");
-
-        notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
+        notificationManager.notify(1, notificationBuilder.build());
     }
 
 }

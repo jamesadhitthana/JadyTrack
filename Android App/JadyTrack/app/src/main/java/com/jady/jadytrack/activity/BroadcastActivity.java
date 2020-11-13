@@ -3,19 +3,19 @@ package com.jady.jadytrack.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -260,7 +260,9 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     if (isGeofenceDrawed) {
                         if (!pointInPolygon(currentMarker.getPosition(), polygon)) {
                             databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
-                            notifyTargetCrossedGeofence();
+                            polygon.setFillColor(Color.RED);
+                            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
+                            notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
                         }
                     }
 
@@ -421,7 +423,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                         databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(true);
                                         manualCheckIn = true;
                                         hasArrived = true;
-                                        notifyTargetReachDestination();
+                                        notifyInfo(getResources().getString(R.string.notification_target_arrived));
                                         Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_check_in)).setText(getResources().getString(R.string.alert_msg_check_in)).setBackgroundColorRes(R.color.colorAccent).show();
 
                                     } catch (Exception e) {
@@ -459,37 +461,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         if (!isGeofenceDrawed) {
             plotGeofence();
         }
-    }
-
-    public void notifyTargetReachDestination() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notifyTargetReachDestination channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
-        notificationBuilder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_action_location)
-                .setTicker("Hearty365")
-                .setContentTitle("Geofence")
-                .setContentText(getResources().getString(R.string.notification_target_arrived))
-                .setContentInfo("Info");
-
-        notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
     }
 
     public void plotGeofence() {
@@ -850,41 +821,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
     }
 
-    private void notifyTargetCrossedGeofence() {
-        polygon.setFillColor(Color.RED);
-
-        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notifyTargetReachDestination channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
-        notificationBuilder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_action_location)
-                .setTicker("Hearty365")
-                .setContentTitle("Geofence")
-                .setContentText(getResources().getString(R.string.notification_target_crossing_border))
-                .setContentInfo("Info");
-
-        notificationManager.notify(/*notifyTargetReachDestination id*/1, notificationBuilder.build());
-    }
-
     //    James UTR09
     private void askUserDisableBroadcast() {
         //Check In Alert Dialog
@@ -929,5 +865,45 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+
+    // Notification
+    private void notifyInfo(String msg) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String NOTIFICATION_CHANNEL_ID = "info_01";
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.jadylogo1)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.jadylogo_254))
+                .setTicker("Hearty365")
+                .setContentTitle("JadyTrack Info")
+                .setContentText(msg)
+                .setContentInfo("Info")
+                .setSound(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_info));
+
+        notificationManager.notify(1, notificationBuilder.build());
+    }
+
+    private void notifyAlert(String msg) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String NOTIFICATION_CHANNEL_ID = "alert_01";
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.jadylogo1)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.jadylogo_254))
+                .setTicker("Hearty365")
+                .setContentTitle("JadyTrack Alert")
+                .setContentText(msg)
+                .setContentInfo("Alert")
+                .setSound(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_alert));
+
+        notificationManager.notify(1, notificationBuilder.build());
     }
 }
