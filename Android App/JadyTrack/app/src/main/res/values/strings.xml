@@ -185,6 +185,7 @@
     <string name="layout_appointment_current_status">Current Status</string>
     <string name="layout_contact_us_title">Contact Us</string>
     <string name="layout_placeholder_enter_message">Enter Message Here</string>
+    <string name="layout_short_tracking_id_content">Short Tracking ID</string>
     <string name="layout_tracking_id_content">Tracking ID</string>
     <string name="layout_home_page_email" translatable="false">someoneemail@mail.com</string>
     <string name="layout_home_page_name">Someone\'s name here</string>
@@ -210,4 +211,6 @@
     <string name="layout_web_link_alerter_login">User is not logged in</string>
     <string name="layout_web_link_found_tracking_id">Tracking ID Loaded</string>
     <string name="layout_web_link_found_tracking_id_desc">Successfully loaded the tracking ID</string>
+    <!--Short Tracking Id-->
+    <string name="layout_short_tracking_id_updated_notif">"Updated Short Tracking ID to: "</string>
 </resources>

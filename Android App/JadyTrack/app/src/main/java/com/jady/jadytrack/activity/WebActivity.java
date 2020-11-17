@@ -34,6 +34,7 @@ import com.tapadoo.alerter.Alerter;
 
 public class WebActivity extends AppCompatActivity {
     private String trackingId;
+    private String receivedTrackingId;
     //    Following InputOptionActivity.java
     public static final String EXTRA_MESSAGE_ID = "com.jady.jadytrack.SENDID";
     public static final String EXTRA_MESSAGE_UID = "com.jady.jadytrack.SENDUID";
@@ -43,8 +44,12 @@ public class WebActivity extends AppCompatActivity {
     private TextView labelTrackingIdTitle;
     private TextView labelTrackingId;
     private TextView labelTargetName;
+    private TextView labelShortTrackingIdTextView;
     // Handler
     public boolean internetStatus = true;
+
+    //Firebase database activity
+    private DatabaseReference shortTrackingIdDatabaseReference;
 
     // Firebase authentication
     private FirebaseAuth mAuth;
@@ -58,21 +63,25 @@ public class WebActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web);
 
 //        *Variables//
+        labelShortTrackingIdTextView = (TextView) findViewById(R.id.shortTrackingIdTextView);
         labelTrackingIdTitle = (TextView) findViewById(R.id.trackingIdTitleTextView);
         labelTrackingId = (TextView) findViewById(R.id.trackingIdTextView);
-        labelTargetName = (TextView) findViewById(R.id.textViewTargetName);
+        labelTargetName = (TextView) findViewById(R.id.targetNameTextView);
         webAppointmentButton = (Button) findViewById(R.id.webAppointmentButton);
         webTrackingButton = (Button) findViewById(R.id.webTrackingButton);
 
         //Firebase auth//
         mAuth = FirebaseAuth.getInstance();
 
+        //Database Activity
+        shortTrackingIdDatabaseReference = FirebaseDatabase.getInstance().getReference().child("shortTrackingSession");
+
         //*--Process Data from Web App Link--//
         Intent intent = getIntent(); //Web app opens an intent of WebActivity
         String action = intent.getAction();
         Uri data = intent.getData();
         String webAppLink = intent.getDataString(); //Raw Link in String
-        trackingId = data.getQueryParameter("id");
+        receivedTrackingId = data.getQueryParameter("id");
 //        Toast.makeText(getApplicationContext(), "This is the tracking id: " + trackingId, Toast.LENGTH_LONG).show();
         Log.d("james", "This is the data: " + webAppLink);
         Log.d("james", "This is the ID: ");
@@ -80,7 +89,7 @@ public class WebActivity extends AppCompatActivity {
 
 
 //        *Update Labels:
-        labelTrackingId.setText(trackingId);
+        labelTrackingId.setText(receivedTrackingId);
 
 //        *Button Functionalites
         webTrackingButton.setOnClickListener(new View.OnClickListener() {
@@ -136,8 +145,38 @@ public class WebActivity extends AppCompatActivity {
             webAppointmentButton.setEnabled(false);
             Alerter.create(WebActivity.this).setTitle(getResources().getString(R.string.layout_web_link_alerter_login_title)).setText(getResources().getString(R.string.layout_web_link_alerter_login)).setBackgroundColorRes(R.color.colorAccent).show();
         }
-//        ---Check if Tracking ID Exists
-        checkTrackingIdExists(trackingId);
+
+
+        //*--Check and Convert shortTrackingID to fullTrackingID--*//
+        shortTrackingIdDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //* If shortTrackingId exists, then get the full tracking Id
+                if (snapshot.hasChild(receivedTrackingId)) {
+                    //*Replace global trackingId with fullTrackingId from database
+                    trackingId = snapshot.child(receivedTrackingId).getValue().toString();
+                    //*Update Labels:
+                    labelShortTrackingIdTextView.setText("(" + receivedTrackingId + ")");
+                    labelTrackingId.setText(trackingId);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_short_tracking_id_updated_notif) + trackingId, Toast.LENGTH_LONG).show();
+                    Log.d("james", "Short tracking ID found! Setting trackingId as the new FullTrackingId");
+                } else {
+                    //*Replace global trackingId with the initial receivedTrackingId
+                    trackingId = receivedTrackingId;
+                    Log.d("james", "Short tracking ID not found! Setting trackingId as receivedTrackingId");
+                }
+
+                //* Check if the fullTrackingId exists
+                checkTrackingIdExists(trackingId);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                found[0] = false;
+                Log.d("james", "Canceled checking shortTrackingId");
+            }
+        });
+
     }//end of OnStart
 
 
@@ -269,6 +308,33 @@ public class WebActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public Boolean checkShortTrackingId(final String shortTrackingId) {
+//        final boolean[] found = {false};
+        shortTrackingIdDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(shortTrackingId)) {
+                    //If shortTrackingId exists, then get the full tracking Id
+                    trackingId = snapshot.child(shortTrackingId).getValue().toString();
+                    Toast.makeText(getApplicationContext(), "Modified tracking id to:" + trackingId, Toast.LENGTH_LONG).show();
+//                    found[0] = true;
+                } else {
+                    Log.d("james", "Short tracking ID not found. Skipping!");
+//                    found[0] = false;
+//                    Alerter.create(WebActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
+//                    loadingWindow.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                found[0] = false;
+            }
+        });
+//        return found[0];
+        return true;
     }
 
 }
