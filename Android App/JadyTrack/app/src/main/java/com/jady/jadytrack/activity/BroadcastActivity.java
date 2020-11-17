@@ -915,8 +915,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 .setSound(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_alert));
 
         notificationManager.notify(1, notificationBuilder.build());
-    //    *--Functions for ShortTrackingId--//
-
+        //    *--Functions for ShortTrackingId--//
+    }
     public String extractAlphanumeric(String inputString) {
         // inputString = "123^&*^&*^asdasdsad";
         return inputString.replaceAll("[^A-Za-z0-9]", "");
