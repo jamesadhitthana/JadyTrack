@@ -8,9 +8,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,7 @@ public class InputIdActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE_UID = "com.jady.jadytrack.SENDUID";
 
     // Attribute
+    private String receivedTrackingId;
     private String id;
     private String scenario;
     private String uid;
@@ -36,10 +39,16 @@ public class InputIdActivity extends AppCompatActivity {
     // Handler
     public boolean internetStatus = true;
 
+    //Firebase database activity
+    private DatabaseReference shortTrackingIdDatabaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.input_id);
+
+        //Database Activity
+        shortTrackingIdDatabaseReference = FirebaseDatabase.getInstance().getReference().child("shortTrackingSession");
 
         // To get the messages from the previous Activity
         Intent intent = getIntent();
@@ -83,41 +92,78 @@ public class InputIdActivity extends AppCompatActivity {
     private void checkDatabase() {
 
         EditText targetId = (EditText) findViewById(R.id.inputId);
-        id = targetId.getText().toString();
+        receivedTrackingId = targetId.getText().toString();
 
-        if (id.isEmpty()) {
+        if (receivedTrackingId.isEmpty()) {
             Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_input_tracking_id)).setText(getResources().getString(R.string.alert_msg_input_tracking_id)).setBackgroundColorRes(R.color.colorAccent).show();
         } else {
-            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("trackingSession");
-            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            //*--Check and Convert shortTrackingID to fullTrackingID--*//
+            shortTrackingIdDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.hasChild(id)) {
-                        if (scenario.equals("viewer")) {
-                            Intent intent = new Intent(InputIdActivity.this, TrackingActivity.class);
-                            intent.putExtra(EXTRA_MESSAGE_ID, id);
-                            startActivity(intent);
-                        } else if (scenario.equals("appointment")) {
-
-                            //Intent intent = new Intent(InputIdActivity.this, AppointmentActivity.class);
-                            Intent intent = new Intent(InputIdActivity.this, InputRouteActivity.class);
-                            intent.putExtra(EXTRA_MESSAGE_ID, id);
-                            intent.putExtra(EXTRA_MESSAGE_UID, uid);
-                            startActivity(intent);
-                        }
-
+                    //* If shortTrackingId exists, then get the full tracking Id
+                    if (snapshot.hasChild(receivedTrackingId)) {
+                        //*Replace global trackingId with fullTrackingId from database
+                        id = snapshot.child(receivedTrackingId).getValue().toString();
+//                        //*Update Labels:
+//                        labelShortTrackingIdTextView.setText("(" + receivedTrackingId + ")");
+//                        labelTrackingId.setText(id);
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_short_tracking_id_updated_notif) + id, Toast.LENGTH_LONG).show();
+                        Log.d("james", "Short tracking ID found! Setting id as the new FullTrackingId");
                     } else {
-                        Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
+                        //*Replace global id with the initial receivedTrackingId
+                        id = receivedTrackingId;
+                        Log.d("james", "Short tracking ID not found! Setting id as receivedTrackingId");
                     }
+
+                    //* Check if the fullTrackingId exists
+                    checkTrackingIdExists(id);
+                    //*---//
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+//                found[0] = false;
+                    Log.d("james", "Canceled checking shortTrackingId");
                 }
             });
+
+
         }
 
+    }
+
+    public void checkTrackingIdExists(final String id) {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("trackingSession");
+        rootRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.hasChild(id)) {
+                            if (scenario.equals("viewer")) {
+                                Intent intent = new Intent(InputIdActivity.this, TrackingActivity.class);
+                                intent.putExtra(EXTRA_MESSAGE_ID, id);
+                                startActivity(intent);
+                            } else if (scenario.equals("appointment")) {
+
+                                //Intent intent = new Intent(InputIdActivity.this, AppointmentActivity.class);
+                                Intent intent = new Intent(InputIdActivity.this, InputRouteActivity.class);
+                                intent.putExtra(EXTRA_MESSAGE_ID, id);
+                                intent.putExtra(EXTRA_MESSAGE_UID, uid);
+                                startActivity(intent);
+                            }
+
+                        } else {
+                            Alerter.create(InputIdActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public boolean isConnected(Context context) {

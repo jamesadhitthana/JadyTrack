@@ -39,7 +39,7 @@
 <!--        app:srcCompat="@drawable/helpblue100" />-->
 
     <TextView
-        android:id="@+id/textViewTargetName"
+        android:id="@+id/trackingIdTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -50,7 +50,22 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackingIdTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/targetNameTextView" />
+
+    <TextView
+        android:id="@+id/shortTrackingIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:text=""
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/targetNameTextView" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -75,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackingIdTextView"
+        app:layout_constraintTop_toBottomOf="@+id/targetNameTextView"
         app:layout_constraintVertical_bias="0.625" />
 
     <Button
@@ -112,7 +127,7 @@
 
 
     <TextView
-        android:id="@+id/trackingIdTextView"
+        android:id="@+id/targetNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

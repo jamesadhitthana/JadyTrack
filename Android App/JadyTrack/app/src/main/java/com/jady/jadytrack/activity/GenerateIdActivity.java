@@ -24,6 +24,12 @@ public class GenerateIdActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final String id = intent.getStringExtra(BroadcastActivity.EXTRA_MESSAGE_ID);
+        final String shortTrackingId = intent.getStringExtra(BroadcastActivity.EXTRA_MESSAGE_SHORT_ID);
+
+        //Show the shortTrackingId
+        TextView showShortTrackingId = (TextView) findViewById(R.id.shortTrackingidView);
+        showShortTrackingId.setText(shortTrackingId);
+        showShortTrackingId.setTextIsSelectable(true);
 
         // Show the tracking ID
         TextView showText = (TextView) findViewById(R.id.trackingidView);
@@ -44,7 +50,11 @@ public class GenerateIdActivity extends AppCompatActivity {
                 sharingIntent.setType("text/plain");
 
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "JadyTrack Tracking Session ID");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, id);
+
+                // Using short tracking id
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shortTrackingId); //!DEPRECEATED
+                //!DEPRECEATED: using full tracking id
+                //sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, id); //!DEPRECEATED
 
                 startActivity(Intent.createChooser(sharingIntent, "Share Tracking Session ID via"));
             }
@@ -55,9 +65,14 @@ public class GenerateIdActivity extends AppCompatActivity {
         Button shareLinkButton = (Button) findViewById(R.id.shareLinkButton);
         shareLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String trackingLink = buildTrackingLink(id);
-//                Toast.makeText(getApplicationContext(), "Hasil link nya: " + trackingLink, Toast.LENGTH_SHORT).show();
 
+                //*Using short tracking id
+                String trackingLink = buildTrackingLink(shortTrackingId); //!DEPRECEATED
+
+                //!DEPRECEATED: using full tracking id
+                //String trackingLink = buildTrackingLink(id); //!DEPRECEATED
+
+//                Toast.makeText(getApplicationContext(), "Hasil link nya: " + trackingLink, Toast.LENGTH_SHORT).show();
 //                Sharing Intent
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 // Set type to text

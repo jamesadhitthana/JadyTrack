@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -64,7 +65,7 @@ import java.util.Vector;
 public class BroadcastActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static final String EXTRA_MESSAGE_ID = "com.jady.jadytrack.SENDID";
-
+    public static final String EXTRA_MESSAGE_SHORT_ID = "com.jady.jadytrack.SENDSHORTID";
     // Google Map
     private GoogleMap mMap;
     private LocationManager locationManager;
@@ -102,6 +103,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     public boolean manualCheckIn = false;
     private boolean hasArrived = false;
     private String id;
+    private String shortTrackingId; //New shortTrackingId 12Nov2020 James
 
     // Widget
     private TextView status;
@@ -117,6 +119,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     // Firebase
     private DatabaseReference databaseReference;
     private DatabaseReference geofenceReference;
+    private DatabaseReference shortTrackingIdDatabaseReference;
 
     // Process dialog
     private KProgressHUD loadingWindow;
@@ -161,13 +164,17 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         // Widget
         status = (TextView) findViewById(R.id.status);
         tombolBroadcast = (Button) findViewById(R.id.startBroadcast);
-        Button tombolGetId = (Button) findViewById(R.id.getId);
+        Button tombolGetId = (Button) findViewById(R.id.getId); //Share / Sharing
         status.setText(getResources().getString(R.string.label_broadcast_disabled));
 
         // Menyiapkan Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference().child("trackingSession");
+        shortTrackingIdDatabaseReference = FirebaseDatabase.getInstance().getReference().child("shortTrackingSession");
         //final String id = trackingSessionKey;
         id = databaseReference.push().getKey(); //(James): Yef, I deleted this and changed it to the key sent by the previous intent
+
+        //*Building shortTrackingId
+        shortTrackingId = buildShortTrackingId(nama, id);
 
         geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/" + id);
 
@@ -228,6 +235,9 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     databaseReference.child(id).child("targetLocation").setValue(location);
                     databaseReference.child(id).child("numHistory").setValue(numMarker);
                     databaseReference.child(id).child("locationHistory").setValue(locationHistory);
+
+                    //*--12Nov2020--//Store shortTrackingId to Firebase Database
+                    writeShortTrackingIdToDatabase(shortTrackingId);
 
                     // Current time
                     Calendar calendar = Calendar.getInstance();
@@ -345,8 +355,9 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         tombolGetId.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (isBroadcast) {
-                    Intent intent = new Intent(view.getContext(), GenerateIdActivity.class); //TODO: THIS!
+                    Intent intent = new Intent(view.getContext(), GenerateIdActivity.class); //Share/Sharing
                     intent.putExtra(EXTRA_MESSAGE_ID, id);
+                    intent.putExtra(EXTRA_MESSAGE_SHORT_ID, shortTrackingId);
                     startActivity(intent);
                 } else {
                     Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_broadcast_disabled)).setText(getResources().getString(R.string.alert_msg_broadcast_disabled)).setBackgroundColorRes(R.color.colorAccent).show();
@@ -867,7 +878,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         alertDialog.show();
     }
 
-
     // Notification
     private void notifyInfo(String msg) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -905,5 +915,27 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 .setSound(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_alert));
 
         notificationManager.notify(1, notificationBuilder.build());
+    //    *--Functions for ShortTrackingId--//
+
+    public String extractAlphanumeric(String inputString) {
+        // inputString = "123^&*^&*^asdasdsad";
+        return inputString.replaceAll("[^A-Za-z0-9]", "");
+    }
+
+    public String buildShortTrackingId(String nama, String fullTrackingId) {
+        //* Extract First Name Only
+        String[] splitName = nama.split(" ", 2);
+        String firstName = splitName[0];
+        //* Build shortTrackingId
+//        Toast.makeText(getApplicationContext(), "this is the shortTrackingId: " + shortTrackingId, Toast.LENGTH_LONG).show();
+        return extractAlphanumeric(firstName) + fullTrackingId.substring(fullTrackingId.length() - 4); //String shortTrackingId
+    }
+
+    public void writeShortTrackingIdToDatabase(String shortTrackingId) {
+        try {
+            shortTrackingIdDatabaseReference.child(shortTrackingId).setValue(id);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }
