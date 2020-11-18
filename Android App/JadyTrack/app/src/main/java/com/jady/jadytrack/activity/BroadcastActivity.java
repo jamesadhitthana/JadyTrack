@@ -94,6 +94,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     // Handler
     private boolean isBroadcast = false;
     private boolean internetStatus = true;
+    private boolean gpsStatus = true;
     private Long startTime = 0L;
 
     // Attribute
@@ -613,11 +614,22 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     } else {
                         internetStatus = true;
                     }
+
+                    if (isGpsEnabled(BroadcastActivity.this)) {
+                        if (gpsStatus && internetStatus) {
+                            gpsDialog(BroadcastActivity.this).show();
+                            gpsStatus = false;
+                        }
+                    } else {
+                        gpsStatus = true;
+                    }
+
+
                 } catch (Exception e) {
                     // TODO: handle exception
                 } finally {
                     // Call the same runnable to call it at regular interval
-                    handler.postDelayed(this, 1000);
+                    handler.postDelayed(this, 5000);
                 }
             }
         };
@@ -658,6 +670,38 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             }
         });
 
+        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+                moveTaskToBack(true);
+            }
+        });
+
+        return builder;
+    }
+
+    public boolean isGpsEnabled(Context context) {
+        final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        return !manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public AlertDialog.Builder gpsDialog(Context c) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(R.string.alert_title_gps_disabled);
+        builder.setMessage(R.string.alert_msg_gps_disabled);
+        builder.setCancelable(false);
+
+        builder.setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
         builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
 
             @Override
@@ -917,6 +961,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         notificationManager.notify(1, notificationBuilder.build());
         //    *--Functions for ShortTrackingId--//
     }
+
     public String extractAlphanumeric(String inputString) {
         // inputString = "123^&*^&*^asdasdsad";
         return inputString.replaceAll("[^A-Za-z0-9]", "");

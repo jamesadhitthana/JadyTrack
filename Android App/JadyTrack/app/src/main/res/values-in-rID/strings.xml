@@ -195,4 +195,6 @@
     <string name="layout_uam_user_email_placeholder">Email</string>
     <string name="layout_uam_user_name_placeholder">Nama</string>
     <string name="layout_uam_image_uploaded_progress_title">Mengupload gambar ...</string>
+    <string name="alert_title_gps_disabled">Akses lokasi dibutuhkan</string>
+    <string name="alert_msg_gps_disabled">GPS anda belum dinyalakan, apakah Anda mau menyalakannya?</string>
 </resources>

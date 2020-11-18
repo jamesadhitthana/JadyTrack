@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -88,6 +89,7 @@ public class TrackingActivity extends AppCompatActivity implements
 
     // Handler
     private boolean internetStatus = true;
+    private boolean gpsStatus = true;
     private Boolean isTargetOnline = true;
     private boolean isFirstMarker = true;
     private boolean isMarkerDrawed = false;
@@ -163,6 +165,15 @@ public class TrackingActivity extends AppCompatActivity implements
                         }
                     } else {
                         internetStatus = true;
+                    }
+
+                    if (isGpsEnabled(TrackingActivity.this)) {
+                        if (gpsStatus && internetStatus) {
+                            gpsDialog(TrackingActivity.this).show();
+                            gpsStatus = false;
+                        }
+                    } else {
+                        gpsStatus = true;
                     }
 
                     long tsLong = System.currentTimeMillis() / 1000;
@@ -512,6 +523,38 @@ public class TrackingActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
+            }
+        });
+
+        return builder;
+    }
+
+    public boolean isGpsEnabled(Context context) {
+        final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        return !manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public AlertDialog.Builder gpsDialog(Context c) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(R.string.alert_title_gps_disabled);
+        builder.setMessage(R.string.alert_msg_gps_disabled);
+        builder.setCancelable(false);
+
+        builder.setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.button_exit), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+                moveTaskToBack(true);
             }
         });
 
