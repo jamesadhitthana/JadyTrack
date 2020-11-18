@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -14,18 +16,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jady.jadytrack.R;
+import com.jady.jadytrack.UserAccountManagementActivity;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.orhanobut.hawk.Hawk;
 
@@ -48,6 +56,9 @@ public class MainMenuActivity extends AppCompatActivity {
     private String currentUserUID;
     private KProgressHUD loadingWindow;
 
+    //17 nov 2020
+    private ImageView imageViewUserAccountManagement;
+
     // Firebase authentication
     private FirebaseAuth mAuth;
     FirebaseDatabase databaseKu;
@@ -63,6 +74,7 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonAboutPage = findViewById(R.id.buttonAboutPage);
         buttonTarget = findViewById(R.id.buttonTarget);
         buttonAppointment = findViewById(R.id.buttonAppointment);
+        imageViewUserAccountManagement = findViewById(R.id.imageView2);
         // Disable the important buttons by default:
         buttonViewer.setEnabled(false);
         buttonAboutPage.setEnabled(false);
@@ -129,6 +141,16 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        imageViewUserAccountManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), UserAccountManagementActivity.class);
+                i.putExtra(EXTRA_MESSAGE_NAME, userName);
+                i.putExtra(EXTRA_MESSAGE_UID, currentUserUID);
+                i.putExtra(EXTRA_MESSAGE_EMAIL, userEmail);
+                startActivity(i);
+            }
+        });
     }
 
     // This is an alert dialog that will be shown when the user want to logout
@@ -189,7 +211,7 @@ public class MainMenuActivity extends AppCompatActivity {
             databaseKu.getReference().child("users").child(currentUser.getUid()).child("name").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot!= null) {
+                    if (dataSnapshot != null) {
                         userName = dataSnapshot.getValue().toString();
                         textViewUserName.setText(userName);
                         //Enable buttons if username is loaded
@@ -197,7 +219,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         buttonAboutPage.setEnabled(true);
                         buttonTarget.setEnabled(true);
                         buttonAppointment.setEnabled(true);
-                        loadingWindow.dismiss();
+                        loadProfilePhoto(); //Load the profile image
                         //---------Main Menu stuff to do after loading is complete---------//
                         //---HAWK set SkipOnboarding to true if the user is logged in---//
                         Boolean skipMainMenuTutorial = Hawk.get("skipMainMenuTutorial");
@@ -217,7 +239,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
                         //END OF: Main Menu stuff to do after loading is complete---------//
 
-                    }else {
+                    } else {
                         //Disable buttons if the username is not loaded and is still null:
                         buttonViewer.setEnabled(false);
                         buttonAboutPage.setEnabled(false);
@@ -250,6 +272,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 .start();
         //END OF: Tap Target methods (INTRO TUTORIAL PART)//
     }
+
     public void updateUI(FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {
@@ -296,4 +319,32 @@ public class MainMenuActivity extends AppCompatActivity {
         });
         return builder;
     }
+
+    //--Profile Photo--//
+    private void loadProfilePhoto() {
+
+        //Firebase storage//
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        StorageReference profilePhotoRef = storageReference.child("public/profilePhotos/" + currentUserUID); //Automatically get the profile photo from the user id
+
+        profilePhotoRef.getBytes(1024 * 1024)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        imageViewUserAccountManagement.setImageBitmap(bitmap);
+//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
+                        loadingWindow.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
+                        loadingWindow.dismiss();
+                    }
+                });
+    }
+
 }

@@ -213,4 +213,19 @@
     <string name="layout_web_link_found_tracking_id_desc">Successfully loaded the tracking ID</string>
     <!--Short Tracking Id-->
     <string name="layout_short_tracking_id_updated_notif">"Updated Short Tracking ID to: "</string>
+    <!--    User Account Management-->
+    <string name="layout_uam_user_name_placeholder">Name</string>
+    <string name="layout_uam_user_email_placeholder">Email</string>
+    <string name="layout_uam_image_change">Change Profile Photo</string>
+    <string name="layout_uam_password_change">Change Password</string>
+    <string name="layout_uam_logout">Logout</string>
+    <string name="layout_uam_password_notif">Password reset email sent</string>
+    <string name="layout_uam_password_notif_desc">For security reasons, we have sent you an email containing a link to change your password</string>
+    <string name="layout_uam_image_uploaded_success">Profile photo uploaded successfully</string>
+    <string name="layout_uam_image_uploaded_failure">Profile photo failed to upload</string>
+    <string name="layout_uam_image_uploaded_progress">Progress: </string>
+    <string name="layout_uam_image_uploaded_progress_title">Uploading image...</string>
+    <string name="layout_uam_image_loaded_success">Profile photo loaded successfully</string>
+    <string name="layout_uam_image_loaded_failure">Don\'t forget to set your profile photo!</string>
+
 </resources>

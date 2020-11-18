@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,9 +19,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +32,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jady.jadytrack.R;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.orhanobut.hawk.Hawk;
@@ -41,6 +48,7 @@ public class WebActivity extends AppCompatActivity {
 
     private Button webAppointmentButton;
     private Button webTrackingButton;
+    private ImageView imageViewTargetProfilePhoto;
     private TextView labelTrackingIdTitle;
     private TextView labelTrackingId;
     private TextView labelTargetName;
@@ -63,6 +71,7 @@ public class WebActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web);
 
 //        *Variables//
+        imageViewTargetProfilePhoto = (ImageView) findViewById(R.id.imageView2);
         labelShortTrackingIdTextView = (TextView) findViewById(R.id.shortTrackingIdTextView);
         labelTrackingIdTitle = (TextView) findViewById(R.id.trackingIdTitleTextView);
         labelTrackingId = (TextView) findViewById(R.id.trackingIdTextView);
@@ -288,16 +297,16 @@ public class WebActivity extends AppCompatActivity {
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() { //Read Once only
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                loadingWindow.dismiss();
                 if (snapshot.hasChild(id)) {
 //                    found
                     Alerter.create(WebActivity.this).setTitle(getResources().getString(R.string.layout_web_link_found_tracking_id)).setText(getResources().getString(R.string.layout_web_link_found_tracking_id_desc)).setBackgroundColorRes(R.color.colorAccent).show();
-
                     labelTargetName.setText((String) snapshot.child(id).child("targetName").getValue());
+                    loadProfilePhoto(snapshot.child(id).child("targetId").getValue().toString());
                 } else {
 //                    Not found
                     Alerter.create(WebActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
                     labelTargetName.setText(getResources().getString(R.string.layout_web_link_tracking_id_not_found));
+                    loadingWindow.dismiss();
                 }
             }
 
@@ -324,7 +333,6 @@ public class WebActivity extends AppCompatActivity {
                     Log.d("james", "Short tracking ID not found. Skipping!");
 //                    found[0] = false;
 //                    Alerter.create(WebActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_find_id)).setText(getResources().getString(R.string.alert_msg_failed_find_id)).setBackgroundColorRes(R.color.colorAccent).show();
-//                    loadingWindow.dismiss();
                 }
             }
 
@@ -336,5 +344,33 @@ public class WebActivity extends AppCompatActivity {
 //        return found[0];
         return true;
     }
+
+    //--Profile Photo--//
+    private void loadProfilePhoto(String targetId) {
+
+        //Firebase storage//
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        StorageReference profilePhotoRef = storageReference.child("public/profilePhotos/" + targetId); //Automatically get the profile photo from the user id
+
+        profilePhotoRef.getBytes(1024 * 1024)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        imageViewTargetProfilePhoto.setImageBitmap(bitmap);
+//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
+                        loadingWindow.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
+                        loadingWindow.dismiss();
+                    }
+                });
+    }
+
 
 }

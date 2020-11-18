@@ -182,4 +182,17 @@
     <string name="forget_password_error_desc">Email tidak ditemukan.</string>
     <string name="layout_short_tracking_id_updated_notif">"Memperbarui ID Pelacakan Pendek menjadi: "</string>
     <string name="layout_short_tracking_id_content">Tracking ID Pendek</string>
+    <string name="layout_uam_image_loaded_failure">Jangan lupa untuk mengatur foto profil Anda!</string>
+    <string name="layout_uam_image_loaded_success">Foto profil berhasil dimuat</string>
+    <string name="layout_uam_image_uploaded_progress">"Persentase: "</string>
+    <string name="layout_uam_image_uploaded_failure">Foto profil gagal diunggah</string>
+    <string name="layout_uam_image_uploaded_success">Foto profil berhasil diunggah</string>
+    <string name="layout_uam_password_notif_desc">Untuk alasan keamanan, kami telah mengirimi Anda email berisi tautan untuk mengubah kata sandi Anda</string>
+    <string name="layout_uam_password_notif">Email pengaturan ulang kata sandi telah dikirim</string>
+    <string name="layout_uam_logout">Keluar</string>
+    <string name="layout_uam_password_change">Ganti kata sandi</string>
+    <string name="layout_uam_image_change">Ubah Foto Profil</string>
+    <string name="layout_uam_user_email_placeholder">Email</string>
+    <string name="layout_uam_user_name_placeholder">Nama</string>
+    <string name="layout_uam_image_uploaded_progress_title">Mengupload gambar ...</string>
 </resources>

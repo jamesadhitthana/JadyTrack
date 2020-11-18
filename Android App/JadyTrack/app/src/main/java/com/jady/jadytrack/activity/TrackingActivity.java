@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,11 +35,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jady.jadytrack.R;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tapadoo.alerter.Alerter;
@@ -72,6 +78,7 @@ public class TrackingActivity extends AppCompatActivity implements
     private Polygon polygon;
 
     // Marker
+    private Bitmap targetProfilePhoto; //james 18 nov 2020
     private BitmapDescriptor icon;
     private LatLng markerPosition = new LatLng(0, 0);
     private Marker currentMarker;
@@ -428,6 +435,12 @@ public class TrackingActivity extends AppCompatActivity implements
                         numMarker++;
                     }
                     mMap.addPolyline(options);
+
+
+                    //*--James 18Nov2020--//
+                    loadTargetPhoto(dataSnapshot.child("targetId").getValue().toString());
+
+
                 } catch (Error e) {
                     Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_history_marker)).setText(getResources().getString(R.string.alert_msg_history_marker)).setBackgroundColorRes(R.color.colorAccent).show();
 
@@ -446,10 +459,16 @@ public class TrackingActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
-
-        markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
-        currentMarker = mMap.addMarker(markerOptions);
+        try {
+            icon = BitmapDescriptorFactory.fromBitmap(targetProfilePhoto);
+            markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
+            currentMarker = mMap.addMarker(markerOptions);
+        } catch (Exception e) {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
+            markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
+            currentMarker = mMap.addMarker(markerOptions);
+            Toast.makeText(getApplicationContext(), "Failed to load profile picture", Toast.LENGTH_SHORT).show();
+        }
         currentMarker.setZIndex(1.0f);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
@@ -637,4 +656,42 @@ public class TrackingActivity extends AppCompatActivity implements
         notificationManager.notify(1, notificationBuilder.build());
     }
 
+    //--Profile Photo--//
+    private void loadTargetPhoto(String targetUID) {
+
+        //Firebase storage//
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        StorageReference profilePhotoRef = storageReference.child("public/profilePhotos/" + targetUID); //Automatically get the profile photo from the user id
+
+        profilePhotoRef.getBytes(1024 * 1024)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+//                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        targetProfilePhoto = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                        imageViewUserAccountManagement.setImageBitmap(bitmap);
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
+//                        loadingWindow.dismiss();
+
+                        try {
+                            icon = BitmapDescriptorFactory.fromBitmap(targetProfilePhoto);
+                            markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
+                            currentMarker = mMap.addMarker(markerOptions);
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), ("Failed to change currentMarker using loadTargetPhoto"), Toast.LENGTH_LONG).show();
+//
+                        }
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
+//                        loadingWindow.dismiss();
+                    }
+                });
+    }
 }

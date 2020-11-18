@@ -19,8 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_jady_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ForgotPasswordActivity"></activity>
-        <!-- Main/First Activity to Run -->
+        <activity android:name=".UserAccountManagementActivity"></activity>
+        <activity android:name=".activity.ForgotPasswordActivity" /> <!-- Main/First Activity to Run -->
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation"
@@ -105,11 +105,9 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jady.jadytrack.activity.InputRouteActivity"
+            android:name=".activity.InputRouteActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <!--END OF: Additional Activities-->
-        
+            android:screenOrientation="portrait" /> <!-- END OF: Additional Activities -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCD25ephYZAZci2vqzYeIU79IMo_3s-KrM" />
