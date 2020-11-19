@@ -227,6 +227,8 @@
     <string name="layout_uam_image_uploaded_progress_title">Uploading image...</string>
     <string name="layout_uam_image_loaded_success">Profile photo loaded successfully</string>
     <string name="layout_uam_image_loaded_failure">Don\'t forget to set your profile photo!</string>
+    <string name="layout_uam_image_compress_failure">Failed to compress your image, please try adding another image</string>
+    <!--GPS-->
     <string name="alert_title_gps_disabled">Location access is important</string>
     <string name="alert_msg_gps_disabled">Your GPS seems to be disabled, do you want to enable it?</string>
 

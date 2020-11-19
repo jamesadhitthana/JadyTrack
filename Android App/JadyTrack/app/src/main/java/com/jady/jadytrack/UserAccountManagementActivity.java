@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,7 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,12 +43,14 @@ import com.jady.jadytrack.entity.User;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tapadoo.alerter.Alerter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 public class UserAccountManagementActivity extends AppCompatActivity {
 
+    private Boolean profilePhotoCompressionEnabled = true;
     private ImageView profilePic;
     private TextView textViewName;
     private TextView textViewEmail;
@@ -148,7 +153,47 @@ public class UserAccountManagementActivity extends AppCompatActivity {
         }
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+
     private void uploadPicture() {
+        Uri finalImageUri = imageUri;
+        //*---Compress Image [!IMPORTANT!: WHEN THE IMAGE IS COMPRESSED IT LOSES PNG TRANSPARENCY]-------------------//
+        if (profilePhotoCompressionEnabled) { //Look at the boolean on global
+            Bitmap bitmapToUpload = null;
+            int originalBitmapSize = -1;
+            int compressedBitmapSize = -1;
+            Uri compressedBitmapUri = null;
+            try {
+                //Prepare Bitmap to upload from the original image's uri
+                bitmapToUpload = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+
+                //*Check Bitmap Size
+                originalBitmapSize = bitmapToUpload.getByteCount();
+                Toast.makeText(getApplicationContext(), "Bitmap Aslinya: " + originalBitmapSize, Toast.LENGTH_LONG).show();
+                Log.d("james", "Bitmap Asli size: " + originalBitmapSize);
+
+                //Compress the bitmap
+                Bitmap bitmapToUploadCompressed = ImageResizer.reduceBitmapSize(bitmapToUpload, 250000);
+                compressedBitmapSize = bitmapToUploadCompressed.getByteCount();
+                Log.d("james", "Bitmap Compressed size: " + compressedBitmapSize);
+                //Get the new uri of the new compressed bitmap
+                compressedBitmapUri = getImageUri(UserAccountManagementActivity.this, bitmapToUploadCompressed);
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_compress_failure), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            //*--Check if Compression Works & if it works then replace finalImageUri with the uri of the compressed image--//
+            if (compressedBitmapUri != null) {
+                finalImageUri = compressedBitmapUri;
+            }
+        }
+        //*END OF: COMPRESS IMAGE-------------------------//
 
         //*---Progress Bar---//
         final ProgressDialog pd = new ProgressDialog(this);
@@ -157,7 +202,7 @@ public class UserAccountManagementActivity extends AppCompatActivity {
         pd.show();
         //*---Uploader---//
 //        final String randomKey = UUID.randomUUID().toString();
-        profilePhotoRef.putFile(imageUri)
+        profilePhotoRef.putFile(finalImageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -264,5 +309,4 @@ public class UserAccountManagementActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
