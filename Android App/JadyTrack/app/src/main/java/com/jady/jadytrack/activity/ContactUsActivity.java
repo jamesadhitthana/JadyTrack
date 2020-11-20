@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,7 +49,15 @@ public class ContactUsActivity extends AppCompatActivity {
         databaseKu = FirebaseDatabase.getInstance();
         // -----------------------------------------
 
-
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
         buttonSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

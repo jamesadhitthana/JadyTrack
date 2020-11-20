@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.jady.jadytrack.R;
-import com.jady.jadytrack.UserAccountManagementActivity;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.orhanobut.hawk.Hawk;
 

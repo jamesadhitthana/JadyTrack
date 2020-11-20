@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         loginEmail = (EditText) findViewById(R.id.loginEmail);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
+
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
+
         //--//
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +48,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 requestResetPasswordEmail(loginEmail.getText().toString());
             }
         });
+
     }
 
     public void requestResetPasswordEmail(String emailAddress) {

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -165,7 +166,15 @@ public class AppointmentActivity extends AppCompatActivity
 
             }
         });
-
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
         // Widget
         setStartingPoint = (Button) findViewById(R.id.undo);
         setStartingPoint.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +227,7 @@ public class AppointmentActivity extends AppCompatActivity
                 // If a destination marker exists:
                 if (destinationMarker != null) {
 
-                    if(startingpoint == 1){
+                    if (startingpoint == 1) {
                         nextStep = true;
                         disableButton(1);
 
@@ -351,10 +360,10 @@ public class AppointmentActivity extends AppCompatActivity
 
     public void disableButton(int number) {
 
-        if(number == 1){
+        if (number == 1) {
             setAppointment.setEnabled(false);
             setAppointment.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-        } else if (number == 2){
+        } else if (number == 2) {
             setStartingPoint.setEnabled(false);
             setAppointment.setEnabled(false);
 

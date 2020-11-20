@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_jady_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserAccountManagementActivity"></activity>
+        <activity android:name=".activity.UserAccountManagementActivity"></activity>
         <activity android:name=".activity.ForgotPasswordActivity" /> <!-- Main/First Activity to Run -->
         <activity
             android:name=".activity.SplashActivity"

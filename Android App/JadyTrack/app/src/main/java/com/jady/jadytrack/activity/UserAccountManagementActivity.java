@@ -1,10 +1,9 @@
-package com.jady.jadytrack;
+package com.jady.jadytrack.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,12 +13,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,24 +28,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.jady.jadytrack.activity.ForgotPasswordActivity;
-import com.jady.jadytrack.activity.InputOptionActivity;
-import com.jady.jadytrack.activity.MainActivity;
-import com.jady.jadytrack.activity.MainMenuActivity;
-import com.jady.jadytrack.entity.User;
+import com.jady.jadytrack.ImageResizer;
+import com.jady.jadytrack.R;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tapadoo.alerter.Alerter;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 public class UserAccountManagementActivity extends AppCompatActivity {
 
@@ -106,7 +98,16 @@ public class UserAccountManagementActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "SUMTINWONG", Toast.LENGTH_LONG).show();
         }
-        //--//
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
+
         buttonChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +252,7 @@ public class UserAccountManagementActivity extends AppCompatActivity {
                     public void onSuccess(byte[] bytes) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         profilePic.setImageBitmap(bitmap);
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
                         loadingWindow.dismiss();
                     }
                 })

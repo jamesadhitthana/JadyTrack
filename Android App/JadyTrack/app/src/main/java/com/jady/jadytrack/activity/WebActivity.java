@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +100,16 @@ public class WebActivity extends AppCompatActivity {
 
 //        *Update Labels:
         labelTrackingId.setText(receivedTrackingId);
+
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
 
 //        *Button Functionalites
         webTrackingButton.setOnClickListener(new View.OnClickListener() {

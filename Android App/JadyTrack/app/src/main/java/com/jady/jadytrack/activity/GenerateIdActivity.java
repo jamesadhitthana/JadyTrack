@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,16 @@ public class GenerateIdActivity extends AppCompatActivity {
         Bitmap myBitmap = QRCode.from(id).bitmap();
         ImageView myImage = (ImageView) findViewById(R.id.qrView);
         myImage.setImageBitmap(myBitmap);
+
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
 
         // Button to share the tracking ID
         Button shareButton = (Button) findViewById(R.id.shareButton);

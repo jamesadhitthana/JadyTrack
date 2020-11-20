@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserAccountManagementActivity">
+    tools:context=".activity.UserAccountManagementActivity">
 
     <!--    Diagonal-->
+
     <com.github.florent37.diagonallayout.DiagonalLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
@@ -20,9 +21,25 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/bg_home_page_compressed" />
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            app:srcCompat="@drawable/back_button_circular_blue_100px" />
     </com.github.florent37.diagonallayout.DiagonalLayout>
 
     <!--    END OF: Diagonal-->
+
+
+
     <ImageView
         android:id="@+id/imageViewProfilePhoto"
         android:layout_width="150dp"

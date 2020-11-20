@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,7 +28,15 @@ public class InputRouteActivity extends AppCompatActivity {
         id = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_ID);
         userUID = intentKu.getStringExtra(InputIdActivity.EXTRA_MESSAGE_UID);
         userUID = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_UID);
-
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
         Button tombolQuickRoute = (Button) findViewById(R.id.quickRouteButton);
         tombolQuickRoute.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

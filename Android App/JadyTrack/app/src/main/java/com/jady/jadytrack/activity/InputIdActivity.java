@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,16 @@ public class InputIdActivity extends AppCompatActivity {
         Intent intent = getIntent();
         scenario = intent.getStringExtra(InputOptionActivity.EXTRA_MESSAGE_SCENARIO);
         uid = intent.getStringExtra(InputOptionActivity.EXTRA_MESSAGE_UID);
+
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //END OF: Back Button--//
 
         // Button to begin tracking
         Button trackingButton = (Button) findViewById(R.id.trackButton);

@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -160,7 +161,15 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         //Tambahan James untuk ambil tracking session key dari AppointmentActivity.java
         //trackingSessionKey = intent.getStringExtra("trackingSession_key");
 
-
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backDialog(BroadcastActivity.this).show();
+            }
+        });
+        //END OF: Back Button--//
         // Menyiapkan tampilan
         // Widget
         status = (TextView) findViewById(R.id.status);

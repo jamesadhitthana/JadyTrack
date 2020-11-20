@@ -15,6 +15,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -150,7 +152,15 @@ public class TrackingActivity extends AppCompatActivity implements
         // Mengatur tampilan awal
         targetStatus = (TextView) findViewById(R.id.targetStatus);
         targetStatus.setText(getResources().getString(R.string.label_title_target_offline));
-
+        //*Back Button//
+        final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backDialog(TrackingActivity.this).show();
+            }
+        });
+        //END OF: Back Button--//
         // Internet Connection handler
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {

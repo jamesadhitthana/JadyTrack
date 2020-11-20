@@ -11,16 +11,28 @@
         android:layout_height="250dp"
         android:elevation="10dp"
         app:diagonal_angle="20"
-        app:diagonal_position="bottom"
-        app:diagonal_direction="left">
+        app:diagonal_direction="left"
+        app:diagonal_position="bottom">
 
 
         <com.flaviofaria.kenburnsview.KenBurnsView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_about_page"
-            />
+            android:src="@drawable/bg_about_page" />
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            app:srcCompat="@drawable/back_button_circular_white_100px" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,9 +49,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:orientation="horizontal"
             android:layout_marginTop="105dp"
-            >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -135,10 +146,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
         android:background="@drawable/contact_us_button"
-        android:textColor="#ffffff"
         android:paddingLeft="10px"
         android:paddingRight="10px"
-        android:text="@string/button_user_manual" />
+        android:text="@string/button_user_manual"
+        android:textColor="#ffffff" />
 
 
 </RelativeLayout>
