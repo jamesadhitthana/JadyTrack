@@ -79,36 +79,38 @@ function loadFullTrackingId(inputSessionID) {
       //--Load Session Child--//
       //testing Notifications db:       -Lb1YvHEhQtgZB9WM4P2
       var dbNotificationStatusLinkExpired = db.ref('trackingSession/' + inputSessionID + "/notifications/statusLinkExpired");
-      dbNotificationStatusLinkExpired.on('value', notifyStatusLinkExpired, logError);
+      dbNotificationStatusLinkExpired.once('value', notifyStatusLinkExpired, logError);
 
       var dbNotificationStatusInGeofence = db.ref('trackingSession/' + inputSessionID + "/notifications/statusInGeofence");
-      dbNotificationStatusInGeofence.on('value', notifyStatusInGeofence, logError);
+      dbNotificationStatusInGeofence.once('value', notifyStatusInGeofence, logError);
 
       var dbNotificationHasArrived = db.ref('trackingSession/' + inputSessionID + "/notifications/statusHasArrived");
-      dbNotificationHasArrived.on('value', notifyHasArrived, logError);
+      dbNotificationHasArrived.once('value', notifyHasArrived, logError);
 
       var dbNotificationManualCheckIn = db.ref('trackingSession/' + inputSessionID + "/notifications/manualCheckIn");
-      dbNotificationManualCheckIn.on('value', notifyManualCheckIn, logError);
+      dbNotificationManualCheckIn.once('value', notifyManualCheckIn, logError);
 
       var dbNotificationStatusSOS = db.ref('trackingSession/' + inputSessionID + "/notifications/statusSOS");
-      dbNotificationStatusSOS.on('value', notifyStatusSOS, logError);
+      dbNotificationStatusSOS.once('value', notifyStatusSOS, logError);
 
       var dbTrackingSessionLocations = db.ref('trackingSession/' + inputSessionID + "/locationHistory");
-      dbTrackingSessionLocations.on('value', showTrackingSessionLocations, logError);
+      dbTrackingSessionLocations.once('value', showTrackingSessionLocations, logError);
 
-      //New functionality to add Geofence
-      var dbGeofence = db.ref('trackingSession/' + inputSessionID + "/geofence");
-      dbGeofence.on('value', showGeofence, logError);
-
-      //--Functionality to add Finish Point and the geofence for the finish point
-      var dbDestinationPoint = db.ref('trackingSession/' + inputSessionID + "/destination");
-      dbDestinationPoint.on('value', addDestinationPoint, logError);
       //---
       //*Update page labels//
       updateLabels(selectedLanguage);
 
-      //* If the page is loaded for the first time (so that it doesnt annoy the user)
+      //* If the page is loaded for the first time
       if (boolFirstTimeLoaded) {
+
+        //*New functionality to add Geofence
+        var dbGeofence = db.ref('trackingSession/' + inputSessionID + "/geofence");
+        dbGeofence.once('value', showGeofence, logError);
+        //*Functionality to add Finish Point and the geofence for the finish point
+        var dbDestinationPoint = db.ref('trackingSession/' + inputSessionID + "/destination");
+        dbDestinationPoint.once('value', addDestinationPoint, logError);
+
+        //* Features loaded only once so that it doesnt annoy the user
         disableInputTrackingId() //Disable user input textbox
         finalTrackingId = inputSessionID
         // Scroll down to the map
