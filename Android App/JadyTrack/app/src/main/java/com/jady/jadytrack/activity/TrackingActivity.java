@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -724,7 +725,8 @@ public class TrackingActivity extends AppCompatActivity implements
 //                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         targetProfilePhoto = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 //                        imageViewUserAccountManagement.setImageBitmap(bitmap);
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
+                        Log.d("james", "User does not have a profile photo on the database");
+//                        Toast.makeText(getApplicationContext(), getResoures().getStrincg(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
 //                        loadingWindow.dismiss();
 
                         try {
@@ -742,7 +744,8 @@ public class TrackingActivity extends AppCompatActivity implements
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
+                        Log.d("james", "User does not have a profile photo on the database");
+//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
 //                        loadingWindow.dismiss();
                     }
                 });

@@ -198,4 +198,6 @@
     <string name="layout_uam_image_compress_failure">Gagal mengompres gambar Anda, coba gunakan gambar lain</string>
     <string name="alert_title_gps_disabled">Akses lokasi dibutuhkan</string>
     <string name="alert_msg_gps_disabled">GPS anda belum dinyalakan, apakah Anda mau menyalakannya?</string>
+    <string name="tutorial_title_profile">Selamat datang di JadyTrack!</string>
+    <string name="tutorial_desc_profile">Beri tahu teman Anda siapa Anda dengan mengubah foto profil Anda di sini.\n\nKetuk bagian tengah lingkaran untuk melanjutkan</string>
 </resources>

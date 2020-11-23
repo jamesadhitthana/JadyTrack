@@ -341,6 +341,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //Tap Target methods (INTRO TUTORIAL PART)//
         new TapTargetSequence(MainMenuActivity.this)
                 .targets(
+                        TapTarget.forView(findViewById(R.id.imageView2), getResources().getString(R.string.tutorial_title_profile), getResources().getString(R.string.tutorial_desc_profile)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
                         TapTarget.forView(findViewById(R.id.buttonAppointment), getResources().getString(R.string.tutorial_title_appointment), getResources().getString(R.string.tutorial_desc_appointment)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
                         TapTarget.forView(findViewById(R.id.buttonTarget), getResources().getString(R.string.tutorial_title_target), getResources().getString(R.string.tutorial_desc_target)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
                         TapTarget.forView(findViewById(R.id.buttonViewer), getResources().getString(R.string.tutorial_title_viewer), getResources().getString(R.string.tutorial_desc_viewer)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
@@ -418,7 +419,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
+                        Log.d("james", "User does not have a profile photo on the database");
+//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
                         loadingWindow.dismiss();
                     }
                 });

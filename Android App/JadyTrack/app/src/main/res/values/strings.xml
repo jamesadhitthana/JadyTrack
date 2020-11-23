@@ -143,6 +143,8 @@
     <string name="notification_target_in_danger">Target is in danger!</string>
 
     <!--Tutorial-->
+    <string name="tutorial_title_profile">Welcome to JadyTrack!</string>
+    <string name="tutorial_desc_profile">Let your peers know who you are by changing your profile photo here.\n\nTap the middle of the circle to continue</string>
     <string name="tutorial_title_appointment">"Appointment "</string>
     <string name="tutorial_desc_appointment">Create and setup the Geofence and destination for your target\'s trip here!</string>
     <string name="tutorial_title_target">"Target "</string>
@@ -152,7 +154,7 @@
     <string name="tutorial_title_logout">"Logout "</string>
     <string name="tutorial_desc_logout">You can logout and switch accounts here!</string>
     <string name="tutorial_title_help">"Help "</string>
-    <string name="tutorial_desc_help">Your help menu is here! Pressing the help menu will reset the quick tutorial. You can also contact us through the contact form inside</string>
+    <string name="tutorial_desc_help">Your help menu is here! Pressing the help menu will reset the quick tutorial. You can also contact us through the contact form inside.\nThat\'s it! Goodluck!</string>
 
     <!--Marker-->
     <string name="marker_history">History</string>

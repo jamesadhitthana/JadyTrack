@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.alert_title_logged_in_as) + mAuth.getCurrentUser().getEmail(),
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.alert_title_logged_in_as) + " " + mAuth.getCurrentUser().getEmail(),
                                     Toast.LENGTH_SHORT).show(); //diemin aja
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);

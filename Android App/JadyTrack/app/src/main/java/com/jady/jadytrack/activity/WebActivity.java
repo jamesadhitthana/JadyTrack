@@ -370,6 +370,7 @@ public class WebActivity extends AppCompatActivity {
                     public void onSuccess(byte[] bytes) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         imageViewTargetProfilePhoto.setImageBitmap(bitmap);
+                        Log.d("james", "Profile photo loaded successfully");
 //                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
                         loadingWindow.dismiss();
                     }
@@ -377,7 +378,8 @@ public class WebActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
+                        Log.d("james", "User does not have a profile photo on the database");
+//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
                         loadingWindow.dismiss();
                     }
                 });
