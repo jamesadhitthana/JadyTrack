@@ -96,7 +96,8 @@ public class UserAccountManagementActivity extends AppCompatActivity {
         try {
             updateUamProfilePhoto();
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "SUMTINWONG", Toast.LENGTH_LONG).show();
+            Log.d("james", "Failed to update profile photo");
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_uploaded_failure), Toast.LENGTH_LONG).show();
         }
         //*Back Button//
         final ImageButton buttonBack = (ImageButton) findViewById(R.id.buttonBack);
@@ -176,7 +177,6 @@ public class UserAccountManagementActivity extends AppCompatActivity {
 
                 //*Check Bitmap Size
                 originalBitmapSize = bitmapToUpload.getByteCount();
-                Toast.makeText(getApplicationContext(), "Bitmap Aslinya: " + originalBitmapSize, Toast.LENGTH_LONG).show();
                 Log.d("james", "Bitmap Asli size: " + originalBitmapSize);
 
                 //Compress the bitmap

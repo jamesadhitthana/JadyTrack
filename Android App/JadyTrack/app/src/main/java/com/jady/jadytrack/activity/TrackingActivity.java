@@ -82,7 +82,8 @@ public class TrackingActivity extends AppCompatActivity implements
     private Polygon polygon;
 
     // Marker
-    private Bitmap targetProfilePhoto; //james 18 nov 2020
+    private Bitmap originalTargetProfilePhoto; //james 23 nov 2020
+    private Bitmap resizedTargetProfilePhoto; //james 18 nov 2020
     private BitmapDescriptor icon;
     private LatLng markerPosition = new LatLng(0, 0);
     private Marker currentMarker;
@@ -481,16 +482,10 @@ public class TrackingActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        try {
-            icon = BitmapDescriptorFactory.fromBitmap(targetProfilePhoto);
-            markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
-            currentMarker = mMap.addMarker(markerOptions);
-        } catch (Exception e) {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
-            markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
-            currentMarker = mMap.addMarker(markerOptions);
-            Toast.makeText(getApplicationContext(), "Failed to load profile picture", Toast.LENGTH_SHORT).show();
-        }
+        //*Load Default placeholder marker smiley
+        icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
+        markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
+        currentMarker = mMap.addMarker(markerOptions);
         currentMarker.setZIndex(1.0f);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
@@ -722,31 +717,30 @@ public class TrackingActivity extends AppCompatActivity implements
                 .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
-//                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        targetProfilePhoto = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                        imageViewUserAccountManagement.setImageBitmap(bitmap);
-                        Log.d("james", "User does not have a profile photo on the database");
-//                        Toast.makeText(getApplicationContext(), getResoures().getStrincg(R.string.layout_uam_image_loaded_success), Toast.LENGTH_LONG).show();
-//                        loadingWindow.dismiss();
-
+                        originalTargetProfilePhoto = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        //*Resize Image//
+                        resizedTargetProfilePhoto = Bitmap.createScaledBitmap(originalTargetProfilePhoto, 120, 120, false);
+                        //*Replace currentMarker icon using the loaded target's profile photo//
                         try {
-                            icon = BitmapDescriptorFactory.fromBitmap(targetProfilePhoto);
+                            //*Removing default placeholder smiley marker
+                            currentMarker.remove();
+
+                            //*Set Marker using new Profile Photo
+                            icon = BitmapDescriptorFactory.fromBitmap(resizedTargetProfilePhoto); //Change icon to profile photo
                             markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
                             currentMarker = mMap.addMarker(markerOptions);
+
+                            Log.d("james", "Updated the target's marker icon to the target's profile photo");
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), ("Failed to change currentMarker using loadTargetPhoto"), Toast.LENGTH_LONG).show();
-//
+                            Log.d("james", "Failed to change target's marker icon (currentMarker) to the target's profile photo  using loadTargetPhoto");
                         }
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("james", "User does not have a profile photo on the database");
-//                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_uam_image_loaded_failure), Toast.LENGTH_LONG).show();
-//                        loadingWindow.dismiss();
+                        //*If user does not have a profile photo on the database then just use the smiley pic//
+                        Log.d("james", "User does not have a profile photo on the database and so nothing is then just use the placeholder smiley pic");
                     }
                 });
     }
