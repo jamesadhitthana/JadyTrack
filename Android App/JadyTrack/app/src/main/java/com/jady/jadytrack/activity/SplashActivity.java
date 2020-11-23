@@ -43,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final String NOTIFICATION_CHANNEL_ID = "info_01";
             final String ALERT_CHANNEL_ID = "alert_01";
+            final String FOREGROUND_CHANNEL_ID = "foreground_01";
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -74,6 +75,14 @@ public class SplashActivity extends AppCompatActivity {
             broadcastingChannel.enableVibration(true);
             broadcastingChannel.setSound(alertSoundUri, audioAttributes);
             notificationManager.createNotificationChannel(broadcastingChannel);
+
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    FOREGROUND_CHANNEL_ID,
+                    "Foreground Service Notification",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            serviceChannel.setSound(null, null);
+            notificationManager.createNotificationChannel(serviceChannel);
         }
     }
 

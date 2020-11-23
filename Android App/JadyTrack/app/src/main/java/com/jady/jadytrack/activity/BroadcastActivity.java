@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -50,6 +51,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jady.jadytrack.R;
+import com.jady.jadytrack.service.ForegroundService;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tapadoo.alerter.Alerter;
 
@@ -344,7 +346,6 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
                 } else {
                     isBroadcast = true;
-                    isBroadcast = true;
                     // ---Start loading window
                     loadingWindowEnableBroadcast = KProgressHUD.create(BroadcastActivity.this)
                             .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -475,9 +476,27 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     }
 
 
+    public void startService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        }
+        else{
+            startService(serviceIntent);
+        }
+    }
+
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        stopService(serviceIntent);
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
+
+        startService();
 
         if (!isGeofenceDrawed) {
             plotGeofence();
@@ -740,6 +759,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         builder.setPositiveButton(getResources().getString(R.string.button_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                stopService();
                 isBroadcast = false;
                 finish();
             }
@@ -992,4 +1012,5 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
 }
