@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -49,6 +50,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.jady.jadytrack.R;
+import com.jady.jadytrack.service.ForegroundService;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.tapadoo.alerter.Alerter;
 
@@ -219,6 +221,8 @@ public class TrackingActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
 
+        startService();
+
         // Menggambar history marker yang tersimpan di firebase
         if (!isMarkerDrawed) {
             plotMarkerHistory();
@@ -316,6 +320,21 @@ public class TrackingActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    public void startService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        }
+        else{
+            startService(serviceIntent);
+        }
+    }
+
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        stopService(serviceIntent);
     }
 
     // untuk menggambar geofence
@@ -582,6 +601,7 @@ public class TrackingActivity extends AppCompatActivity implements
         builder.setPositiveButton(getResources().getString(R.string.button_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                stopService();
                 Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 startActivity(i);
                 finish();
@@ -744,4 +764,5 @@ public class TrackingActivity extends AppCompatActivity implements
                     }
                 });
     }
+
 }

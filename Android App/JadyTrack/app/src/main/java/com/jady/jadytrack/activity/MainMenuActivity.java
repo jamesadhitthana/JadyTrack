@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.jady.jadytrack.R;
+import com.jady.jadytrack.service.ForegroundService;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.orhanobut.hawk.Hawk;
 
@@ -426,4 +427,10 @@ public class MainMenuActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onDestroy() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        stopService(serviceIntent);
+        super.onDestroy();
+    }
 }
