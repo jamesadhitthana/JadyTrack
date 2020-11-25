@@ -31,6 +31,8 @@
     <string name="alert_msg_geofence">Unable to set Geofence because Geofence has been created previously</string>
     <string name="alert_title_forgot_draw">You forgot to draw your Geofence!</string>
     <string name="alert_msg_forgot_draw">Please draw at least three points for your Geofence</string>
+    <string name="alert_title_outside_geofence">Target position or destination position outside the Geofence!</string>
+    <string name="alert_msg_outside_geofence">Please make sure target position and destination position inside the Geofence</string>
     <string name="alert_title_forgot_destination">You forgot to set your destination!</string>
     <string name="alert_msg_forgot_destination">Please set your destination by tapping on the desired destination</string>
     <string name="alert_title_failed_set_object">Oops something went wrong!</string>
@@ -61,6 +63,8 @@
     <string name="alert_title_confirm_disable">Broadcast disabled</string>
     <string name="alert_title_enable_sos">Are you sure you want to enable SOS (Emergency) mode? If you are connected to the internet, your peers will get notified of an emergency immediately.</string>
     <string name="alert_title_check_in_arrived">Are you sure you want to check in with your peers? You won\'t be able to cancel your decision and JadyTrack will automatically assume that you have arrived.</string>
+    <string name="alert_title_save_quick_route">Do you want to save the Geofence that you have created to be used again in Quick Route?</string>
+    <string name="alert_title_delete_quick_route">Are you sure you want to delete this Quick Route?</string>
     <string name="alert_title_failed_disable_broadcast">Failed to disable Broadcast</string>
     <string name="alert_msg_failed_disable_broadcast">Please check your internet connection</string>
     <string name="alert_title_disable_broadcast_ask">Are you sure you want to disable the Broadcast?. Your peers will not know what is going on if you disable it.</string>
@@ -121,6 +125,7 @@
     <string name="button_appointment">Appointment</string>
     <string name="button_target">Target</string>
     <string name="button_viewer">Viewer</string>
+    <string name="button_quick_route_management">Quick Route Management</string>
     <string name="button_track">Track</string>
     <string name="button_scan_qr">Scan QR Code</string>
     <string name="button_input_tracking_id">Input Tracking ID</string>
@@ -153,6 +158,8 @@
     <string name="tutorial_desc_logout">You can logout and switch accounts here!</string>
     <string name="tutorial_title_help">"Help "</string>
     <string name="tutorial_desc_help">Your help menu is here! Pressing the help menu will reset the quick tutorial. You can also contact us through the contact form inside</string>
+    <string name="tutorial_title_quick_route_management">"Quick Route Management "</string>
+    <string name="tutorial_desc_quick_route_management">You can change the name or delete your previously created Geofence here!</string>
 
     <!--Marker-->
     <string name="marker_history">History</string>
@@ -183,6 +190,7 @@
     <string name="layout_about_page_contact">Contact:</string>
     <string name="layout_about_page_email" translatable="false">jadytrack@gmail.com</string>
     <string name="layout_appointment_current_status">Current Status</string>
+    <string name="layout_quick_route_management">Quick Route Management</string>
     <string name="layout_contact_us_title">Contact Us</string>
     <string name="layout_placeholder_enter_message">Enter Message Here</string>
     <string name="layout_short_tracking_id_content">Short Tracking ID</string>

@@ -107,6 +107,10 @@
         <activity
             android:name=".activity.InputRouteActivity"
             android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.QuickRouteManagementActivity"
+            android:configChanges="orientation"
             android:screenOrientation="portrait" /> <!-- END OF: Additional Activities -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

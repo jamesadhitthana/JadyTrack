@@ -20,6 +20,8 @@
     <string name="alert_msg_geofence">Gagal membuat Geofence karena Geofence sudah terbuat sebelumnya</string>
     <string name="alert_title_forgot_draw">Anda lupa menggambar Geofence</string>
     <string name="alert_msg_forgot_draw">Mohon menggambar paling sedikit tiga titik untuk Geofence Anda</string>
+    <string name="alert_title_outside_geofence">Posisi target atau posisi destinasi diluar Geofence!</string>
+    <string name="alert_msg_outside_geofence">Pastikan posisi target dan posisi destinasi di dalam Geofence</string>
     <string name="alert_title_forgot_destination">Anda lupa untuk menentukan destinasi Anda!</string>
     <string name="alert_msg_forgot_destination">Mohon tentukan destinasi Anda dengan mengetuk lokasi yang diinginkan</string>
     <string name="alert_title_failed_set_object">Oops ada sesuatu yang salah!</string>
@@ -50,6 +52,8 @@
     <string name="tutorial_desc_target">Anda dapat membagikan lokasi dan sesi pelacakan Anda untuk membuat janji!</string>
     <string name="tutorial_desc_appointment">Anda dapat membuat janji Anda di sini dengan mengatur Geofence dan destinasi untuk perjalanan target Anda!</string>
     <string name="tutorial_title_appointment">Janji</string>
+    <string name="tutorial_title_quick_route_management">"Manajemen Quick Route "</string>
+    <string name="tutorial_desc_quick_route_management">Anda dapat mengubah nama atau menghapus Geofence yang telah anda buat sebelumnya di sini!</string>
     <string name="notification_target_in_danger">Target ada dalam bahaya</string>
     <string name="notification_target_offline">Target sedang offline</string>
     <string name="notification_target_crossing_border">Menyebrangi batas</string>
@@ -113,6 +117,8 @@
     <string name="alert_title_failed_contact_us">Oh tidak!</string>
     <string name="alert_msg_failed_disable_broadcast">Mohon cek kembali koneksi internet Anda</string>
     <string name="alert_title_check_in_arrived">Anda yakin ingin check-in? Anda tidak dapat membatalkan keputusan dan JadyTrack secara otomatis mengasumsikan bahwa Anda sudah tiba di tujuan</string>
+    <string name="alert_title_save_quick_route">Apakah anda ingin menyimpan Geofence yang telah anda buat untuk dapat digunakan kembali pada Quick Route?</string>
+    <string name="alert_title_delete_quick_route">Apakah anda yakin untuk menghapus Quick Route ini?</string>
     <string name="alert_title_enable_sos">Anda yakin ingin mengaktifkan mode SOS (Darurat)? Rekan Anda akan mendapatkan notifikasi darurat</string>
     <string name="alert_title_confirm_disable">Siaran dimatikan</string>
     <string name="alert_title_dont_have_geofence">Anda tidak memiliki Geofence</string>
@@ -139,6 +145,7 @@
     <string name="button_sos">SOS</string>
     <string name="button_get_tracking_id">Dapatkan ID Pelacakan</string>
     <string name="layout_appointment_current_status">Status Saat Ini</string>
+    <string name="layout_quick_route_management">Manajemen Quick Route</string>
     <string name="layout_contact_us_title">Hubungi Kami</string>
     <string name="button_send_message">Kirim Pesan</string>
     <string name="layout_placeholder_enter_message">Masukan Pesan di Sini</string>
@@ -148,6 +155,7 @@
     <string name="button_appointment">Janji</string>
     <string name="button_target">Target</string>
     <string name="button_viewer">Pelacak</string>
+    <string name="button_quick_route_management">Manajemen Quick Route</string>
     <string name="layout_input_id_placeholder">Masukan ID Pelacakan di sini</string>
     <string name="button_track">Lacak</string>
     <string name="layout_input_id_title">ID Pelacakan</string>
