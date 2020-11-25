@@ -181,7 +181,7 @@
     <!--Layout-->
     <string name="layout_about_page_title">About JadyTrack</string>
     <string name="layout_about_page_sub_title">Know whats going on, don\'t worry about…</string>
-    <string name="layout_about_page_content">JadyTrack allows you or your loved ones to track and share your current LIVE location in real time as easy as 1,2,3!\\n\\nSimply open the app, set your destination and geofence customization, then tap go! It will then create a new QR code (or link) that you can share with your peers so that they can track you for the current session.\\n\\nAlso JadyTrack isn\'t going to spy on you, compared to our competitors, we believe that privacy is your privilege, so we won’t track you 24/7. JadyTrack only works per session, so once the session is done, that’s it!</string>
+    <string name="layout_about_page_content">JadyTrack allows you or your loved ones to track and share your current LIVE location in real time as easy as 1,2,3!\n\nSimply open the app, set your destination and geofence customization, then tap go! It will then create a new QR code (or link) that you can share with your peers so that they can track you for the current session.\n\nAlso JadyTrack isn\'t going to spy on you, compared to our competitors, we believe that privacy is your privilege, so we won’t track you 24/7. JadyTrack only works per session, so once the session is done, that’s it!</string>
     <string name="layout_about_page_contact">Contact:</string>
     <string name="layout_about_page_email" translatable="false">jadytrack@gmail.com</string>
     <string name="layout_appointment_current_status">Current Status</string>
