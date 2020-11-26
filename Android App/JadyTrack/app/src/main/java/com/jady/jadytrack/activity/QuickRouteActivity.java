@@ -242,12 +242,17 @@ public class QuickRouteActivity extends AppCompatActivity
                     for (HashMap.Entry<String, Object> entry : data.entrySet()) {
 
                         // epoch to date
-                        String dataTime = entry.getValue().toString();
+                        String quickRouteHistoryName = entry.getValue().toString();
+                        String formatted = null;
 
-                        Date date = new Date(Long.parseLong(dataTime));
-                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                        format.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
-                        String formatted = format.format(date);
+                        if(isValidDate(quickRouteHistoryName)){
+                            Date date = new Date(Long.parseLong(quickRouteHistoryName));
+                            DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                            format.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
+                            formatted = format.format(date);
+                        } else {
+                            formatted = quickRouteHistoryName;
+                        }
 
                         historyTime.add(formatted);
 
@@ -305,6 +310,20 @@ public class QuickRouteActivity extends AppCompatActivity
         });
 
 
+    }
+
+    public static boolean isValidDate(String inDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        dateFormat.setLenient(false);
+        try {
+            Date date = new Date(Long.parseLong(inDate));
+            DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            format.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
+            String formatted = format.format(date);
+        } catch (Exception pe) {
+            return false;
+        }
+        return true;
     }
 
     public void sendtoFirebase() {

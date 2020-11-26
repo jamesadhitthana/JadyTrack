@@ -110,7 +110,7 @@
         <Button
             android:id="@+id/buttonAppointment"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="75dp"
             android:layout_margin="20dp"
             android:layout_marginBottom="41dp"
             android:background="@drawable/home_page_buttons_shape"
@@ -119,7 +119,7 @@
         <Button
             android:id="@+id/buttonTarget"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="75dp"
             android:layout_margin="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -129,11 +129,21 @@
         <Button
             android:id="@+id/buttonViewer"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="75dp"
+            android:layout_margin="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/home_page_buttons_shape"
+            android:text="@string/button_viewer" />
+
+        <Button
+            android:id="@+id/buttonQuickRouteManagement"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
             android:layout_margin="20dp"
             android:layout_marginTop="41dp"
             android:background="@drawable/home_page_buttons_shape"
-            android:text="@string/button_viewer" />
+            android:text="@string/button_quick_route_management" />
 
     </LinearLayout>
 

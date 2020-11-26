@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,7 +56,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextView textViewUserName;
     private String userName;
     private String userEmail;
-    private Button buttonViewer, buttonTarget, buttonAppointment;
+    private Button buttonViewer, buttonTarget, buttonAppointment, buttonQuickRouteManagement;
     private ImageButton buttonAboutPage;
     private String currentUserUID;
     private KProgressHUD loadingWindow;
@@ -78,12 +80,14 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonAboutPage = findViewById(R.id.buttonAboutPage);
         buttonTarget = findViewById(R.id.buttonTarget);
         buttonAppointment = findViewById(R.id.buttonAppointment);
+        buttonQuickRouteManagement = findViewById(R.id.buttonQuickRouteManagement);
         imageViewUserAccountManagement = findViewById(R.id.imageView2);
         // Disable the important buttons by default:
         buttonViewer.setEnabled(false);
         buttonAboutPage.setEnabled(false);
         buttonTarget.setEnabled(false);
         buttonAppointment.setEnabled(false);
+        buttonQuickRouteManagement.setEnabled(false);
         // Set loading window
         loadingWindow = KProgressHUD.create(MainMenuActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -152,6 +156,14 @@ public class MainMenuActivity extends AppCompatActivity {
                 i.putExtra(EXTRA_MESSAGE_NAME, userName);
                 i.putExtra(EXTRA_MESSAGE_UID, currentUserUID);
                 i.putExtra(EXTRA_MESSAGE_EMAIL, userEmail);
+                startActivity(i);
+            }
+        });
+        buttonQuickRouteManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent (getApplicationContext(), QuickRouteManagementActivity.class);
+                i.putExtra(EXTRA_MESSAGE_UID, currentUserUID);
                 startActivity(i);
             }
         });
@@ -297,6 +309,33 @@ public class MainMenuActivity extends AppCompatActivity {
                         buttonAboutPage.setEnabled(true);
                         buttonTarget.setEnabled(true);
                         buttonAppointment.setEnabled(true);
+
+                        DatabaseReference historyReference = FirebaseDatabase.getInstance().getReference().child("users/" + currentUserUID + "/trackingHistory");
+                        final boolean[] isHistoryCollected = {false};
+
+                        historyReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null && !isHistoryCollected[0]) {
+
+                                    isHistoryCollected[0] = true;
+                                    buttonQuickRouteManagement.setEnabled(true);
+
+                                } else {
+                                    buttonQuickRouteManagement.setEnabled(false);
+                                    buttonQuickRouteManagement.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+
+                        });
+
+
                         loadProfilePhoto(); //Load the profile image
                         //---------Main Menu stuff to do after loading is complete---------//
                         //---HAWK set SkipOnboarding to true if the user is logged in---//
@@ -323,7 +362,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         buttonAboutPage.setEnabled(false);
                         buttonTarget.setEnabled(false);
                         buttonAppointment.setEnabled(false);
-
+                        buttonQuickRouteManagement.setEnabled(false);
                     }
                 }
 
@@ -346,6 +385,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         TapTarget.forView(findViewById(R.id.buttonAppointment), getResources().getString(R.string.tutorial_title_appointment), getResources().getString(R.string.tutorial_desc_appointment)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
                         TapTarget.forView(findViewById(R.id.buttonTarget), getResources().getString(R.string.tutorial_title_target), getResources().getString(R.string.tutorial_desc_target)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
                         TapTarget.forView(findViewById(R.id.buttonViewer), getResources().getString(R.string.tutorial_title_viewer), getResources().getString(R.string.tutorial_desc_viewer)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
+                        TapTarget.forView(findViewById(R.id.buttonQuickRouteManagement), getResources().getString(R.string.tutorial_title_quick_route_management), getResources().getString(R.string.tutorial_desc_quick_route_management)).outerCircleColor(R.color.jamesBlue).tintTarget(false),
                         TapTarget.forView(findViewById(R.id.buttonLogout), getResources().getString(R.string.tutorial_title_logout), getResources().getString(R.string.tutorial_desc_logout)).outerCircleColor(R.color.jamesBlue),
                         TapTarget.forView(findViewById(R.id.buttonAboutPage), getResources().getString(R.string.tutorial_title_help), getResources().getString(R.string.tutorial_desc_help)).outerCircleColor(R.color.jamesBlue))
                 .start();

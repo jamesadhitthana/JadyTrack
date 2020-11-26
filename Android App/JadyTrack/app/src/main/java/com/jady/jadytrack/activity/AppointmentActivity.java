@@ -1,9 +1,11 @@
 package com.jady.jadytrack.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -88,6 +90,7 @@ public class AppointmentActivity extends AppCompatActivity
     private DatabaseReference databaseReference;
     private DatabaseReference geofenceReference;
     private String id;
+
     // Google Map
     private GoogleMap map;
     private GoogleApiClient googleApiClient; // Untuk membuat lokasinya center
@@ -99,6 +102,9 @@ public class AppointmentActivity extends AppCompatActivity
     //Button
     private Button setStartingPoint, setAppointment;
     private boolean nextStep = false;
+
+    //Quick Route History
+    private boolean saveQuickRoute = false;
 
     // Jumlah marker
     private int startingpoint = 0;
@@ -123,10 +129,6 @@ public class AppointmentActivity extends AppCompatActivity
 
         // Load Name and UserID from MainMenu Intent passing
         Intent intentKu = getIntent();
-       /* id = intentKu.getStringExtra(InputIdActivity.EXTRA_MESSAGE_ID);
-        id = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_ID);
-        userUID = intentKu.getStringExtra(InputIdActivity.EXTRA_MESSAGE_UID);
-        userUID = intentKu.getStringExtra(ScanQrActivity.EXTRA_MESSAGE_UID);*/
 
         id = intentKu.getStringExtra(InputRouteActivity.EXTRA_MESSAGE_ID);
         userUID = intentKu.getStringExtra(InputRouteActivity.EXTRA_MESSAGE_UID);
@@ -187,7 +189,7 @@ public class AppointmentActivity extends AppCompatActivity
                     disableButton(2);
                     nextStep = false;
 
-                    setAppointment.setText("Confirm Destination");
+                    setAppointment.setText(getResources().getString(R.string.button_confirm_destination));
 
                 }
                 if (startingpoint == 2) {
@@ -195,7 +197,7 @@ public class AppointmentActivity extends AppCompatActivity
                     markers.remove(markers.size() - 1);
                     startingpoint = 1;
 
-                    setAppointment.setText("Confirm Destination");
+                    setAppointment.setText(getResources().getString(R.string.button_confirm_destination));
                     nextStep = false;
 
                     enableButton();
@@ -231,84 +233,106 @@ public class AppointmentActivity extends AppCompatActivity
                         nextStep = true;
                         disableButton(1);
 
-                        showCustomDialog("Create geofence by clicking in the map area");
-                        setAppointment.setText("Confirm Geofence");
+                        showCustomDialog(getResources().getString(R.string.alert_title_create_geofence), getResources().getString(R.string.alert_msg_create_geofence));
+                        setAppointment.setText(getResources().getString(R.string.button_confirm_geofence));
 
                     }
 
                     // If a geofence markers minimal 3 exists (minimal bikin triangle):
                     if (markers.size() >= 3) {
 
-                        // Try Catch for Uploading geofence data, destination point, and notification data to Firebase
-                        try {
+                        if(pointInPolygon(locationMarker.getPosition(), polygon) && pointInPolygon(destinationMarker.getPosition(), polygon)){
 
-                            geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/" + id);
+                            // Try Catch for Uploading geofence data, destination point, and notification data to Firebase
+                            try {
 
-                            geofenceReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.hasChild("geofence") && !isSent) {
-                                        isSent = true;
-                                        sendtoFirebase();
+                                geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/" + id);
 
-                                        Intent intent = new Intent(AppointmentActivity.this, TrackingActivity.class);
-                                        intent.putExtra(EXTRA_MESSAGE_ID, id);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        // Set the new task and clear flags
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                    } else if (!isSent) {
-                                        Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_geofence)).setText(getResources().getString(R.string.alert_msg_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
+                                geofenceReference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (!dataSnapshot.hasChild("geofence") && !isSent) {
+                                            isSent = true;
+
+                                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AppointmentActivity.this);
+                                            alertDialogBuilder.setMessage(getResources().getString(R.string.alert_title_save_quick_route));
+                                            alertDialogBuilder.setPositiveButton(getResources().getString(R.string.button_yes),
+                                                    new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface arg0, int arg1) {
+                                                            saveQuickRoute = true;
+                                                            sendtoFirebase(saveQuickRoute);
+
+                                                            Intent intent = new Intent(AppointmentActivity.this, TrackingActivity.class);
+                                                            intent.putExtra(EXTRA_MESSAGE_ID, id);
+                                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                            // Set the new task and clear flags
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            startActivity(intent);
+                                                        }
+                                                    });
+
+                                            alertDialogBuilder.setNegativeButton(getResources().getString(R.string.button_no),
+                                                    new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            saveQuickRoute = false;
+                                                            sendtoFirebase(saveQuickRoute);
+
+                                                            Intent intent = new Intent(AppointmentActivity.this, TrackingActivity.class);
+                                                            intent.putExtra(EXTRA_MESSAGE_ID, id);
+                                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                            // Set the new task and clear flags
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            startActivity(intent);
+                                                        }
+                                                    });
+
+                                            AlertDialog alertDialog = alertDialogBuilder.create();
+                                            alertDialog.setCancelable(false);
+                                            alertDialog.show();
+
+                                        } else if (!isSent) {
+                                            Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_geofence)).setText(getResources().getString(R.string.alert_msg_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                }
-                            });
+                                    }
+                                });
 
 
-                        } catch (Exception e) {
-                            Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_set_object)).setText(getResources().getString(R.string.alert_msg_failed_set_object)).setBackgroundColorRes(R.color.colorAccent).show();
+                            } catch (Exception e) {
+                                Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_set_object)).setText(getResources().getString(R.string.alert_msg_failed_set_object)).setBackgroundColorRes(R.color.colorAccent).show();
+                            }
+                        } else {
+                            Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_outside_geofence)).setText(getResources().getString(R.string.alert_msg_outside_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
                         }
-                    } else {
-                        Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_draw)).setText(getResources().getString(R.string.alert_msg_forgot_draw)).setBackgroundColorRes(R.color.colorAccent).show();
                     }
-                } else {
-                    Alerter.create(AppointmentActivity.this).setTitle(getResources().getString(R.string.alert_title_forgot_destination)).setText(getResources().getString(R.string.alert_msg_forgot_destination)).setBackgroundColorRes(R.color.colorAccent).show();
                 }
-
             }
         });
 
         disableButton(2);
 
-        showCustomDialog("Pick destination by clicking in the map area");
-
-        // To choose Quick Route
-        /*Button quickroute = (Button) findViewById(R.id.quickroute);
-        quickroute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(AppointmentActivity.this, QuickRouteActivity.class);
-                intent.putExtra(EXTRA_MESSAGE_ID, id);
-                intent.putExtra(EXTRA_MESSAGE_UID, userUID);
-                startActivity(intent);
-            }
-        });*/
+        showCustomDialog(getResources().getString(R.string.alert_title_create_destination), getResources().getString(R.string.alert_msg_create_destination));
 
     }
 
-    public void sendtoFirebase() {
+    public void sendtoFirebase(boolean saveQuickRoute) {
         //---------Firebase Preparation---------//
         databaseReference = FirebaseDatabase.getInstance().getReference().child("trackingSession");
         DatabaseReference historyReference = FirebaseDatabase.getInstance().getReference().child("users/" + userUID);
         //END OF: Firebase Preparation---------//
 
-        Date date = new Date();
-        long time = date.getTime();
+        if(saveQuickRoute){
+            Date date = new Date();
+            long time = date.getTime();
 
-        historyReference.child("trackingHistory").child(id).setValue(time);
+            historyReference.child("trackingHistory").child(id).setValue(time);
+        }
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -372,16 +396,18 @@ public class AppointmentActivity extends AppCompatActivity
         }
     }
 
-    public void showCustomDialog(String msg) {
+    public void showCustomDialog(String title, String msg) {
         final Dialog dialog = new Dialog(AppointmentActivity.this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         //Mention the name of the layout of your custom dialog.
         dialog.setContentView(R.layout.notification_dialog);
 
+        TextView notifTitle = dialog.findViewById(R.id.notificationTitle);
         TextView notifMsg = dialog.findViewById(R.id.notificationText);
         Button confirmButton = dialog.findViewById(R.id.confirm);
 
+        notifTitle.setText(title);
         notifMsg.setText(msg);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -620,7 +646,6 @@ public class AppointmentActivity extends AppCompatActivity
                 .build();
     }
 
-
     private PendingIntent geoFencePendingIntent;
 
     private PendingIntent createGeofencePendingIntent() {
@@ -775,6 +800,70 @@ public class AppointmentActivity extends AppCompatActivity
         drawer = new ArrayList<>(hull);
     }
 
+    public boolean pointInPolygon(LatLng point, Polygon polygon) {
+        // ray casting alogrithm http://rosettacode.org/wiki/Ray-casting_algorithm
+        int crossings = 0;
+        List<LatLng> path = polygon.getPoints();
+        path.remove(path.size() - 1); //remove the last point that is added automatically by getPoints()
+
+        // for each edge
+        for (int i = 0; i < path.size(); i++) {
+            LatLng a = path.get(i);
+            int j = i + 1;
+            //to close the last edge, you have to take the first point of your polygon
+            if (j >= path.size()) {
+                j = 0;
+            }
+            LatLng b = path.get(j);
+            if (rayCrossesSegment(point, a, b)) {
+                crossings++;
+            }
+        }
+
+        // odd number of crossings?
+        return (crossings % 2 == 1);
+    }
+
+    public boolean rayCrossesSegment(LatLng point, LatLng a, LatLng b) {
+        // Ray Casting algorithm checks, for each segment, if the point is 1) to the left of the segment and 2) not above nor below the segment. If these two conditions are met, it returns true
+        double px = point.longitude,
+                py = point.latitude,
+                ax = a.longitude,
+                ay = a.latitude,
+                bx = b.longitude,
+                by = b.latitude;
+        if (ay > by) {
+            ax = b.longitude;
+            ay = b.latitude;
+            bx = a.longitude;
+            by = a.latitude;
+        }
+        // alter longitude to cater for 180 degree crossings
+        if (px < 0 || ax < 0 || bx < 0) {
+            px += 360;
+            ax += 360;
+            bx += 360;
+        }
+        // if the point has the same latitude as a or b, increase slightly py
+        if (py == ay || py == by) py += 0.00000001;
+
+
+        // if the point is above, below or to the right of the segment, it returns false
+        if ((py > by || py < ay) || (px > Math.max(ax, bx))) {
+            return false;
+        }
+        // if the point is not above, below or to the right and is to the left, return true
+        else if (px < Math.min(ax, bx)) {
+            return true;
+        }
+        // if the two above conditions are not met, you have to compare the slope of segment [a,b] (the red one here) and segment [a,p] (the blue one here) to see if your point is to the left of segment [a,b] or not
+        else {
+            double red = (ax != bx) ? ((by - ay) / (bx - ax)) : Double.POSITIVE_INFINITY;
+            double blue = (ax != px) ? ((py - ay) / (px - ax)) : Double.POSITIVE_INFINITY;
+            return (blue >= red);
+        }
+
+    }
 
     @Override
     public void onLocationChanged(Location location) {
