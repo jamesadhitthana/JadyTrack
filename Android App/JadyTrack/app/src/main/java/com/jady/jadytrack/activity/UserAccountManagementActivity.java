@@ -42,7 +42,7 @@ import java.io.IOException;
 
 public class UserAccountManagementActivity extends AppCompatActivity {
 
-    private Boolean profilePhotoCompressionEnabled = true;
+    private Boolean profilePhotoCompressionEnabled = false;
     private ImageView profilePic;
     private TextView textViewName;
     private TextView textViewEmail;
