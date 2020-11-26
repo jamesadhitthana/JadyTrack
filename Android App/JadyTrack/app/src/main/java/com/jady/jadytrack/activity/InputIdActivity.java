@@ -120,8 +120,7 @@ public class InputIdActivity extends AppCompatActivity {
 //                        //*Update Labels:
 //                        labelShortTrackingIdTextView.setText("(" + receivedTrackingId + ")");
 //                        labelTrackingId.setText(id);
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_short_tracking_id_updated_notif) + id, Toast.LENGTH_LONG).show();
-                        Log.d("james", "Short tracking ID found! Setting id as the new FullTrackingId");
+                        Log.d("james", "Short tracking ID found! Setting id " + id + " as the new FullTrackingId");
                     } else {
                         //*Replace global id with the initial receivedTrackingId
                         id = receivedTrackingId;

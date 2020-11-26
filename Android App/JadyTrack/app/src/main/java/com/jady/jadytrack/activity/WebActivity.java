@@ -178,8 +178,7 @@ public class WebActivity extends AppCompatActivity {
                     //*Update Labels:
                     labelShortTrackingIdTextView.setText("(" + receivedTrackingId + ")");
                     labelTrackingId.setText(trackingId);
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.layout_short_tracking_id_updated_notif) + trackingId, Toast.LENGTH_LONG).show();
-                    Log.d("james", "Short tracking ID found! Setting trackingId as the new FullTrackingId");
+                    Log.d("james", "Short tracking ID found! Setting id " + trackingId + " as the new FullTrackingId");
                 } else {
                     //*Replace global trackingId with the initial receivedTrackingId
                     trackingId = receivedTrackingId;

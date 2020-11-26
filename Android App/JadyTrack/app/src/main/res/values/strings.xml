@@ -97,6 +97,9 @@
     <string name="alert_msg_crossed_geofence">Target has exited the Geofence!</string>
     <string name="alert_title_password_criteria">Make sure all your fields are filled and that your password is at least 6 characters long</string>
     <string name="alert_title_password_email_empty">Password or email is empty</string>
+    <string name="alert_title_location_permission_rejected_title">Oops you disabled the app\'s location permissions</string>
+    <string name="alert_title_location_permission_rejected_msg">Please allow the app the permission to access your location</string>
+
 
     <!--Button-->
     <string name="button_disable_broadcast">Disable Broadcast</string>

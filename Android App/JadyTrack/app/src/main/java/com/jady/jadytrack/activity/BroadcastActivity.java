@@ -108,6 +108,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private boolean hasArrived = false;
     private String id;
     private String shortTrackingId; //New shortTrackingId 12Nov2020 James
+    private boolean notifiedOutsideGeofence =false; //New trying to fix the broken alerter notification 26Nov2020 James
 
     // Widget
     private TextView status;
@@ -190,150 +191,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
         geofenceReference = FirebaseDatabase.getInstance().getReference().child("trackingSession/" + id);
 
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
 
-                // mengubah status
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.child(id).child("notifications").child("statusSOS").getValue() == "true") {
-                            databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
-                        }
-                        if (dataSnapshot.child(id).child("notifications").child("statusInGeofence").getValue() == "true") {
-                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
-                        }
-                        if (dataSnapshot.child(id).child("notifications").child("statusHasArrived").getValue() == "true") {
-                            databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(false);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-
-                Long endTime = location.getTime();
-                long diffTime = endTime - startTime;
-
-                // Mengubah current marker
-                markerPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                currentMarker.setPosition(markerPosition);
-                if (!isMarkerDrawed) {
-                    loadingWindow.dismiss();
-                    isMarkerDrawed = true;
-                }
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
-
-                // setiap 12 detik (12000) update database
-                if (diffTime > 5000 && isBroadcast) {
-
-                    status.setText(getResources().getString(R.string.label_broadcast_enabled));
-
-                    //--stop loading window
-                    loadingWindowEnableBroadcast.dismiss();
-                    //END OF: stop loading window
-
-                    startTime = endTime;
-
-                    //--UPDATED-- Membuat objek dan mengirim ke firebase
-                    //databaseReference.child(id).setValue(target);
-                    databaseReference.child(id).child("targetId").setValue(userUID);
-                    databaseReference.child(id).child("targetName").setValue(nama);
-                    databaseReference.child(id).child("targetLocation").setValue(location);
-                    databaseReference.child(id).child("numHistory").setValue(numMarker);
-                    databaseReference.child(id).child("locationHistory").setValue(locationHistory);
-
-                    //*--12Nov2020--//Store shortTrackingId to Firebase Database
-                    writeShortTrackingIdToDatabase(shortTrackingId);
-
-                    // Current time
-                    Calendar calendar = Calendar.getInstance();
-                    TimeZone tz = TimeZone.getDefault();
-                    calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    java.util.Date currenTimeZone = new java.util.Date((long) 1379487711 * 1000);
-                    String date = sdf.format(currenTimeZone);
-
-                    if (isFirstMarker) {
-                        // start marker
-                        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.start);
-                        mMap.addMarker(new MarkerOptions().position(markerPosition).title("First Marker").icon(icon));
-                        isFirstMarker = false;
-                    } else {
-                        // history marker
-                        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
-                        mMap.addMarker(new MarkerOptions().position(markerPosition).title(date).icon(icon));
-                    }
-
-                    // add polyline
-                    options.add(markerPosition);
-                    mMap.addPolyline(options);
-
-                    // History marker & jumlah history marker
-                    numMarker++;
-                    locationHistory.put(numMarker.toString(), location);
-
-                    // handler untuk geofence
-                    if (isGeofenceDrawed) {
-                        if (!pointInPolygon(currentMarker.getPosition(), polygon)) {
-                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
-                            polygon.setFillColor(Color.RED);
-                            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
-                            notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
-                        }
-                    }
-
-
-                } else if (!isBroadcast) {
-                    status.setText(getResources().getString(R.string.label_broadcast_disabled));
-
-                    if (progressDialogIsShown) {
-                        loadingWindowDisableBroadcast.dismiss();
-                        progressDialogIsShown = false;
-                    }
-
-                }
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        }
-
-
+        //!START OF BUTTONS
         // Enable/Disable Broadcast
         tombolBroadcast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -471,6 +330,161 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                 }
             }
         });
+        //END OF: Buttons
+
+
+//        *-----------------------Location-------------//
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                // mengubah status
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(id).child("notifications").child("statusSOS").getValue() == "true") {
+                            databaseReference.child(id).child("notifications").child("statusSOS").setValue(false);
+                        }
+                        if (dataSnapshot.child(id).child("notifications").child("statusInGeofence").getValue() == "true") {
+                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
+                        }
+                        if (dataSnapshot.child(id).child("notifications").child("statusHasArrived").getValue() == "true") {
+                            databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                Long endTime = location.getTime();
+                long diffTime = endTime - startTime;
+
+                // Mengubah current marker
+                markerPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                currentMarker.setPosition(markerPosition);
+                if (!isMarkerDrawed) {
+                    loadingWindow.dismiss();
+                    isMarkerDrawed = true;
+                }
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
+
+                // setiap 12 detik (12000) update database
+                if (diffTime > 5000 && isBroadcast) {
+
+                    status.setText(getResources().getString(R.string.label_broadcast_enabled));
+
+                    //--stop loading window
+                    loadingWindowEnableBroadcast.dismiss();
+                    //END OF: stop loading window
+
+                    startTime = endTime;
+
+                    //--UPDATED-- Membuat objek dan mengirim ke firebase
+                    //databaseReference.child(id).setValue(target);
+                    databaseReference.child(id).child("targetId").setValue(userUID);
+                    databaseReference.child(id).child("targetName").setValue(nama);
+                    databaseReference.child(id).child("targetLocation").setValue(location);
+                    databaseReference.child(id).child("numHistory").setValue(numMarker);
+                    databaseReference.child(id).child("locationHistory").setValue(locationHistory);
+
+                    //*--12Nov2020--//Store shortTrackingId to Firebase Database
+                    writeShortTrackingIdToDatabase(shortTrackingId);
+
+                    // Current time
+                    Calendar calendar = Calendar.getInstance();
+                    TimeZone tz = TimeZone.getDefault();
+                    calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    java.util.Date currenTimeZone = new java.util.Date((long) 1379487711 * 1000);
+                    String date = sdf.format(currenTimeZone);
+
+                    if (isFirstMarker) {
+                        // start marker
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.start);
+                        mMap.addMarker(new MarkerOptions().position(markerPosition).title("First Marker").icon(icon));
+                        isFirstMarker = false;
+                    } else {
+                        // history marker
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.greendot);
+                        mMap.addMarker(new MarkerOptions().position(markerPosition).title(date).icon(icon));
+                    }
+
+                    // add polyline
+                    options.add(markerPosition);
+                    mMap.addPolyline(options);
+
+                    // History marker & jumlah history marker
+                    numMarker++;
+                    locationHistory.put(numMarker.toString(), location);
+
+                    // handler untuk geofence
+                    if (isGeofenceDrawed) {
+                        if (!pointInPolygon(currentMarker.getPosition(), polygon)) {
+                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
+                            polygon.setFillColor(Color.RED);
+
+                            //*Crossing the Border Notification
+
+                            if (!notifiedOutsideGeofence) {
+                                Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
+                                notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
+                                notifiedOutsideGeofence = true;
+                            }
+
+                        }else{
+                            notifiedOutsideGeofence = false;
+                        }
+                    }
+
+
+                } else if (!isBroadcast) {
+                    status.setText(getResources().getString(R.string.label_broadcast_disabled));
+
+                    if (progressDialogIsShown) {
+                        loadingWindowDisableBroadcast.dismiss();
+                        progressDialogIsShown = false;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        }
 
 
     }
@@ -478,10 +492,9 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
     public void startService() {
         Intent serviceIntent = new Intent(this, ForegroundService.class);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
-        }
-        else{
+        } else {
             startService(serviceIntent);
         }
     }
@@ -621,6 +634,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                     PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
+        } else {
+            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_location_permission_rejected_title)).setText(getResources().getString(R.string.alert_title_location_permission_rejected_msg)).setBackgroundColorRes(R.color.colorAccent).show();
         }
     }
 
