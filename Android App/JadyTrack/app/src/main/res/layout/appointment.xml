@@ -14,73 +14,101 @@
     <!-- Line with Latitude and Longitude -->
 
     <!--GoogleMap fragment-->
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="565dp"
-        android:layout_marginBottom="90dp"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_bottom"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/setgeofence"
-        style="@style/Widget.AppCompat.Button"
+        <Button
+            android:id="@+id/setgeofence"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/contact_us_button"
+            android:fontFamily="@font/roboto_light"
+            android:text="Confirm Destination"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toTopOf="@+id/middle_middle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/undo"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/contact_us_button"
+            android:fontFamily="@font/roboto_light"
+            android:text="Undo"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middle_middle" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/middle_middle"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_top"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/contact_us_button"
-        android:fontFamily="@font/roboto_light"
-        android:text="Confirm Destination"
-        android:textColor="#ffffff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
-        app:layout_constraintVertical_bias="0.245" />
-
-    <Button
-        android:id="@+id/undo"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/contact_us_button"
-        android:fontFamily="@font/roboto_light"
-        android:text="Undo"
-        android:textColor="#ffffff"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/setgeofence"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
-
-    <ImageButton
-        android:id="@+id/buttonBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@null"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraint_layout_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back_button_circular_white_100px" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/back_button_circular_white_100px" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
