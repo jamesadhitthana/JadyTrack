@@ -102,7 +102,9 @@ public class QuickRouteManagementActivity extends AppCompatActivity implements O
                         }
                     });
 
-                    alertDialogBuilder.show();
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
 
                 }
 

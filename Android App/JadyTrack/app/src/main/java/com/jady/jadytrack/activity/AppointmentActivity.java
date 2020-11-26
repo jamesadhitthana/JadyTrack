@@ -293,6 +293,7 @@ public class AppointmentActivity extends AppCompatActivity
                                                     });
 
                                             AlertDialog alertDialog = alertDialogBuilder.create();
+                                            alertDialog.setCancelable(false);
                                             alertDialog.show();
 
                                         } else if (!isSent) {
