@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -84,8 +85,8 @@ public class QuickRouteManagementActivity extends AppCompatActivity implements O
                     final EditText input = new EditText(QuickRouteManagementActivity.this);
                     input.setText(quickRouteHistoryArrayList.get(selected_position).getNameQuickRoute());
                     input.setSelectAllOnFocus(true);
+                    input.setPadding(70, 40, 70, 30);
                     alertDialogBuilder.setView(input);
-
                     alertDialogBuilder.setPositiveButton(getResources().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
