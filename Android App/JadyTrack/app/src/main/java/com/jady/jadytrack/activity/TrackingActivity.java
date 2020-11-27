@@ -324,10 +324,9 @@ public class TrackingActivity extends AppCompatActivity implements
 
     public void startService() {
         Intent serviceIntent = new Intent(this, ForegroundService.class);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
-        }
-        else{
+        } else {
             startService(serviceIntent);
         }
     }
@@ -505,7 +504,7 @@ public class TrackingActivity extends AppCompatActivity implements
         icon = BitmapDescriptorFactory.fromResource(R.drawable.smile);
         markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
         currentMarker = mMap.addMarker(markerOptions);
-        currentMarker.setZIndex(1.0f);
+        currentMarker.setZIndex(1000000.0f);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
 
@@ -749,7 +748,7 @@ public class TrackingActivity extends AppCompatActivity implements
                             icon = BitmapDescriptorFactory.fromBitmap(resizedTargetProfilePhoto); //Change icon to profile photo
                             markerOptions = new MarkerOptions().position(markerPosition).title(getResources().getString(R.string.marker_current_location)).icon(icon);
                             currentMarker = mMap.addMarker(markerOptions);
-
+                            currentMarker.setZIndex(1000000.0f);
                             Log.d("james", "Updated the target's marker icon to the target's profile photo");
                         } catch (Exception e) {
                             Log.d("james", "Failed to change target's marker icon (currentMarker) to the target's profile photo  using loadTargetPhoto");

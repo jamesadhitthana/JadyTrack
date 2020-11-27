@@ -620,7 +620,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
         // Current marker
         MarkerOptions markerOption = new MarkerOptions().position(markerPosition).title("Current Location").icon(icon);
         currentMarker = mMap.addMarker(markerOption);
-        currentMarker.setZIndex(1.0f);
+        currentMarker.setZIndex(1000000.0f);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, 17.0f));
     }
 
