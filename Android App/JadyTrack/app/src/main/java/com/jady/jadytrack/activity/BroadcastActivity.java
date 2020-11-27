@@ -106,6 +106,7 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
     private boolean isGeofenceDrawed = false;
     public boolean manualCheckIn = false;
     private boolean hasArrived = false;
+    private boolean isGeofenceNotified = false;
     private String id;
     private String shortTrackingId; //New shortTrackingId 12Nov2020 James
 
@@ -280,12 +281,42 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
 
                     // handler untuk geofence
                     if (isGeofenceDrawed) {
-                        if (!pointInPolygon(currentMarker.getPosition(), polygon)) {
+                        /*if (!pointInPolygon(currentMarker.getPosition(), polygon)) {
                             databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
                             polygon.setFillColor(Color.RED);
                             Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
                             notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
+                        } else {
+                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(true);
+                            polygon.setFillColor(Color.argb(100, 150, 150, 150));
+                        }*/
+
+                        if(pointInPolygon(currentMarker.getPosition(), polygon)) {
+                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(true);
+                            polygon.setFillColor(Color.argb(100, 150, 150, 150));
+                            isGeofenceNotified = false;
+                        } else if (!pointInPolygon(currentMarker.getPosition(), polygon) && !isGeofenceNotified) {
+                            databaseReference.child(id).child("notifications").child("statusInGeofence").setValue(false);
+                            polygon.setFillColor(Color.RED);
+                            isGeofenceNotified = true;
+                            Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_crossing_border)).setText(getResources().getString(R.string.alert_msg_crossing_border)).setBackgroundColorRes(R.color.colorAccent).show();
+                            notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
                         }
+
+                        //Method to know if current marker inside destination radius
+                        float[] distance = new float[2];
+
+                        Location.distanceBetween(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude,
+                            destinationFence.getCenter().latitude, destinationFence.getCenter().longitude, distance);
+
+                        if( distance[0] < destinationFence.getRadius() && !hasArrived){
+                            //current location is within circle
+                            //Toast.makeText(getApplicationContext(), "Inside Destination Area", Toast.LENGTH_SHORT).show();
+                            databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(true);
+                            hasArrived = true;
+                            notifyInfo(getResources().getString(R.string.notification_target_arrived));
+                        }
+
                     }
 
 

@@ -297,7 +297,20 @@ public class TrackingActivity extends AppCompatActivity implements
                     }
 
                     // If the user has been notified ONCE, then dont notify again!
-                    if (!statusInGeofence && !isGeofenceNotified) {
+                    /*if (!statusInGeofence && !isGeofenceNotified) {
+                        polygon.setFillColor(Color.RED);
+                        Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_crossed_geofence)).setText(getResources().getString(R.string.alert_msg_crossed_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
+
+                        notifyAlert(getResources().getString(R.string.notification_target_crossing_border));
+                        isGeofenceNotified = true;
+                    } else {
+                        polygon.setFillColor(Color.argb(100, 150, 150, 150));
+                    }*/
+
+                    if (statusInGeofence) {
+                        polygon.setFillColor(Color.argb(100, 150, 150, 150));
+                        isGeofenceNotified = false;
+                    } if (!statusInGeofence && !isGeofenceNotified) {
                         polygon.setFillColor(Color.RED);
                         Alerter.create(TrackingActivity.this).setTitle(getResources().getString(R.string.alert_title_crossed_geofence)).setText(getResources().getString(R.string.alert_msg_crossed_geofence)).setBackgroundColorRes(R.color.colorAccent).show();
 
