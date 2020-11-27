@@ -311,14 +311,11 @@ public class MainMenuActivity extends AppCompatActivity {
                         buttonAppointment.setEnabled(true);
 
                         DatabaseReference historyReference = FirebaseDatabase.getInstance().getReference().child("users/" + currentUserUID + "/trackingHistory");
-                        final boolean[] isHistoryCollected = {false};
 
                         historyReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getValue() != null && !isHistoryCollected[0]) {
-
-                                    isHistoryCollected[0] = true;
+                                if (dataSnapshot.getValue() != null) {
                                     buttonQuickRouteManagement.setEnabled(true);
 
                                 } else {

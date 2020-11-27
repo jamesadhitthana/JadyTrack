@@ -101,7 +101,7 @@ public class AppointmentActivity extends AppCompatActivity
     private boolean isSent = false;
 
     //Button
-    private Button setStartingPoint, setAppointment;
+    private Button undoButton, buttonConfirm;
     private boolean nextStep = false;
 
     //Quick Route History
@@ -179,8 +179,8 @@ public class AppointmentActivity extends AppCompatActivity
         });
         //END OF: Back Button--//
         // Widget
-        setStartingPoint = (Button) findViewById(R.id.undo);
-        setStartingPoint.setOnClickListener(new View.OnClickListener() {
+        undoButton = (Button) findViewById(R.id.undo);
+        undoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (startingpoint == 1) {//if there is a destination point then
                     destinationMarker.remove();
@@ -190,7 +190,7 @@ public class AppointmentActivity extends AppCompatActivity
                     disableButton(2);
                     nextStep = false;
 
-                    setAppointment.setText(getResources().getString(R.string.button_confirm_destination));
+                    buttonConfirm.setText(getResources().getString(R.string.button_confirm_destination));
 
                 }
                 if (startingpoint == 2) {
@@ -198,7 +198,7 @@ public class AppointmentActivity extends AppCompatActivity
                     markers.remove(markers.size() - 1);
                     startingpoint = 1;
 
-                    setAppointment.setText(getResources().getString(R.string.button_confirm_destination));
+                    buttonConfirm.setText(getResources().getString(R.string.button_confirm_destination));
                     nextStep = false;
 
                     enableButton();
@@ -212,6 +212,7 @@ public class AppointmentActivity extends AppCompatActivity
                 }
                 if (startingpoint == 4) {
                     undoPolygon();
+                    drawGeofence();
                     disableButton(1);
                 }
                 if (startingpoint > 4) {
@@ -224,8 +225,8 @@ public class AppointmentActivity extends AppCompatActivity
 
 
         // Set Geofence button will create the trackingSession ID and contents (@Yefta, maybe you should put your stuff here)
-        setAppointment = (Button) findViewById(R.id.setgeofence);
-        setAppointment.setOnClickListener(new View.OnClickListener() {
+        buttonConfirm = (Button) findViewById(R.id.setgeofence);
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {//Set Appointment Button
                 // If a destination marker exists:
                 if (destinationMarker != null) {
@@ -235,7 +236,7 @@ public class AppointmentActivity extends AppCompatActivity
                         disableButton(1);
 
                         showCustomDialog(getResources().getString(R.string.alert_title_create_geofence), getResources().getString(R.string.alert_msg_create_geofence));
-                        setAppointment.setText(getResources().getString(R.string.button_confirm_geofence));
+                        buttonConfirm.setText(getResources().getString(R.string.button_confirm_geofence));
 
                     }
 
@@ -376,24 +377,24 @@ public class AppointmentActivity extends AppCompatActivity
     }
 
     public void enableButton() {
-        setStartingPoint.setEnabled(true);
-        setAppointment.setEnabled(true);
+        undoButton.setEnabled(true);
+        buttonConfirm.setEnabled(true);
 
-        setStartingPoint.getBackground().setColorFilter(null);
-        setAppointment.getBackground().setColorFilter(null);
+        undoButton.getBackground().setColorFilter(null);
+        buttonConfirm.getBackground().setColorFilter(null);
     }
 
     public void disableButton(int number) {
 
         if (number == 1) {
-            setAppointment.setEnabled(false);
-            setAppointment.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+            buttonConfirm.setEnabled(false);
+            buttonConfirm.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         } else if (number == 2) {
-            setStartingPoint.setEnabled(false);
-            setAppointment.setEnabled(false);
+            undoButton.setEnabled(false);
+            buttonConfirm.setEnabled(false);
 
-            setStartingPoint.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-            setAppointment.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+            undoButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+            buttonConfirm.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         }
     }
 
