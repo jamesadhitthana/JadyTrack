@@ -37,7 +37,7 @@ public class ForegroundService extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
 
-        startForeground(1, notification);
+        startForeground(10, notification);
 
         //do heavy work on a background thread
         //stopSelf();
