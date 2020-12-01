@@ -9,6 +9,9 @@ var numHistory;
 var targetId;
 var targetName;
 
+var geofenceFound = false;
+var destinationFound = false;
+
 var linkExpired;
 var hasArrived;
 var statusSOS;
@@ -106,9 +109,6 @@ function loadFullTrackingId(inputSessionID) {
         //*New functionality to add Geofence
         var dbGeofence = db.ref('trackingSession/' + inputSessionID + "/geofence");
         dbGeofence.once('value', showGeofence, logError);
-        //*Functionality to add Finish Point and the geofence for the finish point
-        var dbDestinationPoint = db.ref('trackingSession/' + inputSessionID + "/destination");
-        dbDestinationPoint.once('value', addDestinationPoint, logError);
 
         //* Features loaded only once so that it doesnt annoy the user
         disableInputTrackingId() //Disable user input textbox
@@ -302,10 +302,20 @@ function loadFullTrackingId(inputSessionID) {
       console.log("diatas itu habis session coorddinates nya geofence");
 
       console.log(geofenceCoordinates);
+      geofenceFound = true;
+
+      //*Functionality to add Finish Point and the geofence for the finish point
+      var dbDestinationPoint = db.ref('trackingSession/' + inputSessionID + "/destination");
+      dbDestinationPoint.once('value', addDestinationPoint, logError);
     } else {
       // alert("Failed to load Geofence Coordinates - Make sure that geofence is created beforehand.");
-      iziToast.error({ message: "Failed to load Geofence Coordinates - Make sure that geofence is created beforehand." })
+      if (selectedLanguage == 'id') {
+        iziToast.warning({ title: "Ups! Anda lupa geofence!", message: "Pastikan geofence telah dibuat di aplikasi" })
+      } else {
+        iziToast.warning({ title: "Oops! You forgot the geofence!", message: "Make sure that geofence is created on the app!" })
+      }
       console.log("[CHILD Data - GEOFENCE] Failed to load Geofence Coordinates =null");
+      geofenceFound = false;
     }
   }
 
@@ -346,11 +356,17 @@ function loadFullTrackingId(inputSessionID) {
       //Move Camera
       // jadyMap.setZoom(14);
       // jadyMap.panTo(new google.maps.LatLng(destinationCoordinates[0], destinationCoordinates[1])); //Pan to the first coordinate
-
+      destinationFound = true;
     } else {
       // alert("Failed to load Destination Coordinates - Make sure that the destination is created beforehand.");
-      iziToast.error({ message: "Failed to load Destination Coordinates - Make sure that the destination is created beforehand." })
+      if (selectedLanguage == 'id') {
+        iziToast.warning({ title: "Ups! Anda lupa destinasi!", message: "Pastikan destinasi telah dibuat di aplikasi" })
+      } else {
+        iziToast.warning({ title: "Oops! You forgot to set the target's destination!", message: "Make sure that destination is set on the app!" })
+      }
+
       console.log("[CHILD Data - Destination] Failed to load Destination Coordinates =null");
+      destinationFound = false;
     }
   }
 }
