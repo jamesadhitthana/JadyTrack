@@ -15,6 +15,7 @@ var destinationFound = false;
 var linkExpired;
 var hasArrived;
 var statusSOS;
+var notifiedStatusSOS = false;
 var statusInGeofence;
 var manualCheckIn;
 
@@ -207,9 +208,13 @@ function loadFullTrackingId(inputSessionID) {
     if (items.val() == true) {//TARGET has enabled the SOS button
       statusSOS = true;
       //* Notify //
-      notifyPages('sos')
+      if (!notifiedStatusSOS) {
+        notifyPages('sos')
+        notifiedStatusSOS = true
+      }
     } else {
       statusSOS = false;
+      notifiedStatusSOS = false;
     }
   }
 
