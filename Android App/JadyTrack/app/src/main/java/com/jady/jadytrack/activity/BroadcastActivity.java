@@ -305,8 +305,8 @@ public class BroadcastActivity extends FragmentActivity implements OnMapReadyCal
                                         databaseReference.child(id).child("notifications").child("statusHasArrived").setValue(true);
                                         manualCheckIn = true;
                                         hasArrived = true;
-                                        notifyInfo(getResources().getString(R.string.notification_target_arrived));
-                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_check_in)).setText(getResources().getString(R.string.alert_msg_check_in)).setBackgroundColorRes(R.color.colorAccent).show();
+                                        /*notifyInfo(getResources().getString(R.string.notification_target_arrived));
+                                        Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_check_in)).setText(getResources().getString(R.string.alert_msg_check_in)).setBackgroundColorRes(R.color.colorAccent).show();*/
 
                                     } catch (Exception e) {
                                         Alerter.create(BroadcastActivity.this).setTitle(getResources().getString(R.string.alert_title_failed_check_in)).setText(getResources().getString(R.string.alert_msg_failed_check_in)).setBackgroundColorRes(R.color.colorAccent).show();

@@ -129,6 +129,8 @@ public class QuickRouteManagementActivity extends AppCompatActivity implements O
 
                                     quickRouteHistoryArrayList.remove(selected_position);
                                     quickRouteHistoryAdapter.notifyDataSetChanged();
+
+                                    selected_position = -1;
                                 }
                             });
 
